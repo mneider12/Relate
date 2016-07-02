@@ -1,5 +1,6 @@
 package com.nydev.relate;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,8 +16,9 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
     /**
      * This method will load a relationship detail activity
      */
-    public void loadFriend(View view)
+    public void launchRelationshipDetail(View view)
     {
-        setContentView(R.layout.relationship_detail);
+        Intent launchRelationshipDetail = new Intent(this, RelationshipDetailActivity.class);
+        startActivity(launchRelationshipDetail);
     }
 }

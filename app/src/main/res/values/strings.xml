@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Relate</string>
     <string name="name_default_text">Ty Nafziger</string>
+    <string name="name_default_text_2">Nick Rogers</string>
     <string name="birthday_default_text">May 1</string>
     <string name="birthday_label">Birthday:</string>
     <string name="relationship_category_default_text">Friend</string>
