@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.nydev.relate.RelationshipDetailActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:orientation="vertical"
-    tools:context="com.nydev.relate.MainActivity">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -74,6 +74,7 @@
         android:background="#FFC107"
         android:layout_alignParentBottom="true"
         android:text="Met at Clark's apartment. He didn't want to go tubing."
-        android:textSize="28sp"/>
+        android:textSize="28sp"
+        android:padding="16dp"/>
 
 </LinearLayout>
