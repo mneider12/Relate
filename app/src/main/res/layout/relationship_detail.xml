@@ -17,17 +17,20 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/enter_name_hint"/>
+                android:hint="@string/enter_name_hint"
+                android:inputType="textPersonName"/>
 
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/enter_birthday_hint" />
+                android:hint="@string/enter_birthday_hint"
+                android:inputType="date"/>
 
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/enter_relationship_hint"/>
+                android:hint="@string/enter_relationship_hint"
+                android:inputType="textCapSentences"/>
 
         </LinearLayout>
 
@@ -39,9 +42,45 @@
 
     </LinearLayout>
 
-    <EditText
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFF9C4"/>
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFF9C4"
+            android:layout_margin="16dp"
+            android:inputType="textMultiLine"
+            android:gravity="top|left"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_create_black_48dp"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_delete_black_24dp"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_done_black_24dp"/>
+
+
+    </LinearLayout>
 
 </LinearLayout>
