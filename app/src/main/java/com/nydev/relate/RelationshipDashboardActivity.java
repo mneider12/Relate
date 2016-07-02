@@ -21,4 +21,13 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
         Intent launchRelationshipDetail = new Intent(this, RelationshipDetailActivity.class);
         startActivity(launchRelationshipDetail);
     }
+
+    /**
+     * Create a new relationship
+     */
+    public void createRelationship(View view)
+    {
+        Intent launchRelationshipDetail = new Intent(this, RelationshipDetailActivity.class);
+        startActivity(launchRelationshipDetail);
+    }
 }

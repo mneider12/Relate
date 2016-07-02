@@ -1,80 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.nydev.relate.RelationshipDetailActivity"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    android:orientation="vertical">
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/name_text_view"
+            <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/name_default_text"
-                android:textSize="24sp"
-                android:layout_marginBottom="16dp" />
+                android:hint="@string/enter_name_hint"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="24sp"
-                    android:layout_height="24sp"
-                    android:src="@drawable/birthday"
-                    android:textSize="24sp"
-                    android:layout_marginRight="16dp"/>
-
-                <TextView
-                    android:id="@+id/birthday_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/birthday_default_text"
-                    android:textSize="20sp"
-                    android:layout_marginBottom="16dp" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/relationship_text_view"
+            <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/relationship_category_default_text"
-                android:textSize="24sp"
-                android:layout_marginBottom="16dp" />
+                android:hint="@string/enter_birthday_hint" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_relationship_hint"/>
 
         </LinearLayout>
 
-        <ImageView
+        <ImageButton
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/ty"/>
+            android:src="@drawable/ic_person_outline_black_48dp"/>
 
     </LinearLayout>
 
-    <TextView
+    <EditText
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#FFC107"
-        android:layout_alignParentBottom="true"
-        android:text="Met at Clark's apartment. He didn't want to go tubing."
-        android:textSize="28sp"
-        android:padding="16dp"/>
+        android:layout_height="match_parent"
+        android:background="#FFF9C4"/>
 
 </LinearLayout>
