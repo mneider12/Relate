@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    tools:context="com.nydev.relate.RelationshipDetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,18 +19,21 @@
             android:orientation="vertical">
 
             <EditText
+                android:id="@+id/name_entry_edit_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/enter_name_hint"
                 android:inputType="textPersonName"/>
 
             <EditText
+                android:id="@+id/birthday_edit_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/enter_birthday_hint"
                 android:inputType="date"/>
 
             <EditText
+                android:id="@+id/relationship_edit_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/enter_relationship_hint"
@@ -48,6 +55,7 @@
         android:layout_weight="1">
 
         <EditText
+            android:id="@+id/note_edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FFF9C4"
@@ -78,8 +86,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_done_black_24dp"/>
-
+            android:src="@drawable/ic_done_black_24dp"
+            android:onClick="saveRelationship"/>
 
     </LinearLayout>
 
