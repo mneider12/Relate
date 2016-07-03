@@ -21,4 +21,21 @@ public class Relationship implements Serializable
         this.relationship = relationshipDescription;
         this.note = note;
     }
+
+    /**
+     * If name is set, return name. Else return id.
+     * @return name to display for this relationship
+     */
+    @Override
+    public String toString()
+    {
+        if (name.equals(""))
+        {
+            return Integer.toString(id);
+        }
+        else
+        {
+            return name;
+        }
+    }
 }

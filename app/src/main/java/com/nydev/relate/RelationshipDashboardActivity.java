@@ -8,7 +8,9 @@ import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -52,26 +54,28 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
     private void loadRelationshipThumbnails()
     {
         // figure out the largest possible ID
-        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        int maxRelationshipId = preferences.getInt("next_id", 1);
-        for (int relationshipId = 1; relationshipId < maxRelationshipId; relationshipId++)
+        int maxRelationshipId = PreferencesHelper.getNextRelationshipId(this);
+        String[] relationshipThumbnails = new String[maxRelationshipId - 1];
+        for (int relationshipIdCounter = 0; relationshipIdCounter < maxRelationshipId - 1; relationshipIdCounter++)
         {
-            String filename = relationshipId + ".ser";
+            int relationshipId = relationshipIdCounter + 1; // relationship IDs start at 1
+            String filename = (relationshipId) + ".ser";
             try
             {
                 FileInputStream fileInputStream = openFileInput(filename);
                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
                 Relationship relationship = (Relationship) objectInputStream.readObject();
+                relationshipThumbnails[relationshipIdCounter] = relationship.toString();
                 objectInputStream.close();
                 fileInputStream.close();
             }
             catch (IOException|ClassNotFoundException exception)
             {
-                Log.e(LOG_TAG, "Failed to load relationship: " + relationshipId);
+                Log.e(LOG_TAG, "Failed to load relationship: " + relationshipIdCounter);
             }
-
-
         }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.relationship_thumbnail, relationshipThumbnails);
+        ListView listView = (ListView) findViewById(R.id.thumbnail_container_layout);
+        listView.setAdapter(adapter);
     }
-
 }

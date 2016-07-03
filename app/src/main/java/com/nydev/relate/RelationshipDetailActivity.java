@@ -20,7 +20,6 @@ import java.io.ObjectOutputStream;
 public class RelationshipDetailActivity extends AppCompatActivity
 {
     private static final String LOG_TAG = "RelationshipDetail";
-    private static final String PREFS_NAME = "RelationshipPrefsFile";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +29,8 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
     public void saveRelationship(View view)
     {
-        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor preferencesEditor = preferences.edit();
-
-        int id = preferences.getInt("next_id", 1);
-
-        preferencesEditor.putInt("next_id", id + 1);    // increment next id
-        preferencesEditor.apply();
+        int id = PreferencesHelper.getNextRelationshipId(this);
+        PreferencesHelper.incrementNextRelationshipId(this);
 
         String name = getStringFromTextView(R.id.name_entry_edit_text);
         String birthday = getStringFromTextView(R.id.birthday_edit_text);
@@ -59,7 +53,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
         catch (IOException IOException)
         {
             Log.e(LOG_TAG, "Failed to save relationship ID: " + id);
-            preferencesEditor.putInt("next_id", id);    // reset ID counter
+            PreferencesHelper.decrementNextRelationshipId(this);    // reset ID counter
         }
     }
 
