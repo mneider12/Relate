@@ -8,6 +8,7 @@ import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -36,7 +37,7 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
     /**
      * This method will load a relationship detail activity
      */
-    public void launchRelationshipDetail(View view)
+    public void launchRelationshipDetail(View view, String thumbnail)
     {
         Intent launchRelationshipDetail = new Intent(this, RelationshipDetailActivity.class);
         startActivity(launchRelationshipDetail);
@@ -55,7 +56,7 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
     {
         // figure out the largest possible ID
         int maxRelationshipId = PreferencesHelper.getNextRelationshipId(this);
-        String[] relationshipThumbnails = new String[maxRelationshipId - 1];
+        final String[] relationshipThumbnails = new String[maxRelationshipId - 1];
         for (int relationshipIdCounter = 0; relationshipIdCounter < maxRelationshipId - 1; relationshipIdCounter++)
         {
             int relationshipId = relationshipIdCounter + 1; // relationship IDs start at 1
@@ -74,8 +75,16 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
                 Log.e(LOG_TAG, "Failed to load relationship: " + relationshipIdCounter);
             }
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.relationship_thumbnail, relationshipThumbnails);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.relationship_thumbnail, relationshipThumbnails);
         ListView listView = (ListView) findViewById(R.id.thumbnail_container_layout);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                launchRelationshipDetail(view, relationshipThumbnails[position]);
+            }
+        });
     }
+
 }
