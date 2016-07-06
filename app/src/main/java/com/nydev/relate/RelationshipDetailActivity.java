@@ -20,7 +20,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.relationship_detail);
+        setContentView(R.layout.relationship_detail_edit);
         Intent intent = getIntent();
         int relationshipId = intent.getIntExtra("com.nydev.relate.relationshipId", 0);
         if (relationshipId != 0)
