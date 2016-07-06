@@ -8,10 +8,10 @@ import java.io.Serializable;
 public class Relationship implements Serializable
 {
     int id;
-    String name;
-    String date;
-    String relationship;
-    String note;
+    private String name;
+    private String date;
+    private String relationship;
+    private String note;
 
     public Relationship(int id, String name, String date, String relationshipDescription, String note)
     {
@@ -37,5 +37,10 @@ public class Relationship implements Serializable
         {
             return name;
         }
+    }
+
+    public String getName()
+    {
+        return name;
     }
 }

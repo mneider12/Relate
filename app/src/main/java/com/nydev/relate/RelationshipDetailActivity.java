@@ -1,15 +1,11 @@
 package com.nydev.relate;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -25,6 +21,19 @@ public class RelationshipDetailActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.relationship_detail);
+        Intent intent = getIntent();
+        int relationshipId = intent.getIntExtra("com.nydev.relate.relationshipId", 0);
+        if (relationshipId != 0)
+        {
+            loadRelationship(relationshipId);
+        }
+    }
+
+    private void loadRelationship(int relationshipId)
+    {
+        Relationship relationship = PreferencesHelper.getRelationship(this, relationshipId);
+        TextView nameEntryEditText = (TextView) findViewById(R.id.name_entry_edit_text);
+        nameEntryEditText.setText(relationship.getName());
     }
 
     public void saveRelationship(View view)
