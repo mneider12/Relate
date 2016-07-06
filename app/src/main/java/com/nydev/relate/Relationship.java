@@ -1,5 +1,7 @@
 package com.nydev.relate;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 
 /**
@@ -16,7 +18,14 @@ public class Relationship implements Serializable
     public Relationship(int id, String name, String date, String relationshipDescription, String note)
     {
         this.id = id;
-        this.name = name;
+        if (name == null)
+        {
+            this.name = "";
+        }
+        else
+        {
+            this.name = name;
+        }
         this.date = date;
         this.relationship = relationshipDescription;
         this.note = note;

@@ -13,7 +13,7 @@ import java.io.ObjectOutputStream;
 /**
  * Created by markneider on 7/1/16.
  */
-public class RelationshipDetailActivity extends AppCompatActivity
+public class RelationshipDetailEditActivity extends AppCompatActivity
 {
     private static final String LOG_TAG = "RelationshipDetail";
 

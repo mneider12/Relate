@@ -2,17 +2,13 @@ package com.nydev.relate;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
 public class RelationshipDashboardActivity extends AppCompatActivity {
 
@@ -29,10 +25,10 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
     /**
      * This method will load a relationship detail activity
      */
-    public void launchRelationshipDetail(int relationshipId)
+    public void launchRelationshipDetailView(int relationshipId)
     {
-        Intent launchRelationshipDetail = new Intent(this, RelationshipDetailActivity.class);
-        launchRelationshipDetail.putExtra("com.nydev.relate.relationshipId", relationshipId);
+        Intent launchRelationshipDetail = new Intent(this, RelationshipDetailViewActivity.class);
+        launchRelationshipDetail.putExtra(PACKAGE_NAME + ".relationshipId", relationshipId);
         startActivity(launchRelationshipDetail);
     }
 
@@ -41,20 +37,23 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
      */
     public void createRelationship(View view)
     {
-        Intent launchRelationshipDetail = new Intent(this, RelationshipDetailActivity.class);
-        startActivity(launchRelationshipDetail);
+        Intent launchRelationshipDetailEdit = new Intent(this, RelationshipDetailEditActivity.class);
+        startActivity(launchRelationshipDetailEdit);
     }
 
     private void loadRelationshipThumbnails()
     {
         // figure out the largest possible ID
         int maxRelationshipId = PreferencesHelper.getNextRelationshipId(this);
-        final Relationship[] relationships = new Relationship[maxRelationshipId - 1];
+        ArrayList<Relationship> relationships = new ArrayList<>();
         for (int relationshipIdCounter = 0; relationshipIdCounter < maxRelationshipId - 1; relationshipIdCounter++)
         {
             int relationshipId = relationshipIdCounter + 1; // relationship IDs start at 1
             Relationship relationship = PreferencesHelper.getRelationship(this, relationshipId);
-            relationships[relationshipIdCounter] = relationship;
+            if (relationship != null)
+            {
+                relationships.add(relationship);
+            }
         }
         ArrayAdapter<Relationship> adapter = new ArrayAdapter<>(this, R.layout.relationship_thumbnail, relationships);
         ListView listView = (ListView) findViewById(R.id.thumbnail_container_layout);
@@ -63,7 +62,7 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                launchRelationshipDetail(position + 1);
+                launchRelationshipDetailView(position + 1);
             }
         });
     }
