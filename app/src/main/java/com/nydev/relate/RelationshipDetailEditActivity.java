@@ -1,14 +1,19 @@
 package com.nydev.relate;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.TextView;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.Calendar;
 
 /**
  * Created by markneider on 7/1/16.
@@ -46,7 +51,7 @@ public class RelationshipDetailEditActivity extends AppCompatActivity
         String relationshipDescription = getStringFromTextView(R.id.relationship_edit_text);
         String note = getStringFromTextView(R.id.note_edit_text);
 
-        Relationship relationship = new Relationship(id, name, birthday, relationshipDescription, note);
+        Relationship relationship = new Relationship(id, name, null, relationshipDescription, note);
 
         String filename = id + ".ser";
 
@@ -75,5 +80,31 @@ public class RelationshipDetailEditActivity extends AppCompatActivity
     {
         TextView textView = (TextView) findViewById(textViewId);
         return textView.getText().toString();
+    }
+
+    public static class BirthdayPickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener
+    {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState)
+        {
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day)
+        {
+
+        }
+    }
+
+    public void showBirthdayPickerDialog(View view)
+    {
+        DialogFragment newFragment = new BirthdayPickerFragment();
+        newFragment.show(getFragmentManager(), "birthdayPicker");
     }
 }
