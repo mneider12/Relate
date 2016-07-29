@@ -63,7 +63,12 @@ public class PreferencesHelper
         catch (IOException|ClassNotFoundException exception)
         {
             Log.e(LOG_TAG, "Failed to load relationship: " + relationshipId);
-            return null;
+            return new Relationship(context);
         }
+    }
+
+    public static boolean isValidRelationshipId(int relationshipId)
+    {
+        return relationshipId == 0;
     }
 }

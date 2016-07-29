@@ -18,32 +18,47 @@ import java.util.Calendar;
 /**
  * Created by markneider on 7/1/16.
  */
-public class RelationshipDetailEditActivity extends AppCompatActivity
+public class RelationshipDetailActivity extends AppCompatActivity
 {
     private static final String LOG_TAG = "RelationshipDetail";
+    private Relationship relationship;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.relationship_detail_edit);
+        setContentView(R.layout.relationship_detail);
         Intent intent = getIntent();
         int relationshipId = intent.getIntExtra("com.nydev.relate.relationshipId", 0);
-        if (relationshipId != 0)
+        if (PreferencesHelper.isValidRelationshipId(relationshipId))    // Activity should open existing relationship in view mode
         {
             loadRelationship(relationshipId);
+        }
+        else
+        {
+            relationship = new Relationship(this);
         }
     }
 
     private void loadRelationship(int relationshipId)
     {
-        Relationship relationship = PreferencesHelper.getRelationship(this, relationshipId);
+        relationship = PreferencesHelper.getRelationship(this, relationshipId);
         TextView nameEntryEditText = (TextView) findViewById(R.id.name_entry_edit_text);
-        nameEntryEditText.setText(relationship.getName());
+
+        if (relationship.getName() != null) // load name if set
+        {
+            nameEntryEditText.setText(relationship.getName());
+            nameEntryEditText.setEnabled(false);
+        }
+        else    // if name is not set, hide name display
+        {
+            nameEntryEditText.setVisibility(View.GONE);
+        }
+
+        // TODO if (relationship.getBirthday() != null)
     }
 
     public void saveRelationship(View view)
     {
-        int id = PreferencesHelper.getNextRelationshipId(this);
         PreferencesHelper.incrementNextRelationshipId(this);
 
         String name = getStringFromTextView(R.id.name_entry_edit_text);
@@ -51,24 +66,8 @@ public class RelationshipDetailEditActivity extends AppCompatActivity
         String relationshipDescription = getStringFromTextView(R.id.relationship_edit_text);
         String note = getStringFromTextView(R.id.note_edit_text);
 
-        Relationship relationship = new Relationship(id, name, null, relationshipDescription, note);
-
-        String filename = id + ".ser";
-
-        try
-        {
-            FileOutputStream fileOutputStream = openFileOutput(filename, MODE_PRIVATE);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(relationship);
-            objectOutputStream.close();
-            fileOutputStream.close();
-            Log.d(LOG_TAG, "Successfully saved id: " + id);
-        }
-        catch (IOException IOException)
-        {
-            Log.e(LOG_TAG, "Failed to save relationship ID: " + id);
-            PreferencesHelper.decrementNextRelationshipId(this);    // reset ID counter
-        }
+        RelationshipDbHelper relationshipDbHelper = new RelationshipDbHelper(this);
+        relationshipDbHelper.insertRelationship(relationship.getId(), relationship.getName(), relationship.getName());
     }
 
     /**

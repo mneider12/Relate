@@ -1,5 +1,7 @@
 package com.nydev.relate;
 
+import android.content.Context;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -13,6 +15,13 @@ public class Relationship implements Serializable
     private Date birthday;
     private String relationship;
     private String note;
+
+
+    public Relationship(Context context)
+    {
+        id = PreferencesHelper.getNextRelationshipId(context);
+        name = "";
+    }
 
     public Relationship(int id, String name, Date birthday, String relationshipDescription, String note)
     {
@@ -75,5 +84,10 @@ public class Relationship implements Serializable
     public String getNote()
     {
         return note;
+    }
+
+    public int getId()
+    {
+        return id;
     }
 }

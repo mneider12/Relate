@@ -24,7 +24,9 @@ public class RelationshipDetailViewActivity extends AppCompatActivity
 
     private void loadRelationship(int relationshipId)
     {
-        Relationship relationship = PreferencesHelper.getRelationship(this, relationshipId);
+        //Relationship relationship = PreferencesHelper.getRelationship(this, relationshipId);
+        RelationshipDbHelper relationshipdbHelper = new RelationshipDbHelper(this);
+        Relationship relationship = relationshipdbHelper.getRelationship(relationshipId);
         TextView nameEntryEditText = (TextView) findViewById(R.id.name_text_view);
         nameEntryEditText.setText(relationship.getName());
     }
