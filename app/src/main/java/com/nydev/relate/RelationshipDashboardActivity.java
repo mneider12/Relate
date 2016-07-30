@@ -61,7 +61,7 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Relationship relationship = (Relationship) adapterView.getItemAtPosition(position);
-                launchRelationshipDetailView(relationship.getId());
+                launchRelationshipDetailView(relationship.getRelationshipId());
             }
         });
     }
@@ -79,7 +79,7 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
                         relationshipsCursor.getColumnIndex(RelationshipEntry.COLUMN_NAME_LAST_NAME));
                 firstName = relationshipsCursor.getString(
                         relationshipsCursor.getColumnIndex(RelationshipEntry.COLUMN_NAME_FIRST_NAME));
-                relationships.add(new Relationship(relationshipId, firstName + " " + lastName, null, null, null));
+                relationships.add(new Relationship(relationshipId, lastName, firstName));
             } while (relationshipsCursor.moveToNext());
         }
         return new ArrayAdapter<>(this, R.layout.relationship_thumbnail, relationships);

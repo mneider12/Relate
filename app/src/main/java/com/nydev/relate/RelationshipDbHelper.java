@@ -74,9 +74,9 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
                     RelationshipEntry.COLUMN_NAME_LAST_NAME));
             String firstName = relationshipCursor.getString(relationshipCursor.getColumnIndex(
                     RelationshipEntry.COLUMN_NAME_FIRST_NAME));
-            return new Relationship(relationshipId, firstName + " " + lastName, null, null, null);
+            return new Relationship(relationshipId, lastName, firstName);
         } else {
-            return new Relationship(relationshipId, null, null, null, null);
+            return new Relationship(relationshipId, null, null);
         }
     }
 

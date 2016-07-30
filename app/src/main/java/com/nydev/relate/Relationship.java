@@ -3,91 +3,96 @@ package com.nydev.relate;
 import android.content.Context;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by markneider on 7/2/16.
+ * Hold information relevant to a single relationship record
  */
 public class Relationship implements Serializable
 {
-    int id;
-    private String name;
-    private Date birthday;
-    private String relationship;
-    private String note;
+    private int relationshipId; // unique ID. Never reused, including after deletions
+    // for readability, try to always reference lastName before firstName when order doesn't otherwise matter
+    private String lastName;
+    private String firstName;
 
-
+    /**
+     * Default constructor for a relationship. Reserves an ID
+     * @param context context for this activity. Needed to retrieve SharedPreferences.
+     */
     public Relationship(Context context)
     {
-        id = PreferencesHelper.getNextRelationshipId(context);
-        name = "";
-    }
-
-    public Relationship(int id, String name, Date birthday, String relationshipDescription, String note)
-    {
-        this.id = id;
-        if (name == null)
-        {
-            this.name = "";
-        }
-        else
-        {
-            this.name = name;
-        }
-        this.birthday = birthday;
-        this.relationship = relationshipDescription;
-        this.note = note;
+        relationshipId = PreferencesHelper.getNextRelationshipId(context);
     }
 
     /**
-     * If name is set, return name. Else return id.
-     * @return name to display for this relationship
+     * Constructor for a relationship. Parameters may be null, except for relationshipId
+     * @param relationshipId unique ID to use for this relationship
+     * @param lastName relation's last name
+     * @param firstName relation's first name
+     */
+    public Relationship(int relationshipId, String lastName, String firstName) {
+        this.relationshipId = relationshipId;
+        this.lastName = lastName;
+        this.firstName = firstName;
+    }
+
+    /**
+     * String representation of the relationship
+     * @return last name, first name [id]
      */
     @Override
     public String toString()
     {
-        if (name.equals(""))
-        {
-            return Integer.toString(id);
-        }
-        else
-        {
-            return name + "[" + id + "]";
-        }
+        return "" + lastName + ", " + firstName + " [" + relationshipId + "]";
     }
 
+    /**
+     * Getter method for lastName
+     * @return lastName or "" if lastName is null
+     */
+    public String getLastName() {
+        return "" + lastName; // add "" to avoid returning null
+    }
+
+    /**
+     * Getter method for firstName
+     * @return firstName or "" if firstName is null
+     */
+    public String getFirstName() {
+        return "" + firstName; // add "" to avoid returning null
+    }
+
+    /**
+     * Get name in first last format
+     * @return name in first last format
+     */
     public String getName()
     {
-        return name;
+        return "" + firstName + " " + lastName; // start with "" to avoid operating on null
     }
 
-    public void setName(String name)
-    {
-        this.name = name;
+    /**
+     * Set lastName
+     * @param lastName relation's last name
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public Date getBirthday()
-    {
-        return birthday;
+    /**
+     * Set firstName
+     * @param firstName relation's first name
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setBirthday(Date birthday)
+    /**
+     * Getter method for relationshipId
+     * @return unique ID for this relationship
+     */
+    public int getRelationshipId()
     {
-        this.birthday = birthday;
-    }
-
-    public String getRelationship()
-    {
-        return relationship;
-    }
-
-    public String getNote()
-    {
-        return note;
-    }
-
-    public int getId()
-    {
-        return id;
+        return relationshipId;
     }
 }

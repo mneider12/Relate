@@ -45,7 +45,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
         relationship = new RelationshipDbHelper(this).getRelationship(relationshipId);
         TextView nameEntryEditText = (TextView) findViewById(R.id.name_entry_edit_text);
 
-        if (relationship.getName().length() > 0) // load name if set
+        if (new RelationshipDbHelper(this).isValidRelationshipId(relationshipId)) // load name if set
         {
             nameEntryEditText.setText(relationship.getName());
             nameEntryEditText.setEnabled(false);
@@ -63,7 +63,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
         String note = getStringFromTextView(R.id.note_edit_text);
 
         RelationshipDbHelper relationshipDbHelper = new RelationshipDbHelper(this);
-        relationshipDbHelper.insertRelationship(relationship.getId(), relationship.getName(), relationship.getName());
+        relationshipDbHelper.insertRelationship(relationship.getRelationshipId(), relationship.getName(), relationship.getName());
     }
 
     /**
