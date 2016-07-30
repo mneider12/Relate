@@ -12,4 +12,5 @@
     <string name="note_view_instructions">Write a note</string>
     <string name="cancel_create">Cancel</string>
     <string name="save">Save</string>
+    <string name="delete">Delete</string>
 </resources>

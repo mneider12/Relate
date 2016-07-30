@@ -126,7 +126,7 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase relationshipDatabase = this.getReadableDatabase();
         Cursor relationshipCursor = relationshipDatabase.rawQuery(
                 "SELECT _ID FROM " + RelationshipEntry.TABLE_NAME +
-                "WHERE _ID=" + relationshipId, null);
+                " WHERE _ID=" + relationshipId, null);
 
         boolean isValidId = relationshipCursor.getCount() == 1;
         relationshipCursor.close();
