@@ -8,4 +8,8 @@
     <string name="enter_name_hint">Name</string>
     <string name="enter_birthday_hint">Birthday</string>
     <string name="enter_relationship_hint">Relationship</string>
+    <string name="add_picture_button">Click to add picture</string>
+    <string name="note_view_instructions">Write a note</string>
+    <string name="cancel_create">Cancel</string>
+    <string name="save">Save</string>
 </resources>

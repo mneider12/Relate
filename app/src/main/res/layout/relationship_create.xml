@@ -32,13 +32,13 @@
                 android:hint="@string/enter_birthday_hint"
                 android:inputType="date"/>
 
+            <!-- Not implemented -->
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/ic_event_black_24dp"
+                android:drawableEnd="@drawable/ic_event_black_24dp"
                 android:text="@string/enter_birthday_hint"
-                android:drawablePadding="16dp"
-                android:onClick="showBirthdayPickerDialog"/>
+                android:drawablePadding="16dp" />
 
             <EditText
                 android:id="@+id/relationship_edit_text"
@@ -53,7 +53,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/ic_person_outline_black_48dp"/>
+            android:src="@drawable/ic_person_outline_black_48dp"
+            android:contentDescription="@string/add_picture_button"/>
 
     </LinearLayout>
 
@@ -69,13 +70,16 @@
             android:background="#FFF9C4"
             android:layout_margin="16dp"
             android:inputType="textMultiLine"
-            android:gravity="top|left"/>
+            android:gravity="top|start"
+            android:hint="@string/note_view_instructions"/>
+
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_create_black_48dp"/>
+            android:src="@drawable/ic_create_black_48dp"
+            android:contentDescription="@string/note_view_instructions"/>
 
     </RelativeLayout>
 
@@ -88,14 +92,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_delete_black_24dp"/>
+            android:src="@drawable/ic_clear_black_24dp"
+            android:contentDescription="@string/cancel_create"/>
 
         <ImageButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/ic_done_black_24dp"
-            android:onClick="saveRelationship"/>
+            android:onClick="saveRelationship"
+            android:contentDescription="@string/save"/>
 
     </LinearLayout>
 
