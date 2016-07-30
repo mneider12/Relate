@@ -65,14 +65,29 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
      */
     public boolean insertRelationship(int relationshipId, String lastName, String firstName) {
         SQLiteDatabase relationshipDatabase = this.getWritableDatabase();
+        ContentValues relationshipValues = buildContentValues(relationshipId, lastName, firstName);
+
+        // return status of insert operation
+        return relationshipDatabase.insert(RelationshipEntry.TABLE_NAME, null, relationshipValues) != -1;
+    }
+
+    public boolean updateRelationship(int relationshipId, String lastName, String firstName) {
+        SQLiteDatabase relationshipDatabase = this.getWritableDatabase();
+        ContentValues relationshipValues = buildContentValues(relationshipId, lastName, firstName);
+
+        //return status of update operation
+        return relationshipDatabase.update(RelationshipEntry.TABLE_NAME, relationshipValues,
+                RelationshipEntry._ID + "=" + relationshipId, null) != -1;
+    }
+
+    private ContentValues buildContentValues(int relationshipId, String lastName, String firstName) {
         ContentValues relationshipValues = new ContentValues();
 
         relationshipValues.put(RelationshipEntry._ID, relationshipId);
         relationshipValues.put(RelationshipEntry.COLUMN_NAME_LAST_NAME, lastName);
         relationshipValues.put(RelationshipEntry.COLUMN_NAME_FIRST_NAME, firstName);
 
-        // return status of insert operation
-        return relationshipDatabase.insert(RelationshipEntry.TABLE_NAME, null, relationshipValues) != -1;
+        return relationshipValues;
     }
 
     /**

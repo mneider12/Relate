@@ -1,11 +1,9 @@
 package com.nydev.relate;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.TextView;
+import com.nydev.relate.RelationshipEditHelper.saveMode;
 
 /**
  * Created by markneider on 7/1/16.
@@ -34,30 +32,15 @@ public class RelationshipCreateActivity extends AppCompatActivity
      */
     public void saveRelationship(View saveButton)
     {
-        String rawName = getStringFromTextView(R.id.name_entry_edit_text);
-        Name relationName = new Name(rawName); // parse name into last name and first name
-
-        RelationshipDbHelper relationshipDbHelper = new RelationshipDbHelper(this);
-        relationshipDbHelper.insertRelationship(relationship.getRelationshipId(),
-                relationName.getLastName(), relationName.getFirstName());
-    }
-
-    public void cancelRelationship(View cancelButton) {
-        // re-launch Dashboard Activity
-        Intent launchDashboardActivity = new Intent(this, RelationshipDashboardActivity.class);
-        launchDashboardActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // back shouldn't return to this activity
-        startActivity(launchDashboardActivity);
+        RelationshipEditHelper.saveRelationship(
+                relationship.getRelationshipId(), saveMode.CREATE, this);
     }
 
     /**
-     * Get the text from a text view and return it as a String
-     * @param textViewId is the id of the TextView to be used in findViewById
-     * @return text from the given TextView
+     * Don't save relationship - destroy activity and return to dashboard
+     * @param cancelButton the view calling this function (not used)
      */
-    @NonNull
-    private String getStringFromTextView(int textViewId)
-    {
-        TextView textView = (TextView) findViewById(textViewId);
-        return textView.getText().toString();
+    public void cancelRelationship(View cancelButton) {
+        RelationshipEditHelper.fallBackToDashboard(this);
     }
 }

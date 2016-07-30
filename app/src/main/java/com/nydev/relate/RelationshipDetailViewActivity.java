@@ -3,8 +3,10 @@ package com.nydev.relate;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.nydev.relate.RelationshipEditHelper.saveMode;
 
 /**
  * Created by markneider on 7/5/16.
@@ -14,6 +16,8 @@ public class RelationshipDetailViewActivity extends AppCompatActivity
 {
 
     private RelationshipDbHelper relationshipDbHelper;
+    private Relationship relationship;
+
     /**
      * Receive Intent and load an existing Relationship.
      * If Relationship is not passed by Intent or cannot be loaded,
@@ -49,10 +53,7 @@ public class RelationshipDetailViewActivity extends AppCompatActivity
             invalidRelationship.show();
         }
 
-        // re-launch Dashboard Activity
-        Intent launchDashboardActivity = new Intent(this, RelationshipDashboardActivity.class);
-        launchDashboardActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // back should not return to this activity
-        startActivity(launchDashboardActivity);
+        RelationshipEditHelper.fallBackToDashboard(this);
     }
 
     /**
@@ -61,8 +62,13 @@ public class RelationshipDetailViewActivity extends AppCompatActivity
      */
     private void loadRelationship(int relationshipId)
     {
-        Relationship relationship = relationshipDbHelper.getRelationship(relationshipId);
+        relationship = relationshipDbHelper.getRelationship(relationshipId);
         TextView nameEntryEditText = (TextView) findViewById(R.id.name_text_view);
         nameEntryEditText.setText(relationship.getName().toString());
+    }
+
+    public void saveRelationship(View saveButton) {
+        RelationshipEditHelper.saveRelationship(
+                relationship.getRelationshipId(), saveMode.UPDATE, this);
     }
 }
