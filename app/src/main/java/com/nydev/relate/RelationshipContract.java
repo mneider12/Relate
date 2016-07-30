@@ -4,14 +4,21 @@ import android.provider.BaseColumns;
 
 /**
  * Created by markneider on 7/8/16.
+ * Define the schema for the relationship table
  */
 public class RelationshipContract {
 
+    /**
+     * Defines constants for accessing relationship table. Constructor should not be called
+     */
     private RelationshipContract()
     {
 
     }
 
+    /**
+     * Define constants for relationship table
+     */
     public static abstract class RelationshipEntry implements BaseColumns
     {
         public static final String TABLE_NAME = "relationship";
