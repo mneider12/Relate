@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".RelationshipDetailActivity"
+        <activity android:name=".RelationshipCreateActivity"
             android:parentActivityName=".RelationshipDashboardActivity">
         </activity>
         <activity android:name=".RelationshipDetailViewActivity"

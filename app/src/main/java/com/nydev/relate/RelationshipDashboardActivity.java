@@ -68,12 +68,13 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
 
     /**
      * Create a new relationship
+     * @param view not used - the view that called createRelationship (expected from onClick)
      */
     public void createRelationship(View view)
     {
-        // launch detail activity to edit new relationship
-        Intent launchRelationshipDetailEdit = new Intent(this, RelationshipDetailActivity.class);
-        startActivity(launchRelationshipDetailEdit);
+        // launch detail activity to create new relationship
+        Intent launchRelationshipCreate = new Intent(this, RelationshipCreateActivity.class);
+        startActivity(launchRelationshipCreate);
     }
 
     /**
