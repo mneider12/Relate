@@ -32,8 +32,6 @@ public class RelationshipDetailViewActivity extends AppCompatActivity
             loadRelationship(relationshipId);
         } else {
             failbackToDashboard("Invalid Relationship ID, cannot load.");
-
-
         }
     }
 
@@ -53,6 +51,7 @@ public class RelationshipDetailViewActivity extends AppCompatActivity
 
         // re-launch Dashboard Activity
         Intent launchDashboardActivity = new Intent(this, RelationshipDashboardActivity.class);
+        launchDashboardActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // back should not return to this activity
         startActivity(launchDashboardActivity);
     }
 
