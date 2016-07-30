@@ -14,6 +14,7 @@ public class Relationship implements Serializable
     // for readability, try to always reference lastName before firstName when order doesn't otherwise matter
     private String lastName;
     private String firstName;
+    private Name name;
 
     public Relationship() {
         relationshipId = -1; // this is an invalid Relationship and cannot be saved until it is assigned an ID
@@ -36,8 +37,7 @@ public class Relationship implements Serializable
      */
     public Relationship(int relationshipId, String lastName, String firstName) {
         this.relationshipId = relationshipId;
-        this.lastName = lastName;
-        this.firstName = firstName;
+        name = new Name(lastName, firstName);
     }
 
     /**
@@ -47,7 +47,7 @@ public class Relationship implements Serializable
     @Override
     public String toString()
     {
-        return "" + lastName + ", " + firstName + " [" + relationshipId + "]";
+        return name.toString() + " [" + relationshipId + "]";
     }
 
     /**
@@ -56,7 +56,7 @@ public class Relationship implements Serializable
      */
     @SuppressWarnings("unused")  // Remove this line once functionality is added using this method
     public String getLastName() {
-        return "" + lastName; // add "" to avoid returning null
+        return name.getLastName();
     }
 
     /**
@@ -65,34 +65,16 @@ public class Relationship implements Serializable
      */
     @SuppressWarnings("unused") // Remove this line once functionality is added using this method
     public String getFirstName() {
-        return "" + firstName; // add "" to avoid returning null
+        return name.getFirstName();
     }
 
     /**
-     * Get name in first last format
-     * @return name in first last format
+     * Get name
+     * @return name
      */
-    public String getName()
+    public Name getName()
     {
-        return "" + firstName + " " + lastName; // start with "" to avoid operating on null
-    }
-
-    /**
-     * Set lastName
-     * @param lastName relation's last name
-     */
-    @SuppressWarnings("unused") // Remove this line once functionality is added using this method
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    /**
-     * Set firstName
-     * @param firstName relation's first name
-     */
-    @SuppressWarnings("unused") // Remove this line once functionality is added using this method
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        return name;
     }
 
     /**

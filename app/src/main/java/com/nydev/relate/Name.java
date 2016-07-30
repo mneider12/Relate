@@ -57,4 +57,8 @@ public class Name {
             return firstName;
         }
     }
+
+    public String toString() {
+        return getFirstName() + " " + getLastName();
+    }
 }

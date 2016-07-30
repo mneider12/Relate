@@ -63,6 +63,6 @@ public class RelationshipDetailViewActivity extends AppCompatActivity
     {
         Relationship relationship = relationshipDbHelper.getRelationship(relationshipId);
         TextView nameEntryEditText = (TextView) findViewById(R.id.name_text_view);
-        nameEntryEditText.setText(relationship.getName());
+        nameEntryEditText.setText(relationship.getName().toString());
     }
 }
