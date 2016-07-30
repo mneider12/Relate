@@ -50,6 +50,7 @@ public class Relationship implements Serializable
      * Getter method for lastName
      * @return lastName or "" if lastName is null
      */
+    @SuppressWarnings("unused")  // Remove this line once functionality is added using this method
     public String getLastName() {
         return "" + lastName; // add "" to avoid returning null
     }
@@ -58,6 +59,7 @@ public class Relationship implements Serializable
      * Getter method for firstName
      * @return firstName or "" if firstName is null
      */
+    @SuppressWarnings("unused") // Remove this line once functionality is added using this method
     public String getFirstName() {
         return "" + firstName; // add "" to avoid returning null
     }
@@ -75,6 +77,7 @@ public class Relationship implements Serializable
      * Set lastName
      * @param lastName relation's last name
      */
+    @SuppressWarnings("unused") // Remove this line once functionality is added using this method
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -83,6 +86,7 @@ public class Relationship implements Serializable
      * Set firstName
      * @param firstName relation's first name
      */
+    @SuppressWarnings("unused") // Remove this line once functionality is added using this method
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
