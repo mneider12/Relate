@@ -52,7 +52,7 @@ public class Relationship implements Serializable
         }
         else
         {
-            return name;
+            return name + "[" + id + "]";
         }
     }
 

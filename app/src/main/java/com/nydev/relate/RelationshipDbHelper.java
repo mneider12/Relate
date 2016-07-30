@@ -37,7 +37,6 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db) {
-        Log.e(LOG_TAG, SQL_CREATE_ENTRIES);
         db.execSQL(SQL_CREATE_ENTRIES);
     }
 
@@ -57,29 +56,40 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
         relationshipValues.put(RelationshipEntry.COLUMN_NAME_FIRST_NAME, firstName);
 
         // return status of insert operation
-        return relationshipDatabase.insert(DATABASE_NAME, null, relationshipValues) != -1;
+        return relationshipDatabase.insert(RelationshipEntry.TABLE_NAME, null, relationshipValues) != -1;
     }
 
     public Relationship getRelationship(int relationshipId) {
         SQLiteDatabase relationshipDatabase = this.getReadableDatabase();
         Cursor relationshipCursor = relationshipDatabase.rawQuery(
-                "SELECT * FROM " + DATABASE_NAME +
+                "SELECT * FROM " + RelationshipEntry.TABLE_NAME +
                 " WHERE " + RelationshipEntry._ID + "=" + relationshipId,
                 null);
         if (relationshipCursor == null) {
             return null; //TODO return something more useful
         }
 
-        String lastName = relationshipCursor.getString(relationshipCursor.getColumnIndex(
-                RelationshipEntry.COLUMN_NAME_LAST_NAME));
-        String firstName = relationshipCursor.getString(relationshipCursor.getColumnIndex(
-                RelationshipEntry.COLUMN_NAME_FIRST_NAME));
-        return new Relationship(relationshipId, firstName + " " + lastName, null, null, null);
+        if (relationshipCursor.moveToFirst()) {
+            String lastName = relationshipCursor.getString(relationshipCursor.getColumnIndex(
+                    RelationshipEntry.COLUMN_NAME_LAST_NAME));
+            String firstName = relationshipCursor.getString(relationshipCursor.getColumnIndex(
+                    RelationshipEntry.COLUMN_NAME_FIRST_NAME));
+            return new Relationship(relationshipId, firstName + " " + lastName, null, null, null);
+        } else {
+            return new Relationship(relationshipId, null, null, null, null);
+        }
     }
 
     public Cursor getAllRelationships() {
         SQLiteDatabase relationshipDatabase = this.getReadableDatabase();
         return relationshipDatabase.rawQuery(
                 "SELECT * FROM " + RelationshipEntry.TABLE_NAME, null);
+    }
+
+    public boolean isValidRelationshipId(int relationshipId) {
+        SQLiteDatabase relationshipDatabase = this.getReadableDatabase();
+        Cursor relationshipCursor = relationshipDatabase.rawQuery(
+                "SELECT _ID FROM " + RelationshipEntry.TABLE_NAME, null);
+        return relationshipCursor.getCount() > 0;
     }
 }

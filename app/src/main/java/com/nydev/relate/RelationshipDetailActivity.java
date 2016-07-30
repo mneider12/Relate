@@ -29,7 +29,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
         setContentView(R.layout.relationship_detail);
         Intent intent = getIntent();
         int relationshipId = intent.getIntExtra("com.nydev.relate.relationshipId", 0);
-        if (PreferencesHelper.isValidRelationshipId(relationshipId))    // Activity should open existing relationship in view mode
+        if (new RelationshipDbHelper(this).isValidRelationshipId(relationshipId))    // Activity should open existing relationship in view mode
         {
             loadRelationship(relationshipId);
         }
@@ -41,17 +41,14 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
     private void loadRelationship(int relationshipId)
     {
-        relationship = PreferencesHelper.getRelationship(this, relationshipId);
+
+        relationship = new RelationshipDbHelper(this).getRelationship(relationshipId);
         TextView nameEntryEditText = (TextView) findViewById(R.id.name_entry_edit_text);
 
-        if (relationship.getName() != null) // load name if set
+        if (relationship.getName().length() > 0) // load name if set
         {
             nameEntryEditText.setText(relationship.getName());
             nameEntryEditText.setEnabled(false);
-        }
-        else    // if name is not set, hide name display
-        {
-            nameEntryEditText.setVisibility(View.GONE);
         }
 
         // TODO if (relationship.getBirthday() != null)
@@ -59,7 +56,6 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
     public void saveRelationship(View view)
     {
-        PreferencesHelper.incrementNextRelationshipId(this);
 
         String name = getStringFromTextView(R.id.name_entry_edit_text);
         String birthday = getStringFromTextView(R.id.birthday_edit_text);

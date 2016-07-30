@@ -15,7 +15,7 @@ public class RelationshipContract {
     public static abstract class RelationshipEntry implements BaseColumns
     {
         public static final String TABLE_NAME = "relationship";
-        public static final String COLUMN_NAME_RELATIONSHIP_ID = "relationshipId";
+        // _ID is the inherited id column
         public static final String COLUMN_NAME_FIRST_NAME = "firstName";
         public static final String COLUMN_NAME_LAST_NAME = "lastName";
     }

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class RelationshipDashboardActivity extends AppCompatActivity {
 
+
     private final String LOG_TAG = "nydev.Relate";  // Tag to use in android monitor log statements
     private final String PACKAGE_NAME = "com.nydev.relate";
 
@@ -73,7 +74,7 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
         if (relationshipsCursor.moveToFirst()) {    // checks if Cursor is empty
             do {
                 relationshipId = relationshipsCursor.getInt(
-                        relationshipsCursor.getColumnIndex(RelationshipEntry.COLUMN_NAME_RELATIONSHIP_ID));
+                        relationshipsCursor.getColumnIndex(RelationshipEntry._ID));
                 lastName = relationshipsCursor.getString(
                         relationshipsCursor.getColumnIndex(RelationshipEntry.COLUMN_NAME_LAST_NAME));
                 firstName = relationshipsCursor.getString(
