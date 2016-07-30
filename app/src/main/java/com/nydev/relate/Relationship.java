@@ -15,6 +15,10 @@ public class Relationship implements Serializable
     private String lastName;
     private String firstName;
 
+    public Relationship() {
+        relationshipId = -1; // this is an invalid Relationship and cannot be saved until it is assigned an ID
+    }
+
     /**
      * Default constructor for a relationship. Reserves an ID
      * @param context context for this activity. Needed to retrieve SharedPreferences.
