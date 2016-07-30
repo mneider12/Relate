@@ -33,17 +33,12 @@ public class RelationshipCreateActivity extends AppCompatActivity
      */
     public void saveRelationship(View view)
     {
-        String name = getStringFromTextView(R.id.name_entry_edit_text);
-        // parse name into last name and first name. Assume everything after the last space in name is the last name
-        // strip white space around name.
-        // likely separate into separate fields in the future
-        name = name.trim();
-        int lastSpace = name.lastIndexOf(' ');
-        String lastName = name.substring(lastSpace + 1); // start after the last space
-        String firstName = name.substring(0, lastSpace); // end before the last space
+        String rawName = getStringFromTextView(R.id.name_entry_edit_text);
+        Name relationName = parseRawName(rawName); // parse name into last name and first name
 
         RelationshipDbHelper relationshipDbHelper = new RelationshipDbHelper(this);
-        relationshipDbHelper.insertRelationship(relationship.getRelationshipId(), lastName, firstName);
+        relationshipDbHelper.insertRelationship(relationship.getRelationshipId(),
+                relationName.getLastName(), relationName.getFirstName());
     }
 
     /**
@@ -56,5 +51,19 @@ public class RelationshipCreateActivity extends AppCompatActivity
     {
         TextView textView = (TextView) findViewById(textViewId);
         return textView.getText().toString();
+    }
+
+    private Name parseRawName(String rawName) {
+        rawName = rawName.trim();
+        int lastSpaceIndex = rawName.lastIndexOf(' ');
+        String lastName, firstName;
+        if (lastSpaceIndex == -1) { // no last name given (first name may be "")
+            lastName = null;
+            firstName = rawName;
+        } else { // first and last name given
+            lastName = rawName.substring(lastSpaceIndex + 1); // start after the last space
+            firstName = rawName.substring(0, lastSpaceIndex); // end before the last space
+        }
+        return new Name(lastName, firstName);
     }
 }
