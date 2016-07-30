@@ -10,6 +10,18 @@ public class Name {
 
     private String lastName,firstName;
 
+    public Name(String rawName) {
+        rawName = rawName.trim();
+        int lastSpaceIndex = rawName.lastIndexOf(' ');
+        if (lastSpaceIndex == -1) { // no last name given (first name may be "")
+            lastName = null;
+            firstName = rawName;
+        } else { // first and last name given
+            lastName = rawName.substring(lastSpaceIndex + 1); // start after the last space
+            firstName = rawName.substring(0, lastSpaceIndex); // end before the last space
+        }
+    }
+
     /**
      * Create a name
      * @param lastName last name

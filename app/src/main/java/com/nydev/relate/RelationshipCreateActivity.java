@@ -34,7 +34,7 @@ public class RelationshipCreateActivity extends AppCompatActivity
     public void saveRelationship(View view)
     {
         String rawName = getStringFromTextView(R.id.name_entry_edit_text);
-        Name relationName = parseRawName(rawName); // parse name into last name and first name
+        Name relationName = new Name(rawName); // parse name into last name and first name
 
         RelationshipDbHelper relationshipDbHelper = new RelationshipDbHelper(this);
         relationshipDbHelper.insertRelationship(relationship.getRelationshipId(),
@@ -51,19 +51,5 @@ public class RelationshipCreateActivity extends AppCompatActivity
     {
         TextView textView = (TextView) findViewById(textViewId);
         return textView.getText().toString();
-    }
-
-    private Name parseRawName(String rawName) {
-        rawName = rawName.trim();
-        int lastSpaceIndex = rawName.lastIndexOf(' ');
-        String lastName, firstName;
-        if (lastSpaceIndex == -1) { // no last name given (first name may be "")
-            lastName = null;
-            firstName = rawName;
-        } else { // first and last name given
-            lastName = rawName.substring(lastSpaceIndex + 1); // start after the last space
-            firstName = rawName.substring(0, lastSpaceIndex); // end before the last space
-        }
-        return new Name(lastName, firstName);
     }
 }
