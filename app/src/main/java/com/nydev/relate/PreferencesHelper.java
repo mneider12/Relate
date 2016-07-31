@@ -11,7 +11,7 @@ import android.content.SharedPreferences;
 public class PreferencesHelper
 {
     private static final String RELATIONSHIP_PREFS_NAME = "RelationshipPrefsFile"; // name of the relationship preferences file
-    private static final String NEXT_RELATIONSHIP_ID = "next_relationship_id"; // name of the index in RelationshipPrefsFile storing the next available ID
+    private static final String NEXT_RELATIONSHIP_ID_KEY = "next_relationship_id"; // name of the index in RelationshipPrefsFile storing the next available ID
     private static final int INITIAL_ID = 1; // first ID to use for a relationship when first loading the application
     @SuppressWarnings("unused") // LOG_TAG is only used for debugging currently
     private static final String LOG_TAG = "nydev.Relate";
@@ -35,7 +35,7 @@ public class PreferencesHelper
         SharedPreferences relationshipPreferences =
                 context.getSharedPreferences(RELATIONSHIP_PREFS_NAME, Context.MODE_PRIVATE);
         // set ID from current next available ID
-        int relationshipId = relationshipPreferences.getInt(NEXT_RELATIONSHIP_ID, INITIAL_ID);
+        int relationshipId = relationshipPreferences.getInt(NEXT_RELATIONSHIP_ID_KEY, INITIAL_ID);
         // increment the counter for next available ID
         incrementNextRelationshipId(relationshipPreferences);
         return relationshipId;
@@ -50,8 +50,32 @@ public class PreferencesHelper
     private static void incrementNextRelationshipId(SharedPreferences relationshipPreferences)
     {
         SharedPreferences.Editor relationshipPreferencesEditor = relationshipPreferences.edit();
-        int currentNextRelationshipId = relationshipPreferences.getInt(NEXT_RELATIONSHIP_ID, INITIAL_ID);
-        relationshipPreferencesEditor.putInt(NEXT_RELATIONSHIP_ID, currentNextRelationshipId + 1);
+        int currentNextRelationshipId = relationshipPreferences.getInt(NEXT_RELATIONSHIP_ID_KEY, INITIAL_ID);
+        relationshipPreferencesEditor.putInt(NEXT_RELATIONSHIP_ID_KEY, currentNextRelationshipId + 1);
         relationshipPreferencesEditor.apply();
+    }
+
+    /**
+     * Getter method for RELATIONSHIP_PREFS_NAME. See variable declaration for description.
+     * @return RELATIONSHIP_PREFS_NAME
+     */
+    public static String getRelationshipPrefsName() {
+        return RELATIONSHIP_PREFS_NAME;
+    }
+
+    /**
+     * Getter method for NEXT_RELATIONSHIP_ID. See variable declaration for description.
+     * @return NEXT_RELATIONSHIP_ID
+     */
+    public static String getNextRelationshipIdKey() {
+        return NEXT_RELATIONSHIP_ID_KEY;
+    }
+
+    /**
+     * Getter method for INITIAL_ID. See variable declaration for description.
+     * @return
+     */
+    public static int getInitialId() {
+        return INITIAL_ID;
     }
 }

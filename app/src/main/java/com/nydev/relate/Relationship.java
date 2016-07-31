@@ -12,12 +12,14 @@ public class Relationship implements Serializable
 {
     private int relationshipId; // unique ID. Never reused, including after deletions
     // for readability, try to always reference lastName before firstName when order doesn't otherwise matter
-    private String lastName;
-    private String firstName;
     private Name name;
 
+    /**
+     * Create an placeholder Relationship with ID = -1 and default / null information
+     */
     public Relationship() {
         relationshipId = -1; // this is an invalid Relationship and cannot be saved until it is assigned an ID
+        name = new Name();
     }
 
     /**
@@ -27,6 +29,7 @@ public class Relationship implements Serializable
     public Relationship(Context context)
     {
         relationshipId = PreferencesHelper.getNextRelationshipId(context);
+        name = new Name();
     }
 
     /**

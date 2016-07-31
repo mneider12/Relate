@@ -10,6 +10,11 @@ public class Name {
 
     private String lastName,firstName;
 
+    public Name() {
+        lastName = null;
+        firstName = null;
+    }
+
     /**
      * Parse a single String into a Name object
      * Strips white space around rawName.
