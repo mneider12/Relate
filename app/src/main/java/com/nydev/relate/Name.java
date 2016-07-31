@@ -10,6 +10,13 @@ public class Name {
 
     private String lastName,firstName;
 
+    /**
+     * Parse a single String into a Name object
+     * Strips white space around rawName.
+     * Splits last name from first name based on the last space with non-whitespace charachters following it.
+     * E.g. - " myrk von Nyder " splits into "Nyder" for lastName and "myrk von" for first name.
+     * @param rawName user entered name String
+     */
     public Name(String rawName) {
         rawName = rawName.trim();
         int lastSpaceIndex = rawName.lastIndexOf(' ');
@@ -58,6 +65,10 @@ public class Name {
         }
     }
 
+    /**
+     * Return name in firstName lastName format
+     * @return name in firstName lastName format
+     */
     public String toString() {
         return getFirstName() + " " + getLastName();
     }
