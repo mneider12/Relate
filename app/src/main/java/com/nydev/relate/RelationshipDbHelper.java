@@ -147,4 +147,11 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
         relationshipCursor.close();
         return isValidId;
     }
+
+    public boolean deleteRelationship(int relationshipId) {
+        SQLiteDatabase relationshipDatabase = this.getWritableDatabase();
+
+        return relationshipDatabase.delete(RelationshipEntry.TABLE_NAME,
+                RelationshipEntry._ID + "=" + relationshipId, null) != -1;
+    }
 }

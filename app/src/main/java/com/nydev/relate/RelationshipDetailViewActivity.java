@@ -71,4 +71,9 @@ public class RelationshipDetailViewActivity extends AppCompatActivity
         RelationshipEditHelper.saveRelationship(
                 relationship.getRelationshipId(), saveMode.UPDATE, this);
     }
+
+    public void deleteRelationship(View deleteButton) {
+        relationshipDbHelper.deleteRelationship(relationship.getRelationshipId());
+        RelationshipEditHelper.fallBackToDashboard(this);
+    }
 }
