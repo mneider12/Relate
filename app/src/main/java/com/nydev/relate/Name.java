@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
  */
 public class Name {
 
+    // By convention, reference last name and then first name in code where order doesn't matter,
+    // in order to increase readability and avoid errors through standardization.
     private String lastName,firstName;
 
     public Name() {
@@ -19,7 +21,7 @@ public class Name {
      * Parse a single String into a Name object
      * Strips white space around rawName.
      * Splits last name from first name based on the last space with non-whitespace charachters following it.
-     * E.g. - " myrk von Nyder " splits into "Nyder" for lastName and "myrk von" for first name.
+     * E.g. - " mark von Nyder " splits into "Nyder" for lastName and "mark von" for first name.
      * @param rawName user entered name String
      */
     public Name(String rawName) {

@@ -28,6 +28,7 @@ public class PreferencesHelperUnitTest {
         SharedPreferences mockedSharedPreferences = mockedContext.getSharedPreferences(
                 PreferencesHelper.getRelationshipPrefsName(), Context.MODE_PRIVATE);
         SharedPreferences.Editor mockedSharedPreferencesEditor = mockedSharedPreferences.edit();
+        mockedSharedPreferencesEditor.apply(); // added only due to lint error requiring apply() after edit(). No effect.
 
         // target of test - verify that the PreferencesHelper returns the next relationship ID from the mock Context's SharedPreferences
         assertEquals(expectedNextRelationshipId, PreferencesHelper.getNextRelationshipId(mockedContext));

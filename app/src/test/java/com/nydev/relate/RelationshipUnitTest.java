@@ -2,10 +2,7 @@ package com.nydev.relate;
 
 import android.content.Context;
 
-import static org.mockito.Mockito.*;
-
 import org.junit.Test;
-import org.mockito.Mock;
 
 import static org.junit.Assert.*;
 
@@ -15,6 +12,10 @@ import static org.junit.Assert.*;
  */
 public class RelationshipUnitTest {
 
+    /**
+     * Test the default Relationship constructor. Expect relationshipId = -1 and data is null or default.
+     * Relationship does not need to be ready for actual use. It is invalid at construction time.
+     */
     @Test
     public void defaultConstructorTest() {
         // Expectation variables
@@ -28,17 +29,23 @@ public class RelationshipUnitTest {
         assertEquals(expectedFirstName, relationship.getFirstName());
     }
 
+    /**
+     * Test the Relationship constructor that assigns an ID based on SharedPreferences from the Context
+     */
     @Test
     public void contextConstructorTest() {
         // Expectation variables
-        final int expectedRelationshipId = 12;
+        final int expectedRelationshipId = MockHelper.getNextRelationshipId();
         final String expectedLastName = "";
         final String expectedFirstName = "";
 
         // create mock objects
         Context mockedContext = MockHelper.getContext();
 
-
         Relationship relationship = new Relationship(mockedContext);
+
+        assertEquals(expectedRelationshipId, relationship.getRelationshipId());
+        assertEquals(expectedLastName, relationship.getLastName());
+        assertEquals(expectedFirstName, relationship.getFirstName());
     }
 }

@@ -73,7 +73,7 @@ public class PreferencesHelper
 
     /**
      * Getter method for INITIAL_ID. See variable declaration for description.
-     * @return
+     * @return initial ID when relationship SharedPreferences is created
      */
     public static int getInitialId() {
         return INITIAL_ID;

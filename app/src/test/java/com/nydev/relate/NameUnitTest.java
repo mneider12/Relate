@@ -14,9 +14,9 @@ public class NameUnitTest {
      */
     @Test
     public void rawStringConstructorTest() {
-        final String rawName = " myrk von Nyder  ";
+        final String rawName = " mark von Nyder  ";
         final String lastName = "Nyder";
-        final String firstName = "myrk von";
+        final String firstName = "mark von";
         Name name = new Name(rawName); // target of this test
         assertEquals(lastName, name.getLastName());
         assertEquals(firstName, name.getFirstName());

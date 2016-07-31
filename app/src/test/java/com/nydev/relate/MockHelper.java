@@ -3,9 +3,6 @@ package com.nydev.relate;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
 import static org.mockito.Mockito.*;
 
 /**
@@ -70,8 +67,9 @@ public class MockHelper {
     }
 
     /**
-     * Get the nextRelationshipId that will be used in mocks
-     * @return
+     * Get the nextRelationshipId that will be used in mocks. Currently this variable is not dynamic,
+     * it will always return the initial ID.
+     * @return nextRelationshipId that will be returned in mocks
      */
     public static int getNextRelationshipId() {
         return INIT_NEXT_RELATIONSHIP_ID;
