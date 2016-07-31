@@ -22,7 +22,21 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:design:24.0.0'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.0.94-beta'
+
+    androidTestCompile 'com.android.support.test:runner:0.4'
+    // JUnit 4 rules
+    androidTestCompile 'com.android.support.test:rules:0.4'
+    // build and run Espresso tests
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    // build and run UI Automator tests
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+
+    configurations.androidTestCompile.dependencies.each { androidTestCompileDependency ->
+        androidTestCompileDependency.exclude group: 'com.android.support'
+    }
 }
