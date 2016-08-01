@@ -38,7 +38,8 @@
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_event_black_24dp"
                 android:text="@string/enter_birthday_hint"
-                android:drawablePadding="16dp" />
+                android:drawablePadding="16dp"
+                android:onClick="showBirthdayPickerDialog"/>
 
             <EditText
                 android:id="@+id/relationship_edit_text"

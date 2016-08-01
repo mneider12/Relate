@@ -1,6 +1,8 @@
 package com.nydev.relate;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
+import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import com.nydev.relate.RelationshipEditHelper.saveMode;
@@ -42,5 +44,11 @@ public class RelationshipCreateActivity extends AppCompatActivity
      */
     public void cancelRelationship(View cancelButton) {
         RelationshipEditHelper.fallBackToDashboard(this);
+    }
+
+    public void showBirthdayPickerDialog(View birthdayPickerButton) {
+        DialogFragment birthdayPickerFragment = new BirthdayPickerFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        birthdayPickerFragment.show(fragmentManager, "birthdayPicker");
     }
 }
