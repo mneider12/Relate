@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import com.nydev.relate.RelationshipContract.RelationshipEntry;
 
 /**
@@ -22,13 +26,15 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME  = "Relationship.db";
 
     private static final String TEXT_TYPE = " TEXT"; // define text data types for SQL columns
+    private static final String DATE_TYPE = " DATE";
     private static final String COMMA_SEPARATOR = ",";
 
     private static final String SQL_CREATE_ENTRIES =    // SQL statement to create relationship table and define columns
             "CREATE TABLE " + RelationshipEntry.TABLE_NAME + " (" +
             RelationshipEntry._ID + " INTEGER PRIMARY KEY," +
             RelationshipEntry.COLUMN_NAME_LAST_NAME + TEXT_TYPE + COMMA_SEPARATOR +
-            RelationshipEntry.COLUMN_NAME_FIRST_NAME + TEXT_TYPE + " )";
+            RelationshipEntry.COLUMN_NAME_FIRST_NAME + TEXT_TYPE + COMMA_SEPARATOR +
+            RelationshipEntry.COLUMN_NAME_BIRTHDAY + DATE_TYPE + " )";
 
     /**
      * Create a new RelationshipDbHelper
@@ -53,7 +59,7 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
      * @param newVersion new version number
      */
     public void onUpgrade(SQLiteDatabase relationshipDb, int oldVersion, int newVersion) {
-        // not needed yet, as the database is on version 1
+
     }
 
     /**
@@ -61,31 +67,58 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
      * @param relationshipId unique ID of the relationship
      * @param lastName relation's last name
      * @param firstName relation's first name
+     * @param birthday relation's birthday
      * @return true if the insert operation was successful, false otherwise
      */
-    public boolean insertRelationship(int relationshipId, String lastName, String firstName) {
+    public boolean insertRelationship(int relationshipId, String lastName, String firstName,
+                                      Date birthday) {
         SQLiteDatabase relationshipDatabase = this.getWritableDatabase();
-        ContentValues relationshipValues = buildContentValues(relationshipId, lastName, firstName);
+        ContentValues relationshipValues = buildContentValues(relationshipId, lastName, firstName,
+                birthday);
 
         // return status of insert operation
         return relationshipDatabase.insert(RelationshipEntry.TABLE_NAME, null, relationshipValues) != -1;
     }
 
-    public boolean updateRelationship(int relationshipId, String lastName, String firstName) {
+    /**
+     * Update an existing Relationship in the relationship table
+     * @param relationshipId unique of an ID that already exists in the relationship table
+     * @param lastName relation's last name
+     * @param firstName relation's first name
+     * @param birthday relation's birthday
+     * @return true if the update operation was successful, false otherwise
+     */
+    public boolean updateRelationship(int relationshipId, String lastName, String firstName,
+                                      Date birthday) {
         SQLiteDatabase relationshipDatabase = this.getWritableDatabase();
-        ContentValues relationshipValues = buildContentValues(relationshipId, lastName, firstName);
+        ContentValues relationshipValues = buildContentValues(relationshipId, lastName, firstName,
+                birthday);
 
         //return status of update operation
         return relationshipDatabase.update(RelationshipEntry.TABLE_NAME, relationshipValues,
                 RelationshipEntry._ID + "=" + relationshipId, null) != -1;
     }
 
-    private ContentValues buildContentValues(int relationshipId, String lastName, String firstName) {
+    /**
+     * Build ContentValues from Relationship information
+     * @param relationshipId unique ID identifying a row in the relationship table
+     * @param lastName entry into the COLUMN_NAME_LAST_NAME column
+     * @param firstName entry into the COLUMN_NAME_FIRST_NAME column
+     * @param birthday entry into the COLUMN_NAME_BIRTHDAY column. Will be converted into "yyyy-MM-dd" format
+     * @return ContentValues with relationship information
+     */
+    private ContentValues buildContentValues(int relationshipId, String lastName, String firstName,
+                                             Date birthday) {
         ContentValues relationshipValues = new ContentValues();
 
         relationshipValues.put(RelationshipEntry._ID, relationshipId);
         relationshipValues.put(RelationshipEntry.COLUMN_NAME_LAST_NAME, lastName);
         relationshipValues.put(RelationshipEntry.COLUMN_NAME_FIRST_NAME, firstName);
+
+        // Always use US locale for consistent read / write in database
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        String birthdayFormatted = dateFormat.format(birthday);
+        relationshipValues.put(RelationshipEntry.COLUMN_NAME_BIRTHDAY, birthdayFormatted);
 
         return relationshipValues;
     }
@@ -148,6 +181,11 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
         return isValidId;
     }
 
+    /**
+     * Delete a row in the relationship table
+     * @param relationshipId unique of a row in the relationship table to delete
+     * @return True if the delete operation is successful, False otherwise
+     */
     public boolean deleteRelationship(int relationshipId) {
         SQLiteDatabase relationshipDatabase = this.getWritableDatabase();
 

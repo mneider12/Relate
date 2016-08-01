@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import java.util.Date;
+
 /**
  * Created by markneider on 7/30/16.
  * Utility functions shared by RelationshipCreateActivity and RelationshipDetailViewActivity
@@ -28,13 +30,15 @@ public class RelationshipEditHelper {
         String rawName = getStringFromTextView(R.id.name_text_view, activity);
         Name relationName = new Name(rawName); // parse name into last name and first name
 
+        Date birthday = new Date();
+
         RelationshipDbHelper relationshipDbHelper = new RelationshipDbHelper(activity);
         if (mode == saveMode.CREATE) {
             relationshipDbHelper.insertRelationship(relationshipId,
-                    relationName.getLastName(), relationName.getFirstName());
+                    relationName.getLastName(), relationName.getFirstName(), birthday);
         } else { // saveMode is UPDATE
             relationshipDbHelper.updateRelationship(relationshipId,
-                    relationName.getLastName(), relationName.getFirstName());
+                    relationName.getLastName(), relationName.getFirstName(), birthday);
         }
     }
 

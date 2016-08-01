@@ -48,4 +48,24 @@ public class RelationshipUnitTest {
         assertEquals(expectedLastName, relationship.getLastName());
         assertEquals(expectedFirstName, relationship.getFirstName());
     }
+
+    /**
+     * Test fully specified constructor
+     */
+    @Test
+    public void fullySpecifiedConstructorTest() {
+        // Expectation variables
+        final int expectedRelationshipId = 17;
+        final String expectedLastName = "Knight";
+        final String expectedFirstName = "Dark";
+
+        // target of test
+        Relationship relationship = new Relationship(expectedRelationshipId, expectedLastName,
+                expectedFirstName);
+
+        // assertions
+        assertEquals(expectedRelationshipId, relationship.getRelationshipId());
+        assertEquals(expectedLastName, relationship.getLastName());
+        assertEquals(expectedFirstName, relationship.getFirstName());
+    }
 }
