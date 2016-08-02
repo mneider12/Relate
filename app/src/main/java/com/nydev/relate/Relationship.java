@@ -3,6 +3,7 @@ package com.nydev.relate;
 import android.content.Context;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by markneider on 7/2/16.
@@ -87,5 +88,13 @@ public class Relationship implements Serializable
     public int getRelationshipId()
     {
         return relationshipId;
+    }
+
+    public Date getBirthday() {
+        return null;
+    }
+
+    public void setName(Name name) {
+        this.name = name;
     }
 }

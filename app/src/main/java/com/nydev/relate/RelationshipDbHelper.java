@@ -62,63 +62,34 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
 
     }
 
-    /**
-     * Insert Relationship info into a row of the relationship table
-     * @param relationshipId unique ID of the relationship
-     * @param lastName relation's last name
-     * @param firstName relation's first name
-     * @param birthday relation's birthday
-     * @return true if the insert operation was successful, false otherwise
-     */
-    public boolean insertRelationship(int relationshipId, String lastName, String firstName,
-                                      Date birthday) {
+    public boolean insertRelationship(Relationship relationship) {
         SQLiteDatabase relationshipDatabase = this.getWritableDatabase();
-        ContentValues relationshipValues = buildContentValues(relationshipId, lastName, firstName,
-                birthday);
+        ContentValues relationshipValues = buildContentValues(relationship);
 
-        // return status of insert operation
         return relationshipDatabase.insert(RelationshipEntry.TABLE_NAME, null, relationshipValues) != -1;
     }
 
-    /**
-     * Update an existing Relationship in the relationship table
-     * @param relationshipId unique of an ID that already exists in the relationship table
-     * @param lastName relation's last name
-     * @param firstName relation's first name
-     * @param birthday relation's birthday
-     * @return true if the update operation was successful, false otherwise
-     */
-    public boolean updateRelationship(int relationshipId, String lastName, String firstName,
-                                      Date birthday) {
+    public boolean updateRelationship(Relationship relationship) {
         SQLiteDatabase relationshipDatabase = this.getWritableDatabase();
-        ContentValues relationshipValues = buildContentValues(relationshipId, lastName, firstName,
-                birthday);
+        ContentValues relationshipValues = buildContentValues(relationship);
 
-        //return status of update operation
         return relationshipDatabase.update(RelationshipEntry.TABLE_NAME, relationshipValues,
-                RelationshipEntry._ID + "=" + relationshipId, null) != -1;
+                RelationshipEntry._ID + "=" + relationship.getRelationshipId(), null) != -1;
     }
 
-    /**
-     * Build ContentValues from Relationship information
-     * @param relationshipId unique ID identifying a row in the relationship table
-     * @param lastName entry into the COLUMN_NAME_LAST_NAME column
-     * @param firstName entry into the COLUMN_NAME_FIRST_NAME column
-     * @param birthday entry into the COLUMN_NAME_BIRTHDAY column. Will be converted into "yyyy-MM-dd" format
-     * @return ContentValues with relationship information
-     */
-    private ContentValues buildContentValues(int relationshipId, String lastName, String firstName,
-                                             Date birthday) {
+    private ContentValues buildContentValues(Relationship relationship) {
         ContentValues relationshipValues = new ContentValues();
 
-        relationshipValues.put(RelationshipEntry._ID, relationshipId);
-        relationshipValues.put(RelationshipEntry.COLUMN_NAME_LAST_NAME, lastName);
-        relationshipValues.put(RelationshipEntry.COLUMN_NAME_FIRST_NAME, firstName);
+        relationshipValues.put(RelationshipEntry._ID, relationship.getRelationshipId());
+        relationshipValues.put(RelationshipEntry.COLUMN_NAME_LAST_NAME, relationship.getLastName());
+        relationshipValues.put(RelationshipEntry.COLUMN_NAME_FIRST_NAME, relationship.getFirstName());
 
-        // Always use US locale for consistent read / write in database
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        String birthdayFormatted = dateFormat.format(birthday);
-        relationshipValues.put(RelationshipEntry.COLUMN_NAME_BIRTHDAY, birthdayFormatted);
+        if (relationship.getBirthday() != null) {
+            // Always use US locale for consistent read / write in database
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            String birthdayFormatted = dateFormat.format(relationship.getBirthday());
+            relationshipValues.put(RelationshipEntry.COLUMN_NAME_BIRTHDAY, birthdayFormatted);
+        }
 
         return relationshipValues;
     }

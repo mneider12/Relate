@@ -5,7 +5,11 @@ import android.os.Bundle;
 import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import com.nydev.relate.RelationshipEditHelper.saveMode;
+import android.widget.EditText;
+import android.view.View.OnFocusChangeListener;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by markneider on 7/1/16.
@@ -26,6 +30,18 @@ public class RelationshipCreateActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.relationship_create);
         relationship = new Relationship(this); // reserves an ID for this Relationship
+
+        TextView nameTextView = (TextView) findViewById(R.id.name_text_view);
+        nameTextView.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View nameTextView, boolean hasFocus) {
+                if (!hasFocus) {
+                    String rawName = ((TextView) nameTextView).getText().toString();
+                    Name relationshipName = new Name(rawName);
+                    relationship.setName(relationshipName);
+                }
+            }
+        });
     }
 
     /**
@@ -34,8 +50,9 @@ public class RelationshipCreateActivity extends AppCompatActivity
      */
     public void saveRelationship(View saveButton)
     {
-        RelationshipEditHelper.saveRelationship(
-                relationship.getRelationshipId(), saveMode.CREATE, this);
+        RelationshipDbHelper relationshipDbHelper = new RelationshipDbHelper(this);
+        relationshipDbHelper.insertRelationship(relationship);
+        RelationshipEditHelper.fallBackToDashboard(this);
     }
 
     /**

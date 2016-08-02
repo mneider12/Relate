@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.nydev.relate.RelationshipEditHelper.saveMode;
 
 /**
  * Created by markneider on 7/5/16.
@@ -68,8 +67,8 @@ public class RelationshipDetailViewActivity extends AppCompatActivity
     }
 
     public void saveRelationship(View saveButton) {
-        RelationshipEditHelper.saveRelationship(
-                relationship.getRelationshipId(), saveMode.UPDATE, this);
+        RelationshipDbHelper relationshipDbHelper = new RelationshipDbHelper(this);
+        relationshipDbHelper.updateRelationship(relationship);
     }
 
     public void deleteRelationship(View deleteButton) {
