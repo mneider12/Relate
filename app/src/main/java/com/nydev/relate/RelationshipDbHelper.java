@@ -6,11 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import com.nydev.relate.RelationshipContract.RelationshipEntry;
+
+import org.joda.time.MonthDay;
 
 /**
  * Created by markneider on 7/27/16.
@@ -83,13 +81,7 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
         relationshipValues.put(RelationshipEntry._ID, relationship.getRelationshipId());
         relationshipValues.put(RelationshipEntry.COLUMN_NAME_LAST_NAME, relationship.getLastName());
         relationshipValues.put(RelationshipEntry.COLUMN_NAME_FIRST_NAME, relationship.getFirstName());
-
-        if (relationship.getBirthday() != null) {
-            // Always use US locale for consistent read / write in database
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-            String birthdayFormatted = dateFormat.format(relationship.getBirthday());
-            relationshipValues.put(RelationshipEntry.COLUMN_NAME_BIRTHDAY, birthdayFormatted);
-        }
+        relationshipValues.put(RelationshipEntry.COLUMN_NAME_BIRTHDAY, relationship.getBirthdayString());
 
         return relationshipValues;
     }
@@ -115,7 +107,13 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
                     RelationshipEntry.COLUMN_NAME_LAST_NAME));
             String firstName = relationshipCursor.getString(relationshipCursor.getColumnIndex(
                     RelationshipEntry.COLUMN_NAME_FIRST_NAME));
+            String rawBirthday = relationshipCursor.getString(relationshipCursor.getColumnIndex(
+                    RelationshipEntry.COLUMN_NAME_BIRTHDAY));
             relationship = new Relationship(relationshipId, lastName, firstName);
+            if (rawBirthday != null) {
+                MonthDay birthday = MonthDay.parse(rawBirthday);
+                relationship.setBirthday(birthday);
+            }
         }
         else { // no match found for relationshipId in _ID column
             relationship = new Relationship(); // blank relationship with ID -1. Not valid to save, no current use case.

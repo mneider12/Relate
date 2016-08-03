@@ -3,6 +3,7 @@ package com.nydev.relate;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.DatePicker;
 
@@ -10,6 +11,8 @@ import java.util.Calendar;
 
 public class BirthdayPickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
+
+    DatePickerDialog.OnDateSetListener mOnDatePickedListener;
 
     public BirthdayPickerFragment() {
         // Required empty public constructor
@@ -28,7 +31,14 @@ public class BirthdayPickerFragment extends DialogFragment
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
-    public void onDateSet(DatePicker view, int year, int month, int day) {
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        mOnDatePickedListener = (DatePickerDialog.OnDateSetListener) context;
+    }
+
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
 
     }
 }

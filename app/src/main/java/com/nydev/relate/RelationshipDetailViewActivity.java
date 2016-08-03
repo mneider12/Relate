@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.joda.time.MonthDay;
+
 /**
  * Created by markneider on 7/5/16.
  * Load an existing Relationship and display info
@@ -64,6 +66,12 @@ public class RelationshipDetailViewActivity extends AppCompatActivity
         relationship = relationshipDbHelper.getRelationship(relationshipId);
         TextView nameEntryEditText = (TextView) findViewById(R.id.name_text_view);
         nameEntryEditText.setText(relationship.getName().toString());
+
+        MonthDay birthday = relationship.getBirthday();
+        if (birthday != null) {
+            TextView birthDayTextView = (TextView) findViewById(R.id.birthday_text_view);
+            birthDayTextView.setText(birthday.toString());
+        }
     }
 
     public void saveRelationship(View saveButton) {

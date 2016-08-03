@@ -1,21 +1,23 @@
 package com.nydev.relate;
 
+import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.DatePicker;
 import android.view.View.OnFocusChangeListener;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import org.joda.time.MonthDay;
 
 /**
  * Created by markneider on 7/1/16.
  * Create a Relationship
  */
 public class RelationshipCreateActivity extends AppCompatActivity
+        implements DatePickerDialog.OnDateSetListener
 {
     @SuppressWarnings("unused") // only used currently when needed for debugging.
     private static final String LOG_TAG = "nydev.Relate";
@@ -67,5 +69,11 @@ public class RelationshipCreateActivity extends AppCompatActivity
         DialogFragment birthdayPickerFragment = new BirthdayPickerFragment();
         FragmentManager fragmentManager = getFragmentManager();
         birthdayPickerFragment.show(fragmentManager, "birthdayPicker");
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        MonthDay birthday = new MonthDay(month, day);
+        relationship.setBirthday(birthday);
     }
 }

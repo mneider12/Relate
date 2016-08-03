@@ -20,7 +20,7 @@ public class Name {
     /**
      * Parse a single String into a Name object
      * Strips white space around rawName.
-     * Splits last name from first name based on the last space with non-whitespace charachters following it.
+     * Splits last name from first name based on the last space with non-whitespace characters following it.
      * E.g. - " mark von Nyder " splits into "Nyder" for lastName and "mark von" for first name.
      * @param rawName user entered name String
      */

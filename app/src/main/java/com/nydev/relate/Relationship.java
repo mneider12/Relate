@@ -2,18 +2,19 @@ package com.nydev.relate;
 
 import android.content.Context;
 
-import java.io.Serializable;
-import java.util.Date;
+import org.joda.time.MonthDay;
 
 /**
  * Created by markneider on 7/2/16.
  * Hold information relevant to a single relationship record
  */
-public class Relationship implements Serializable
+public class Relationship
 {
     private int relationshipId; // unique ID. Never reused, including after deletions
-    // for readability, try to always reference lastName before firstName when order doesn't otherwise matter
+
     private Name name;
+    private MonthDay birthday;
+
 
     /**
      * Create an placeholder Relationship with ID = -1 and default / null information
@@ -90,8 +91,21 @@ public class Relationship implements Serializable
         return relationshipId;
     }
 
-    public Date getBirthday() {
-        return null;
+    public MonthDay getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(MonthDay birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getBirthdayString() {
+
+        if (birthday == null) {
+            return "";
+        } else {
+            return birthday.toString();
+        }
     }
 
     public void setName(Name name) {
