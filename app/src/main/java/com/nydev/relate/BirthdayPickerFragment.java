@@ -39,6 +39,6 @@ public class BirthdayPickerFragment extends DialogFragment
     }
 
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-
+        mOnDatePickedListener.onDateSet(datePicker, year, month, day);
     }
 }
