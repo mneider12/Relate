@@ -8,15 +8,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
+
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import org.joda.time.MonthDay;
 
-import java.util.Calendar;
+import java.lang.reflect.Array;
+
 
 public class BirthdayPickerFragment extends DialogFragment {
-
-
 
     public static BirthdayPickerFragment newInstance(MonthDay initialDate) {
         final String MONTH_KEY = "month";
@@ -47,6 +48,12 @@ public class BirthdayPickerFragment extends DialogFragment {
                              Bundle savedInstance) {
         View birthdayPickerDialogView = inflater.inflate(R.layout.birthday_picker_dialog, container,
                 false);
+
+        Spinner monthSpinner = (Spinner) birthdayPickerDialogView.findViewById(R.id.month_spinner);
+        ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.months_array, android.R.layout.simple_spinner_item);
+        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        monthSpinner.setAdapter(monthAdapter);
 
         return birthdayPickerDialogView;
     }

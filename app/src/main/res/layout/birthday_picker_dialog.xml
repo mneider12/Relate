@@ -5,13 +5,15 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center">
 
-    <Button
+    <Spinner
+        android:id="@+id/month_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="heythere"/>
 
-    <Button
+    <Spinner
+        android:id="@+id/day_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
