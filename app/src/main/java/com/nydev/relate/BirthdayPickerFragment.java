@@ -11,10 +11,14 @@ import android.view.ViewGroup;
 
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.joda.time.MonthDay;
 
+import com.nydev.relate.DateHelper.Month;
+
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 
 public class BirthdayPickerFragment extends DialogFragment {
@@ -50,10 +54,21 @@ public class BirthdayPickerFragment extends DialogFragment {
                 false);
 
         Spinner monthSpinner = (Spinner) birthdayPickerDialogView.findViewById(R.id.month_spinner);
-        ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.months_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<Month> monthAdapter = new ArrayAdapter<Month>(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, Month.values()) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView view = (TextView) super.getView(position, convertView, parent);
+
+                view.setText(getItem(position).getAbbreviation());
+                return view;
+            }
+        };
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         monthSpinner.setAdapter(monthAdapter);
+
+        Spinner dayOfMonthSpinner = (Spinner) birthdayPickerDialogView.findViewById(R.id.day_spinner);
+
 
         return birthdayPickerDialogView;
     }
