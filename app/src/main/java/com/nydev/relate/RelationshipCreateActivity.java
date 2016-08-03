@@ -17,7 +17,6 @@ import org.joda.time.MonthDay;
  * Create a Relationship
  */
 public class RelationshipCreateActivity extends AppCompatActivity
-        implements DatePickerDialog.OnDateSetListener
 {
     @SuppressWarnings("unused") // only used currently when needed for debugging.
     private static final String LOG_TAG = "nydev.Relate";
@@ -72,9 +71,10 @@ public class RelationshipCreateActivity extends AppCompatActivity
         birthdayPickerFragment.show(fragmentManager, "birthdayPicker");
     }
 
-    @Override
-    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        MonthDay birthday = new MonthDay(month, day);
-        relationship.setBirthday(birthday);
+    public void saveBirthday(View saveBirthdayButton) {
+        FragmentManager fragmentManager = getFragmentManager();
+        BirthdayPickerFragment birthdayPickerFragment =
+                (BirthdayPickerFragment) fragmentManager.findFragmentByTag("birthdayPicker");
+        birthdayPickerFragment.save(saveBirthdayButton);
     }
 }

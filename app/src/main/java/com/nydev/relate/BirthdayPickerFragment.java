@@ -80,4 +80,8 @@ public class BirthdayPickerFragment extends DialogFragment {
 
         return birthdayPickerDialogView;
     }
+
+    public void save(View saveButton) {
+
+    }
 }
