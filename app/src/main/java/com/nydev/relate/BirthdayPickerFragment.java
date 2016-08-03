@@ -1,9 +1,6 @@
 package com.nydev.relate;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +14,18 @@ import org.joda.time.MonthDay;
 
 import com.nydev.relate.DateHelper.Month;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-
+/**
+ * Created by markneider on 8/2/16
+ * Reusable fragment to select a month and day birthday
+ */
 public class BirthdayPickerFragment extends DialogFragment {
 
-    public static BirthdayPickerFragment newInstance(MonthDay initialDate) {
-        final String MONTH_KEY = "month";
-        final String DAY_KEY = "day";
+    private static final String MONTH_KEY = "month";
+    private static final String DAY_KEY = "day";
 
+    public static BirthdayPickerFragment newInstance(MonthDay initialDate) {
         BirthdayPickerFragment birthdayPickerFragment = new BirthdayPickerFragment();
 
         if (initialDate == null) {
@@ -43,8 +42,6 @@ public class BirthdayPickerFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -52,6 +49,8 @@ public class BirthdayPickerFragment extends DialogFragment {
                              Bundle savedInstance) {
         View birthdayPickerDialogView = inflater.inflate(R.layout.birthday_picker_dialog, container,
                 false);
+
+        Bundle birthdayArgs = getArguments();
 
         Spinner monthSpinner = (Spinner) birthdayPickerDialogView.findViewById(R.id.month_spinner);
         ArrayAdapter<Month> monthAdapter = new ArrayAdapter<Month>(getActivity(),
@@ -66,53 +65,19 @@ public class BirthdayPickerFragment extends DialogFragment {
         };
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         monthSpinner.setAdapter(monthAdapter);
+        monthSpinner.setSelection(birthdayArgs.getInt(MONTH_KEY) - 1);
 
         Spinner dayInMonthSpinner = (Spinner) birthdayPickerDialogView.findViewById(R.id.day_spinner);
         ArrayList<Integer> daysInMonthArray = new ArrayList<>();
         for (int day = 1; day <= 31; day++) {
             daysInMonthArray.add(day);
         }
-        ArrayAdapter<Integer> dayInMonthAdapter = new ArrayAdapter<Integer>(getActivity(),
+        ArrayAdapter<Integer> dayInMonthAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, daysInMonthArray);
         dayInMonthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dayInMonthSpinner.setAdapter(dayInMonthAdapter);
-
+        dayInMonthSpinner.setSelection(birthdayArgs.getInt(DAY_KEY) - 1);
 
         return birthdayPickerDialogView;
     }
 }
-
-/*public class BirthdayPickerFragment extends DialogFragment
-        implements DatePickerDialog.OnDateSetListener {
-
-    DatePickerDialog.OnDateSetListener mOnDatePickedListener;
-
-    public BirthdayPickerFragment() {
-        // Required empty public constructor
-    }
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-        // Use the current date as the default date in the picker
-        final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        // Create a new instance of DatePickerDialog and return it
-        return new DatePickerDialog(getActivity(), this, year, month, day);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        mOnDatePickedListener = (DatePickerDialog.OnDateSetListener) context;
-    }
-
-    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        mOnDatePickedListener.onDateSet(datePicker, year, month, day);
-    }
-}
-*/

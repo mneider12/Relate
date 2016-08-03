@@ -66,7 +66,8 @@ public class RelationshipCreateActivity extends AppCompatActivity
     }
 
     public void showBirthdayPickerDialog(View birthdayPickerButton) {
-        DialogFragment birthdayPickerFragment = new BirthdayPickerFragment();
+        DialogFragment birthdayPickerFragment = BirthdayPickerFragment.newInstance(
+                new MonthDay(1, 1)); // default to January 1
         FragmentManager fragmentManager = getFragmentManager();
         birthdayPickerFragment.show(fragmentManager, "birthdayPicker");
     }
