@@ -67,7 +67,15 @@ public class BirthdayPickerFragment extends DialogFragment {
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         monthSpinner.setAdapter(monthAdapter);
 
-        Spinner dayOfMonthSpinner = (Spinner) birthdayPickerDialogView.findViewById(R.id.day_spinner);
+        Spinner dayInMonthSpinner = (Spinner) birthdayPickerDialogView.findViewById(R.id.day_spinner);
+        ArrayList<Integer> daysInMonthArray = new ArrayList<>();
+        for (int day = 1; day <= 31; day++) {
+            daysInMonthArray.add(day);
+        }
+        ArrayAdapter<Integer> dayInMonthAdapter = new ArrayAdapter<Integer>(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, daysInMonthArray);
+        dayInMonthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dayInMonthSpinner.setAdapter(dayInMonthAdapter);
 
 
         return birthdayPickerDialogView;
