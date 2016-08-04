@@ -1,19 +1,14 @@
 package com.nydev.relate;
 
-import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.DatePicker;
 import android.view.View.OnFocusChangeListener;
 import android.widget.TextView;
 
 import org.joda.time.MonthDay;
-
-import com.nydev.relate.DateHelper.Month;
 
 /**
  * Created by markneider on 7/1/16.
@@ -79,11 +74,10 @@ public class RelationshipCreateActivity extends AppCompatActivity
     public void saveBirthday(View saveButton) {
         BirthdayPickerFragment birthdayPickerFragment =
                 (BirthdayPickerFragment) getFragmentManager().findFragmentByTag("birthdayPicker");
-        birthdayPickerFragment.saveBirthday(saveButton);
+        birthdayPickerFragment.saveBirthday();
     }
 
-    public void saveBirthday(Month birthMonth, int birthDayOfMonth) {
-        MonthDay birthday = new MonthDay(birthMonth.getMonthOfYear(), birthDayOfMonth);
+    public void saveBirthday(MonthDay birthday) {
         relationship.setBirthday(birthday);
     }
 }
