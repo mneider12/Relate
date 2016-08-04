@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.view.View.OnFocusChangeListener;
@@ -12,15 +13,19 @@ import android.widget.TextView;
 
 import org.joda.time.MonthDay;
 
+import com.nydev.relate.DateHelper.Month;
+
 /**
  * Created by markneider on 7/1/16.
  * Create a Relationship
  */
 public class RelationshipCreateActivity extends AppCompatActivity
+        implements BirthdayPickerFragment.OnBirthdaySaveListener
 {
     @SuppressWarnings("unused") // only used currently when needed for debugging.
     private static final String LOG_TAG = "nydev.Relate";
     private Relationship relationship; // Relationship being edited
+
 
     /**
      * Load relationship information on activity creation
@@ -71,10 +76,14 @@ public class RelationshipCreateActivity extends AppCompatActivity
         birthdayPickerFragment.show(fragmentManager, "birthdayPicker");
     }
 
-    public void saveBirthday(View saveBirthdayButton) {
-        FragmentManager fragmentManager = getFragmentManager();
+    public void saveBirthday(View saveButton) {
         BirthdayPickerFragment birthdayPickerFragment =
-                (BirthdayPickerFragment) fragmentManager.findFragmentByTag("birthdayPicker");
-        birthdayPickerFragment.save(saveBirthdayButton);
+                (BirthdayPickerFragment) getFragmentManager().findFragmentByTag("birthdayPicker");
+        birthdayPickerFragment.saveBirthday(saveButton);
+    }
+
+    public void saveBirthday(Month birthMonth, int birthDayOfMonth) {
+        MonthDay birthday = new MonthDay(birthMonth.getMonthOfYear(), birthDayOfMonth);
+        relationship.setBirthday(birthday);
     }
 }

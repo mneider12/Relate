@@ -1,7 +1,10 @@
 package com.nydev.relate;
 
+import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +25,17 @@ import java.util.ArrayList;
  */
 public class BirthdayPickerFragment extends DialogFragment {
 
+    private static final String LOG_TAG = "nydev.Relate";
+
     private static final String MONTH_KEY = "month";
     private static final String DAY_KEY = "day";
+
+    OnBirthdaySaveListener mCallback;
+
+    public interface OnBirthdaySaveListener {
+        void saveBirthday(Month birthMonth, int birthDayOfMonth);
+        void saveBirthday(View saveButton);
+    }
 
     public static BirthdayPickerFragment newInstance(MonthDay initialDate) {
         BirthdayPickerFragment birthdayPickerFragment = new BirthdayPickerFragment();
@@ -81,7 +93,22 @@ public class BirthdayPickerFragment extends DialogFragment {
         return birthdayPickerDialogView;
     }
 
-    public void save(View saveButton) {
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        mCallback = (OnBirthdaySaveListener) context;
+    }
+
+    public void saveBirthday(View saveButton) {
+        Spinner monthSpinner = (Spinner) getView().findViewById(R.id.month_spinner);
+        Month birthMonth = (Month) monthSpinner.getSelectedItem();
+
+        Spinner dayOfMonthSpinner = (Spinner) getView().findViewById(R.id.day_spinner);
+        int dayOfMonth = (Integer) dayOfMonthSpinner.getSelectedItem();
+
+        mCallback.saveBirthday(birthMonth, dayOfMonth);
+
 
     }
 }
