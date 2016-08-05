@@ -1,6 +1,8 @@
 package com.nydev.relate;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.joda.time.MonthDay;
 
@@ -12,8 +14,8 @@ public class Relationship
 {
     private int relationshipId; // unique ID. Never reused, including after deletions
 
-    private Name name;
-    private MonthDay birthday;
+    private Name name; // relation's name
+    private MonthDay birthday; // relation's birthday
 
 
     /**
@@ -91,14 +93,29 @@ public class Relationship
         return relationshipId;
     }
 
+    /**
+     * Get this relation's birthday
+     * @return relation's birthday
+     */
+    @Nullable
     public MonthDay getBirthday() {
         return birthday;
     }
 
+    /**
+     * Set this relation's birthday
+     * @param birthday relation's birthday
+     */
     public void setBirthday(MonthDay birthday) {
         this.birthday = birthday;
     }
 
+    /**
+     * Retrieve the default display String for this relation's birthday
+     * @return default display format for birthday. See MonthDay.toString() for format.
+     *         If birthday is null, then return "";
+     */
+    @NonNull
     public String getBirthdayString() {
 
         if (birthday == null) {
@@ -108,6 +125,10 @@ public class Relationship
         }
     }
 
+    /**
+     * Set this relation's name directly
+     * @param name relation's name
+     */
     public void setName(Name name) {
         this.name = name;
     }

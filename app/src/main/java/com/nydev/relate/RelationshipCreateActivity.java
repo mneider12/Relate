@@ -4,6 +4,8 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.TextView;
@@ -33,14 +35,22 @@ public class RelationshipCreateActivity extends AppCompatActivity
         relationship = new Relationship(this); // reserves an ID for this Relationship
 
         TextView nameTextView = (TextView) findViewById(R.id.name_text_view);
-        nameTextView.setOnFocusChangeListener(new OnFocusChangeListener() {
+        nameTextView.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onFocusChange(View nameTextView, boolean hasFocus) {
-                if (!hasFocus) {
-                    String rawName = ((TextView) nameTextView).getText().toString();
-                    Name relationshipName = new Name(rawName);
-                    relationship.setName(relationshipName);
-                }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable nameEditable) {
+                String rawName = nameEditable.toString();
+                Name relationshipName = new Name(rawName);
+                relationship.setName(relationshipName);
             }
         });
     }

@@ -12,9 +12,10 @@ public class Name {
     // in order to increase readability and avoid errors through standardization.
     private String lastName,firstName;
 
+    /**
+     * Initialize a name object without setting any attributes;
+     */
     public Name() {
-        lastName = null;
-        firstName = null;
     }
 
     /**
