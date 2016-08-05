@@ -57,27 +57,44 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
      * @param newVersion new version number
      */
     public void onUpgrade(SQLiteDatabase relationshipDb, int oldVersion, int newVersion) {
-
+        // not needed until the database needs to be changed after release
     }
 
+    /**
+     * Insert a Relationship into the relationship database
+     * @param relationship relationship to save
+     * @return true if the insert was successful, otherwise false
+     */
     public boolean insertRelationship(Relationship relationship) {
         SQLiteDatabase relationshipDatabase = this.getWritableDatabase();
-        ContentValues relationshipValues = buildContentValues(relationship);
+        ContentValues relationshipValues = buildContentValues(relationship); // build data for insert
 
         return relationshipDatabase.insert(RelationshipEntry.TABLE_NAME, null, relationshipValues) != -1;
     }
 
+    /**
+     * Update an existing relationship in the relationship database
+     * @param relationship relationship to update in the database
+     * @return true if the update was successful, otherwise false
+     */
     public boolean updateRelationship(Relationship relationship) {
         SQLiteDatabase relationshipDatabase = this.getWritableDatabase();
-        ContentValues relationshipValues = buildContentValues(relationship);
+        ContentValues relationshipValues = buildContentValues(relationship); // build data for update
 
         return relationshipDatabase.update(RelationshipEntry.TABLE_NAME, relationshipValues,
                 RelationshipEntry._ID + "=" + relationship.getRelationshipId(), null) != -1;
     }
 
+    /**
+     * Build the data for either an insert or update into the relationship database.
+     * Can be used as input to insert or update to a SQLiteDatabase
+     * @param relationship relationship to build data from
+     * @return ContentValues representing the data for a row in the relationship database
+     */
     private ContentValues buildContentValues(Relationship relationship) {
         ContentValues relationshipValues = new ContentValues();
 
+        // build key-value pairs based on the RelationshipContract
         relationshipValues.put(RelationshipEntry._ID, relationship.getRelationshipId());
         relationshipValues.put(RelationshipEntry.COLUMN_NAME_LAST_NAME, relationship.getLastName());
         relationshipValues.put(RelationshipEntry.COLUMN_NAME_FIRST_NAME, relationship.getFirstName());

@@ -33,6 +33,10 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
         loadRelationshipThumbnails();
     }
 
+    /**
+     * Load all Relationships from the relationship database when the application loads.
+     * Create a ListView with selectable items to launch detail view of a Relationship.
+     */
     private void loadRelationshipThumbnails()
     {
         RelationshipDbHelper relationshipDbHelper = new RelationshipDbHelper(this); // Helper class to access Relationship database

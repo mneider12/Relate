@@ -3,6 +3,8 @@ package com.nydev.relate;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,14 +58,14 @@ public class BirthdayPickerFragment extends DialogFragment {
     /**
      * Create a new BirthdayPickerFragment.
      * @param initialDate Initial date to be displayed in the fragment UI.
-     *                    If null, then initialize to today.
+     *                    If null, then initialize to January 1.
      * @return new BirthdayPickerFragment
      */
-    public static BirthdayPickerFragment newInstance(MonthDay initialDate) {
+    public static BirthdayPickerFragment newInstance(@Nullable MonthDay initialDate) {
         BirthdayPickerFragment birthdayPickerFragment = new BirthdayPickerFragment();
 
         if (initialDate == null) {
-            initialDate = new MonthDay(); // Initializes to today's date
+            initialDate = new MonthDay(1, 1); // Initializes to January 1 by default
         }
         // Set up arguments for use in onCreateView
         Bundle birthdayArgs = new Bundle(); // key-value pairs

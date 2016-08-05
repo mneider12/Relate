@@ -74,11 +74,20 @@ public class RelationshipDetailViewActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Save updated relationship to the relationship database. Then return to the dashboard.
+     * @param saveButton Button that called this method from onClick
+     */
     public void saveRelationship(View saveButton) {
         RelationshipDbHelper relationshipDbHelper = new RelationshipDbHelper(this);
         relationshipDbHelper.updateRelationship(relationship);
+        RelationshipEditHelper.fallBackToDashboard(this);
     }
 
+    /**
+     * Delete current relationship from the relationship database and return to the dashboard.
+     * @param deleteButton Button that called this method from onClick
+     */
     public void deleteRelationship(View deleteButton) {
         relationshipDbHelper.deleteRelationship(relationship.getRelationshipId());
         RelationshipEditHelper.fallBackToDashboard(this);

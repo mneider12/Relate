@@ -17,7 +17,8 @@ public class RelationshipEditHelper {
     }
 
     /**
-     * Destroys calling activity and loads the dashboard
+     * Destroys calling activity and loads the dashboard.
+     * After calls to this method, the back button will not return to the calling activity.
      * @param activity calling activity
      */
     public static void fallBackToDashboard(AppCompatActivity activity) {
