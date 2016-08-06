@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.joda.time.MonthDay;
@@ -120,5 +121,7 @@ public class RelationshipCreateActivity extends AppCompatActivity
      */
     public void saveBirthday(MonthDay birthday) {
         relationship.setBirthday(birthday);
+        Button birthdayButton = (Button) findViewById(R.id.birthday_selection_button);
+        birthdayButton.setText(birthday.toString());
     }
 }
