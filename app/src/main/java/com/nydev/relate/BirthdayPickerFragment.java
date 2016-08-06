@@ -3,7 +3,6 @@ package com.nydev.relate;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;

@@ -2,7 +2,6 @@ package com.nydev.relate;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import org.joda.time.MonthDay;
 
@@ -95,15 +94,6 @@ public class Relationship
     public int getRelationshipId()
     {
         return relationshipId;
-    }
-
-    /**
-     * Get this relation's birthday
-     * @return relation's birthday
-     */
-    @Nullable
-    public MonthDay getBirthday() {
-        return birthday;
     }
 
     /**
