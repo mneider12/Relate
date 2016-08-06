@@ -5,33 +5,44 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
-
-import org.joda.time.MonthDay;
 
 /**
  * Created by markneider on 8/6/16.
+ * Fragment to input basic demographic info
  */
 public class DemographicsEditFragment extends Fragment {
 
-    private static final String NAME_KEY = "name";
-    private static final String BIRTHDAY_KEY = "birthday";
+    private static final String NAME_KEY = "name"; // key in demographics args for name
+    private static final String BIRTHDAY_KEY = "birthday"; // key in demographics args for birthday
 
-    private DemographicsSaveListener mCallback;
+    private DemographicsSaveListener mCallback; // calling context - needs to implement DemographicsSaveListener
 
+    /**
+     * Define communication interface between this fragment and the calling activity
+     */
     public interface DemographicsSaveListener {
+        /**
+         * Save name inputted in this fragment back to the calling activity
+         * @param name name from the name entry view
+         */
         void saveName(Name name);
     }
 
+    /**
+     * Create a fragment to edit demographics info for a relationship
+     * @param relationship relationship to edit
+     * @return fragment to edit relationship demographics
+     */
+    @SuppressWarnings("unused") // will be used by view detail
     public static DemographicsEditFragment newInstance(Relationship relationship) {
         DemographicsEditFragment demographicsEditFragment = new DemographicsEditFragment();
 
+        // setup arguments
         Bundle demographicArgs = new Bundle();
         demographicArgs.putString(NAME_KEY, relationship.getName().toString());
         demographicArgs.putString(BIRTHDAY_KEY, relationship.getBirthdayString());
@@ -41,24 +52,35 @@ public class DemographicsEditFragment extends Fragment {
         return demographicsEditFragment;
     }
 
+    /**
+     * Initialize demographic values to views
+     * @param relationship relationship being edited
+     */
+    @SuppressWarnings("unused") // to be used in the future
     public void setDemographics(Relationship relationship) {
-        View demographicsEditView = getView();
         String nameEditText = relationship.getName().toString();
         String birthdaySelectionText = relationship.getBirthdayString();
 
-        setDemographicsDisplay(demographicsEditView, nameEditText, birthdaySelectionText);
+        setDemographicsDisplay(getView(), nameEditText, birthdaySelectionText);
     }
 
+    /**
+     * Create fragment view and initialize fields
+     * @param layoutInflater {@inheritDoc}
+     * @param container {@inheritDoc}
+     * @param savedInstance {@inheritDoc}
+     * @return initialized fragment view
+     */
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup container,
                              Bundle savedInstance) {
-        final String NAME_DEFAULT = "";
-        final String BIRTHDAY_DEFAULT = "";
+        final String NAME_DEFAULT = ""; // if name isn't set, set name text to blank so the hint will show
+        final String BIRTHDAY_DEFAULT = ""; // if birthday isn't set, set birthday text to blank so the hint will show
 
         View demographicsEditView = layoutInflater.inflate(R.layout.demographics_edit_fragment,
                 container, false);
 
-        Bundle demographicArgs = getArguments();
+        Bundle demographicArgs = getArguments(); // if we are editing an existing relationship, demographicsArgs will be set
 
         String nameEditText, birthdaySelectionText;
         if (demographicArgs == null) {
@@ -74,19 +96,29 @@ public class DemographicsEditFragment extends Fragment {
         return demographicsEditView;
     }
 
+    /**
+     * Find and initialize views with existing data
+     * @param demographicsEditView root view of this fragment (needed because this may be called before root view is initialized to getView()
+     * @param nameEditText text to set in name_entry_view
+     * @param birthdaySelectionText text to set in birthday_selection_button
+     */
     private void setDemographicsDisplay(
             View demographicsEditView, String nameEditText, String birthdaySelectionText) {
 
         TextView nameEditTextView =
                 (TextView) demographicsEditView.findViewById(R.id.name_entry_view);
         nameEditTextView.setText(nameEditText);
-        setNameEditTextWatcher(nameEditTextView);
+        setNameEditTextWatcher(nameEditTextView); // TextWatcher will call saveName in calling activity afterTextChange
 
         Button birthdaySelectionButton =
                 (Button) demographicsEditView.findViewById(R.id.birthday_selection_button);
         birthdaySelectionButton.setText(birthdaySelectionText);
     }
 
+    /**
+     * save a reference to the calling context for communication back
+     * @param context calling context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -94,6 +126,10 @@ public class DemographicsEditFragment extends Fragment {
         mCallback = (DemographicsSaveListener) context; // calling activity must implement DemographicsSaveListener
     }
 
+    /**
+     * Set a TextWatcher on the name edit text view to save the name afterTextChanged
+     * @param nameEditTextView view to set watcher on
+     */
     private void setNameEditTextWatcher(TextView nameEditTextView) {
         nameEditTextView.addTextChangedListener(new TextWatcher() {
             /**
