@@ -38,7 +38,6 @@ public class DemographicsEditFragment extends Fragment {
      * @param relationship relationship to edit
      * @return fragment to edit relationship demographics
      */
-    @SuppressWarnings("unused") // will be used by view detail
     public static DemographicsEditFragment newInstance(Relationship relationship) {
         DemographicsEditFragment demographicsEditFragment = new DemographicsEditFragment();
 

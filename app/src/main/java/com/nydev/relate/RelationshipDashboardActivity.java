@@ -34,6 +34,15 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
     }
 
     /**
+     * Refresh the list of relationships when the Dashboard resumes.
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadRelationshipThumbnails();
+    }
+
+    /**
      * Load all Relationships from the relationship database when the application loads.
      * Create a ListView with selectable items to launch detail view of a Relationship.
      */
@@ -64,7 +73,7 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
         final String PACKAGE_NAME = "com.nydev.relate"; // identifier to use for sending intent extras from this application
         final String DOT_SEPARATOR = ".";
         final String RELATIONSHIP_ID_INTENT_EXTRA = "relationshipId";
-        Intent launchRelationshipDetail = new Intent(this, RelationshipDetailViewActivity.class);
+        Intent launchRelationshipDetail = new Intent(this, RelationshipDetailActivity.class);
         launchRelationshipDetail.putExtra(
                 PACKAGE_NAME + DOT_SEPARATOR + RELATIONSHIP_ID_INTENT_EXTRA, relationshipId);
         startActivity(launchRelationshipDetail);
@@ -77,7 +86,7 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
     public void createRelationship(View view)
     {
         // launch detail activity to create new relationship
-        Intent launchRelationshipCreate = new Intent(this, RelationshipCreateActivity.class);
+        Intent launchRelationshipCreate = new Intent(this, RelationshipDetailActivity.class);
         startActivity(launchRelationshipCreate);
     }
 
