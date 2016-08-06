@@ -4,11 +4,8 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import org.joda.time.MonthDay;
 
@@ -17,7 +14,8 @@ import org.joda.time.MonthDay;
  * Create a Relationship
  */
 public class RelationshipCreateActivity extends AppCompatActivity
-        implements BirthdayPickerFragment.OnBirthdaySaveListener
+        implements BirthdayPickerFragment.OnBirthdaySaveListener,
+        DemographicsEditFragment.DemographicsSaveListener
 {
     @SuppressWarnings("unused") // only used currently when needed for debugging.
     private static final String LOG_TAG = "nydev.Relate";
@@ -33,46 +31,6 @@ public class RelationshipCreateActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.relationship_create);
         relationship = new Relationship(this); // reserves an ID for this Relationship
-
-        TextView nameTextView = (TextView) findViewById(R.id.name_text_view);
-        nameTextView.addTextChangedListener(new TextWatcher() {
-            /**
-             * Not used
-             * {@inheritDoc}
-             * @param charSequence {@inheritDoc}
-             * @param i {@inheritDoc}
-             * @param i1 {@inheritDoc}
-             * @param i2 {@inheritDoc}
-             */
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            /**
-             * Not used
-             * {@inheritDoc}
-             * @param charSequence {@inheritDoc}
-             * @param i {@inheritDoc}
-             * @param i1 {@inheritDoc}
-             * @param i2 {@inheritDoc}
-             */
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            /**
-             * After text is changed in the name entry text field, save the new name to the relationship
-             * @param nameEditable text from name edit text view
-             */
-            @Override
-            public void afterTextChanged(Editable nameEditable) {
-                String rawName = nameEditable.toString();
-                Name relationshipName = new Name(rawName);
-                relationship.setName(relationshipName);
-            }
-        });
     }
 
     /**
@@ -112,6 +70,14 @@ public class RelationshipCreateActivity extends AppCompatActivity
         BirthdayPickerFragment birthdayPickerFragment =
                 (BirthdayPickerFragment) getFragmentManager().findFragmentByTag("birthdayPicker");
         birthdayPickerFragment.saveBirthday();
+    }
+
+    public void saveName(Name name) {
+        relationship.setName(name);
+    }
+
+    public void launchBirthdayPickerDialog() {
+
     }
 
     /**

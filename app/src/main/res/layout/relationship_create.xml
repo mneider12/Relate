@@ -18,21 +18,11 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/name_text_view"
-                android:layout_width="wrap_content"
+            <fragment class="com.nydev.relate.DemographicsEditFragment"
+                android:id="@+id/demographics_edit"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/enter_name_hint"
-                android:inputType="textPersonName|textCapWords"/>
-
-            <Button
-                android:id="@+id/birthday_selection_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_cake_black_24dp"
-                android:text="@string/enter_birthday_hint"
-                android:drawablePadding="16dp"
-                android:onClick="showBirthdayPickerDialog"/>
+                tools:layout="@layout/demographics_edit_fragment" />
 
             <EditText
                 android:id="@+id/relationship_edit_text"

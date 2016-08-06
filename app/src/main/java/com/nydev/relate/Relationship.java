@@ -79,8 +79,12 @@ public class Relationship
      * Get name
      * @return name
      */
+    @NonNull
     public Name getName()
     {
+        if (name == null) {
+            return new Name();
+        }
         return name;
     }
 
