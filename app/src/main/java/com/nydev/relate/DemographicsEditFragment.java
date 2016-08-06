@@ -52,8 +52,8 @@ public class DemographicsEditFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup container,
                              Bundle savedInstance) {
-        final String NAME_DEFAULT = "Name";
-        final String BIRTHDAY_DEFAULT = "Birthday";
+        final String NAME_DEFAULT = "";
+        final String BIRTHDAY_DEFAULT = "";
 
         View demographicsEditView = layoutInflater.inflate(R.layout.demographics_edit_fragment,
                 container, false);

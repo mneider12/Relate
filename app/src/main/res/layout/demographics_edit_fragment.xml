@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableEnd="@drawable/ic_cake_black_24dp"
-        android:text="@string/enter_birthday_hint"
+        android:hint="@string/enter_birthday_hint"
         android:drawablePadding="16dp"
         android:onClick="showBirthdayPickerDialog"/>
 
