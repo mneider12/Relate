@@ -126,4 +126,18 @@ public class Relationship
     public void setName(Name name) {
         this.name = name;
     }
+
+    @Override
+    public boolean equals(Object otherRelationship){
+        if (otherRelationship != null && otherRelationship instanceof Relationship) {
+            return relationshipId == ((Relationship) otherRelationship).getRelationshipId();
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return relationshipId;
+    }
 }
