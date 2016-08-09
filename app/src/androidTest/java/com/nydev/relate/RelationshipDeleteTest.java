@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static com.nydev.relate.UiTestHelper.withAdaptedData;
+import static com.nydev.relate.UiTestHelper.withRelationship;
 
 /**
  * Created by markneider on 8/8/16.
@@ -64,7 +64,7 @@ public class RelationshipDeleteTest {
                 relationshipDbHelper.isValidRelationshipId(testRelationship.getRelationshipId()));
         // check that the dashboard's ListView does not have an item for testRelationship
         onView(withId(R.id.thumbnail_container_layout))
-                .check(matches(not(withAdaptedData(is(testRelationship)))));
+                .check(matches(not(withRelationship(is(testRelationship)))));
     }
 
     /**

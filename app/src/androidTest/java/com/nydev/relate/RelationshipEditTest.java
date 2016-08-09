@@ -23,18 +23,23 @@ import java.util.ArrayList;
 
 /**
  * Created by markneider on 8/8/16.
+ * Test the relationship edit workflow
  */
 public class RelationshipEditTest {
 
-    private ArrayList<Relationship> preEditRelationships;
+    private ArrayList<Relationship> savedRelationships; // save relationships before editing so they can be restored later
 
+    // start test from dashboard activity
     @Rule
     public ActivityTestRule<RelationshipDashboardActivity> mDashboardRule =
             new ActivityTestRule<>(RelationshipDashboardActivity.class);
 
+    /**
+     * initialize savedRelationships
+     */
     @Before
     public void createPreEditRelationships() {
-        preEditRelationships = new ArrayList<>();
+        savedRelationships = new ArrayList<>();
     }
 
     /**
@@ -47,29 +52,34 @@ public class RelationshipEditTest {
         final int testBirthDayOfMonth = 17;
         MonthDay testBirthday = new MonthDay(testBirthMonth.getMonthOfYear(), testBirthDayOfMonth);
 
+        // get the last relationship in the database to test with
         Relationship testRelationship = RelationshipDbTestHelper
                 .getLastRelationshipFromDatabase(mDashboardRule.getActivity());
-        preEditRelationships.add(testRelationship);
+        savedRelationships.add(testRelationship); // save off relationship before editing
 
-        onData(allOf(instanceOf(Relationship.class), is(testRelationship))).perform(click());
-        onView(withId(R.id.edit_demographics_button)).perform(click());
+        onData(allOf(instanceOf(Relationship.class), is(testRelationship))).perform(click()); // open testRelationship detail
+        onView(withId(R.id.edit_demographics_button)).perform(click()); // edit demographics
 
+        // fill in test demographic data
         UiTestHelper.editDemographics(testName, testBirthMonth, testBirthDayOfMonth,
                 mDashboardRule);
-        onView(withId(R.id.save_relationship)).perform(click());
+        onView(withId(R.id.save_relationship)).perform(click()); // save changes
 
+        // reload relationship from database, to test save was successful
         testRelationship = RelationshipDbTestHelper
                 .getLastRelationshipFromDatabase(mDashboardRule.getActivity());
-        assertEquals(testName, testRelationship.getName().toString());
-        assertEquals(testBirthday.toString(), testRelationship.getBirthdayString());
-
+        assertEquals(testName, testRelationship.getName().toString()); // check name
+        assertEquals(testBirthday.toString(), testRelationship.getBirthdayString()); // check birthday
     }
 
+    /**
+     * After edits are confirmed, revert changes from savedRelationships
+     */
     @After
     public void restorePreEditRelationships() {
         RelationshipDbHelper relationshipDbHelper =
                 new RelationshipDbHelper(mDashboardRule.getActivity());
-        for (Relationship relationship : preEditRelationships) {
+        for (Relationship relationship : savedRelationships) {
             relationshipDbHelper.updateRelationship(relationship);
         }
     }

@@ -23,7 +23,7 @@ import java.util.ArrayList;
  */
 public class RelationshipCreateTest {
 
-    private ArrayList<Relationship> relationshipsCreated;
+    private ArrayList<Relationship> createdRelationships;
     private int savedNextRelationshipId; // save off nextRelationshipId before tests and restore after.
 
     @Rule
@@ -32,7 +32,7 @@ public class RelationshipCreateTest {
 
     @Before
     public void setupRelationshipCreated() {
-        relationshipsCreated = new ArrayList<>();
+        createdRelationships = new ArrayList<>();
         savedNextRelationshipId = PreferencesTestHelper
                 .getNextRelationshipIdNoIncrement(mDashboardRule.getActivity());
     }
@@ -57,14 +57,14 @@ public class RelationshipCreateTest {
                 RelationshipDbTestHelper.getLastRelationshipFromDatabase(mDashboardRule.getActivity());
         assertEquals(testName, testRelationship.getName().toString());
         assertEquals(testBirthday.toString(), testRelationship.getBirthdayString());
-        relationshipsCreated.add(testRelationship);
+        createdRelationships.add(testRelationship);
     }
 
     @After
     public void deleteCreatedRelationships() {
         RelationshipDbHelper relationshipDbHelper =
                 new RelationshipDbHelper(mDashboardRule.getActivity());
-        for (Relationship relationship : relationshipsCreated) {
+        for (Relationship relationship : createdRelationships) {
             relationshipDbHelper.deleteRelationship(relationship.getRelationshipId());
         }
         PreferencesTestHelper.setNextRelationshipId(
