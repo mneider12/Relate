@@ -10,3 +10,7 @@ Social media integration
 
 Add information to Dashboard Thumbnail
 - Needs improved design
+
+Enhance test suite for edge cases
+- don\'t just test operations on last row in database
+- tests when the database is empty (maybe with a mock)
