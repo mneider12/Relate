@@ -69,6 +69,7 @@ public class RelationshipDeleteTest {
 
     /**
      * Restore relationships saved off in savedRelationships
+     * Uses direct methods, not UI calls
      */
     @After
     public void restoreSavedRelationships() {

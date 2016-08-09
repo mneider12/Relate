@@ -23,13 +23,15 @@ import java.util.ArrayList;
  */
 public class RelationshipCreateTest {
 
-    private ArrayList<Relationship> createdRelationships;
+    private ArrayList<Relationship> createdRelationships; // save any created relationships to delete later
     private int savedNextRelationshipId; // save off nextRelationshipId before tests and restore after.
 
+    // start test from dashboard activity
     @Rule
     public ActivityTestRule<RelationshipDashboardActivity> mDashboardRule =
             new ActivityTestRule<>(RelationshipDashboardActivity.class);
 
+    // Create the createdRelationships ArrayList and save off the current value of nextRelationshipId
     @Before
     public void setupRelationshipCreated() {
         createdRelationships = new ArrayList<>();
@@ -42,24 +44,30 @@ public class RelationshipCreateTest {
      */
     @Test
     public void relationshipCreateTest() {
-        @SuppressWarnings("SpellCheckingInspection")
+        @SuppressWarnings("SpellCheckingInspection") // I double checked
         final String testName = "Anakin Skywalker";
         final Month testBirthMonth = Month.APRIL;
         final int testBirthDayOfMonth = 19;
         MonthDay testBirthday = new MonthDay(testBirthMonth.getMonthOfYear(), testBirthDayOfMonth);
 
         onView(withId(R.id.create_relationship_button)).perform(click()); // open create activity
+        // Fill out demographics with test data
         UiTestHelper.editDemographics(testName, testBirthMonth, testBirthDayOfMonth,
                 mDashboardRule);
-        onView(withId(R.id.save_relationship)).perform(click());
+        onView(withId(R.id.save_relationship)).perform(click()); // save relationship
 
+        // Retrieve the last saved relationship to verify it is the one just created
         Relationship testRelationship =
                 RelationshipDbTestHelper.getLastRelationshipFromDatabase(mDashboardRule.getActivity());
-        assertEquals(testName, testRelationship.getName().toString());
-        assertEquals(testBirthday.toString(), testRelationship.getBirthdayString());
-        createdRelationships.add(testRelationship);
+        assertEquals(testName, testRelationship.getName().toString()); // verify name
+        assertEquals(testBirthday.toString(), testRelationship.getBirthdayString()); // verify birthday
+        createdRelationships.add(testRelationship); // save relationship to delete after test
     }
 
+    /**
+     * Delete created relationships and restore previous value of nextRelationshipId.
+     * Uses direct methods, not UI calls
+     */
     @After
     public void deleteCreatedRelationships() {
         RelationshipDbHelper relationshipDbHelper =

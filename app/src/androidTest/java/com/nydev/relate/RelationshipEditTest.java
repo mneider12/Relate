@@ -73,7 +73,8 @@ public class RelationshipEditTest {
     }
 
     /**
-     * After edits are confirmed, revert changes from savedRelationships
+     * After edits are confirmed, revert changes from savedRelationships/
+     * Uses direct methods, not UI calls.
      */
     @After
     public void restorePreEditRelationships() {
