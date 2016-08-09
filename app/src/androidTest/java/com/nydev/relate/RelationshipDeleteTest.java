@@ -16,8 +16,12 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import static com.nydev.relate.UiTestHelper.withAdaptedData;
 
@@ -26,19 +30,26 @@ import static com.nydev.relate.UiTestHelper.withAdaptedData;
  */
 public class RelationshipDeleteTest {
 
+    private ArrayList<Relationship> savedRelationships;
+
 
     @Rule
     public ActivityTestRule<RelationshipDashboardActivity> mDashboardRule =
             new ActivityTestRule<>(RelationshipDashboardActivity.class);
 
+    @Before
+    public void setupSavedRelationships() {
+        savedRelationships = new ArrayList<>();
+    }
+
     /**
      * Test the relationship delete workflow
-     * SIDE EFFECT: Deletes the last relationship from the database (if at least one exists)
      */
     @Test
     public void relationshipDeleteTest() {
         Relationship testRelationship = RelationshipDbTestHelper
                 .getLastRelationshipFromDatabase(mDashboardRule.getActivity());
+        savedRelationships.add(testRelationship);
 
         onData(allOf(instanceOf(Relationship.class), is(testRelationship))).perform(click());
         onView(withId(R.id.delete_relationship_button)).perform(click());
@@ -49,6 +60,15 @@ public class RelationshipDeleteTest {
                 relationshipDbHelper.isValidRelationshipId(testRelationship.getRelationshipId()));
         onView(withId(R.id.thumbnail_container_layout))
                 .check(matches(not(withAdaptedData(is(testRelationship)))));
+    }
+
+    @After
+    public void restoreSavedRelationships() {
+        RelationshipDbHelper relationshipDbHelper =
+                new RelationshipDbHelper(mDashboardRule.getActivity());
+        for (Relationship relationship : savedRelationships) {
+            relationshipDbHelper.insertRelationship(relationship);
+        }
     }
 
 

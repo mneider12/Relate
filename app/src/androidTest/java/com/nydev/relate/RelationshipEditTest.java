@@ -3,6 +3,8 @@ package com.nydev.relate;
 import android.support.test.rule.ActivityTestRule;
 
 import org.joda.time.MonthDay;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -17,18 +19,26 @@ import static org.junit.Assert.assertEquals;
 
 import com.nydev.relate.DateHelper.Month;
 
+import java.util.ArrayList;
+
 /**
  * Created by markneider on 8/8/16.
  */
 public class RelationshipEditTest {
 
+    private ArrayList<Relationship> preEditRelationships;
+
     @Rule
     public ActivityTestRule<RelationshipDashboardActivity> mDashboardRule =
             new ActivityTestRule<>(RelationshipDashboardActivity.class);
 
+    @Before
+    public void createPreEditRelationships() {
+        preEditRelationships = new ArrayList<>();
+    }
+
     /**
      * Test the relationship edit workflow
-     * SIDE EFFECT: will edit the last relationship in the database
      */
     @Test
     public void editRelationship() {
@@ -39,6 +49,7 @@ public class RelationshipEditTest {
 
         Relationship testRelationship = RelationshipDbTestHelper
                 .getLastRelationshipFromDatabase(mDashboardRule.getActivity());
+        preEditRelationships.add(testRelationship);
 
         onData(allOf(instanceOf(Relationship.class), is(testRelationship))).perform(click());
         onView(withId(R.id.edit_demographics_button)).perform(click());
@@ -52,5 +63,14 @@ public class RelationshipEditTest {
         assertEquals(testName, testRelationship.getName().toString());
         assertEquals(testBirthday.toString(), testRelationship.getBirthdayString());
 
+    }
+
+    @After
+    public void restorePreEditRelationships() {
+        RelationshipDbHelper relationshipDbHelper =
+                new RelationshipDbHelper(mDashboardRule.getActivity());
+        for (Relationship relationship : preEditRelationships) {
+            relationshipDbHelper.updateRelationship(relationship);
+        }
     }
 }
