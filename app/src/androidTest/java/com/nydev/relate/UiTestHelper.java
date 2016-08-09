@@ -1,9 +1,15 @@
 package com.nydev.relate;
 
 import android.support.test.rule.ActivityTestRule;
+import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 
 import com.nydev.relate.DateHelper.Month;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -21,7 +27,7 @@ import static org.hamcrest.Matchers.is;
 /**
  * Created by markneider on 8/8/16.
  */
-public class DemographicsEditTestHelper {
+public class UiTestHelper {
 
     @Rule
     public static ActivityTestRule<RelationshipDashboardActivity> mDashboardRule;
@@ -46,5 +52,29 @@ public class DemographicsEditTestHelper {
 
         // save birthday and relationship
         onView(withId(R.id.save_birthday)).perform(click());
+    }
+
+    public static Matcher<View> withAdaptedData(final Matcher<Relationship> dataMatcher) {
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public boolean matchesSafely(View view) {
+                if (!(view instanceof AdapterView)) {
+                    return false;
+                }
+                Adapter adapter = ((AdapterView) view).getAdapter();
+                for (int i = 0; i < adapter.getCount(); i++) {
+                    if (dataMatcher.matches(adapter.getItem(i))) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with class name: ");
+                dataMatcher.describeTo(description);
+            }
+        };
     }
 }

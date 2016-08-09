@@ -6,15 +6,10 @@ import org.joda.time.MonthDay;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.concurrent.TimeUnit;
-
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -48,7 +43,7 @@ public class RelationshipEditTest {
         onData(allOf(instanceOf(Relationship.class), is(testRelationship))).perform(click());
         onView(withId(R.id.edit_demographics_button)).perform(click());
 
-        DemographicsEditTestHelper.editDemographics(testName, testBirthMonth, testBirthDayOfMonth,
+        UiTestHelper.editDemographics(testName, testBirthMonth, testBirthDayOfMonth,
                 mDashboardRule);
         onView(withId(R.id.save_relationship)).perform(click());
 

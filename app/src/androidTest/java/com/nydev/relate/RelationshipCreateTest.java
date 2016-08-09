@@ -1,28 +1,21 @@
 package com.nydev.relate;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.support.test.rule.ActivityTestRule;
 
 import org.joda.time.MonthDay;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
 
 import com.nydev.relate.DateHelper.Month;
-import com.nydev.relate.RelationshipContract.RelationshipEntry;
+
+import java.util.ArrayList;
 
 /**
  * Created by markneider on 8/6/16.
@@ -30,13 +23,22 @@ import com.nydev.relate.RelationshipContract.RelationshipEntry;
  */
 public class RelationshipCreateTest {
 
+    private ArrayList<Relationship> relationshipsCreated;
+    private int savedNextRelationshipId; // save off nextRelationshipId before tests and restore after.
+
     @Rule
     public ActivityTestRule<RelationshipDashboardActivity> mDashboardRule =
             new ActivityTestRule<>(RelationshipDashboardActivity.class);
 
+    @Before
+    public void setupRelationshipCreated() {
+        relationshipsCreated = new ArrayList<>();
+        savedNextRelationshipId = PreferencesTestHelper
+                .getNextRelationshipIdNoIncrement(mDashboardRule.getActivity());
+    }
+
     /**
      * Test the relationship creation workflow.
-     * SIDE EFFECT: will add a relationship to the database
      */
     @Test
     public void relationshipCreateTest() {
@@ -47,7 +49,7 @@ public class RelationshipCreateTest {
         MonthDay testBirthday = new MonthDay(testBirthMonth.getMonthOfYear(), testBirthDayOfMonth);
 
         onView(withId(R.id.create_relationship_button)).perform(click()); // open create activity
-        DemographicsEditTestHelper.editDemographics(testName, testBirthMonth, testBirthDayOfMonth,
+        UiTestHelper.editDemographics(testName, testBirthMonth, testBirthDayOfMonth,
                 mDashboardRule);
         onView(withId(R.id.save_relationship)).perform(click());
 
@@ -55,5 +57,17 @@ public class RelationshipCreateTest {
                 RelationshipDbTestHelper.getLastRelationshipFromDatabase(mDashboardRule.getActivity());
         assertEquals(testName, testRelationship.getName().toString());
         assertEquals(testBirthday.toString(), testRelationship.getBirthdayString());
+        relationshipsCreated.add(testRelationship);
+    }
+
+    @After
+    public void deleteCreatedRelationships() {
+        RelationshipDbHelper relationshipDbHelper =
+                new RelationshipDbHelper(mDashboardRule.getActivity());
+        for (Relationship relationship : relationshipsCreated) {
+            relationshipDbHelper.deleteRelationship(relationship.getRelationshipId());
+        }
+        PreferencesTestHelper.setNextRelationshipId(
+                mDashboardRule.getActivity(), savedNextRelationshipId);
     }
 }
