@@ -16,3 +16,5 @@ Enhance test suite for edge cases
 - tests when the database is empty (maybe with a mock)
 
 Create integrity checker
+
+Limit note size

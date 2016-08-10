@@ -12,7 +12,8 @@ import org.joda.time.MonthDay;
 
 /**
  * Created by markneider on 7/27/16.
- * Helper class for accessing Relationship SQLite database
+ * Helper class for accessing relationship table
+ * This also contains over database methods that may be accessed by other table helpers.
  */
 public class RelationshipDbHelper extends SQLiteOpenHelper {
 
@@ -23,9 +24,10 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME  = "Relationship.db";
 
-    private static final String TEXT_TYPE = " TEXT"; // define text data types for SQL columns
-    private static final String DATE_TYPE = " DATE";
-    private static final String COMMA_SEPARATOR = ",";
+    public static final String TEXT_TYPE = " TEXT"; // define text data types for SQL columns
+    public static final String DATE_TYPE = " DATE";
+    public static final String COMMA_SEPARATOR = ",";
+    public static final String INTEGER_TYPE = " INTEGER";
 
     private static final String SQL_CREATE_ENTRIES =    // SQL statement to create relationship table and define columns
             "CREATE TABLE " + RelationshipEntry.TABLE_NAME + " (" +
