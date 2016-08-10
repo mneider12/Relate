@@ -127,7 +127,7 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
             String rawBirthday = relationshipCursor.getString(relationshipCursor.getColumnIndex(
                     RelationshipEntry.COLUMN_NAME_BIRTHDAY));
             relationship = new Relationship(relationshipId, lastName, firstName);
-            if (rawBirthday != null) {
+            if (!rawBirthday.equals("")) {
                 MonthDay birthday = MonthDay.parse(rawBirthday);
                 relationship.setBirthday(birthday);
             }
