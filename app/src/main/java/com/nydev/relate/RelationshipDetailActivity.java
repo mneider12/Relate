@@ -6,10 +6,15 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import org.joda.time.MonthDay;
+
+import java.util.ArrayList;
 
 /**
  * Created by markneider on 8/6/16.
@@ -21,7 +26,9 @@ public class RelationshipDetailActivity extends AppCompatActivity
         DemographicsViewFragment.OnEditDemographicsButtonListener {
 
     private Relationship relationship;
-    private RelationshipDbHelper relationshipDbHelper;
+    private RelationshipTableHelper relationshipTableHelper;
+    private Note note;
+    private RelationshipDetailActivity container; // use to differentiate 'this' in subclasses
 
     /**
      * Load relationship information on activity creation
@@ -33,12 +40,13 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         int relationshipId = intent.getIntExtra("com.nydev.relate.relationshipId", 0);
+        int noteId = intent.getIntExtra("com.nydev.relate.noteId", 0);
 
-        relationshipDbHelper = new RelationshipDbHelper(this);
-        if (relationshipDbHelper.isValidRelationshipId(relationshipId)) { // load in view mode if a valid existing relationship is passed in
+        relationshipTableHelper = new RelationshipTableHelper(this);
+        if (relationshipTableHelper.isValidRelationshipId(relationshipId)) { // load in view mode if a valid existing relationship is passed in
             setContentView(R.layout.relationship_detail_view);
 
-            relationship = relationshipDbHelper.getRelationship(relationshipId);
+            relationship = relationshipTableHelper.getRelationship(relationshipId);
 
             DemographicsViewFragment demographicsViewFragment =
                     DemographicsViewFragment.newInstance(relationship);
@@ -46,10 +54,72 @@ public class RelationshipDetailActivity extends AppCompatActivity
             getFragmentManager().beginTransaction().add(
                     R.id.demographics_container, demographicsViewFragment).commit();
 
+            NoteTableHelper noteTableHelper = new NoteTableHelper(this);
+            ArrayList<Note> notes = noteTableHelper.getNotes(relationship);
+            if (notes.isEmpty()) {
+                note = new Note(this, relationship);
+            } else {
+                note = notes.get(0);
+            }
+
         } else { // Create a new relationship in edit mode
             setContentView(R.layout.relationship_create);
             relationship = new Relationship(this); // reserves an ID for this Relationship
+            note = new Note(this, relationship);
         }
+
+        TextView noteView = (TextView) findViewById(R.id.note_edit_text);
+        noteView.setText(note.getNoteText());
+        // set watcher on note activity
+        container = this;
+        setNoteEditTextWatcher(noteView);
+    }
+
+    /**
+     * Set a TextWatcher on the name edit text view to save the name afterTextChanged
+     * @param noteEditTextView view to set watcher on
+     */
+    private void setNoteEditTextWatcher(final TextView noteEditTextView) {
+        noteEditTextView.addTextChangedListener(new TextWatcher() {
+            /**
+             * Not used
+             * {@inheritDoc}
+             *
+             * @param charSequence {@inheritDoc}
+             * @param i            {@inheritDoc}
+             * @param i1           {@inheritDoc}
+             * @param i2           {@inheritDoc}
+             */
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            /**
+             * Not used
+             * {@inheritDoc}
+             *
+             * @param charSequence {@inheritDoc}
+             * @param i            {@inheritDoc}
+             * @param i1           {@inheritDoc}
+             * @param i2           {@inheritDoc}
+             */
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            /**
+             * After text is changed in the name entry text field, save the new name to the relationship
+             *
+             * @param noteEditable text from name edit text view
+             */
+            @Override
+            public void afterTextChanged(Editable noteEditable) {
+                String noteText = noteEditable.toString();
+                note.setNoteText(noteEditable.toString());
+            }
+        });
     }
 
     /**
@@ -58,10 +128,14 @@ public class RelationshipDetailActivity extends AppCompatActivity
      */
     public void saveRelationship(View saveButton)
     {
-        if (relationshipDbHelper.isValidRelationshipId(relationship.getRelationshipId())) { // Relationship exists; update
-            relationshipDbHelper.updateRelationship(relationship);
+        if (relationshipTableHelper.isValidRelationshipId(relationship.getRelationshipId())) { // Relationship exists; update
+            relationshipTableHelper.updateRelationship(relationship);
         } else { // relationship is new; insert
-            relationshipDbHelper.insertRelationship(relationship);
+            relationshipTableHelper.insertRelationship(relationship);
+        }
+        if (!note.getNoteText().equals("")) {
+            NoteTableHelper noteTableHelper = new NoteTableHelper(this);
+            noteTableHelper.insertNote(note);
         }
         finish();
     }
@@ -71,8 +145,8 @@ public class RelationshipDetailActivity extends AppCompatActivity
      * @param cancelButton the view calling this function (not used)
      */
     public void cancelRelationship(View cancelButton) {
-        if (relationshipDbHelper.isValidRelationshipId(relationship.getRelationshipId())) { // need to restore data
-            relationship = relationshipDbHelper.getRelationship(relationship.getRelationshipId());
+        if (relationshipTableHelper.isValidRelationshipId(relationship.getRelationshipId())) { // need to restore data
+            relationship = relationshipTableHelper.getRelationship(relationship.getRelationshipId());
         }
         finish();
     }
@@ -117,7 +191,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
      * @param deleteButton Button that called this method from onClick
      */
     public void deleteRelationship(View deleteButton) {
-        relationshipDbHelper.deleteRelationship(relationship.getRelationshipId());
+        relationshipTableHelper.deleteRelationship(relationship.getRelationshipId());
         finish();
     }
 

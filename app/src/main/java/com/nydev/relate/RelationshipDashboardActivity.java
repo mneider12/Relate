@@ -48,8 +48,8 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
      */
     private void loadRelationshipThumbnails()
     {
-        RelationshipDbHelper relationshipDbHelper = new RelationshipDbHelper(this); // Helper class to access Relationship database
-        Cursor relationshipsCursor = relationshipDbHelper.getAllRelationships(); // load all relationships right away - may need more performance aware process later
+        RelationshipTableHelper relationshipTableHelper = new RelationshipTableHelper(this); // Helper class to access Relationship database
+        Cursor relationshipsCursor = relationshipTableHelper.getAllRelationships(); // load all relationships right away - may need more performance aware process later
         ArrayAdapter<Relationship> relationshipArrayAdapter = getRelationshipArrayAdapter(relationshipsCursor); // load relationships into an ArrayAdapter
         ListView relationshipListView = (ListView) findViewById(R.id.thumbnail_container_layout); // ListView to display list of relationships
         relationshipListView.setAdapter(relationshipArrayAdapter); // bind relationshipArrayAdapter to relationshipListView

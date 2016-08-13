@@ -1,5 +1,7 @@
 package com.nydev.relate;
 
+import android.content.Context;
+
 import org.joda.time.LocalDate;
 
 /**
@@ -21,14 +23,20 @@ public class Note {
         noteText = "";
     }
 
-    public Note(Relationship relationship, LocalDate contactDate, String noteText) {
+    public Note(Context context, Relationship relationship) {
+        noteId = PreferencesHelper.getNextNoteId(context);
         this.relationship = relationship;
-        this.createdDate = new LocalDate(); // today
-        if (contactDate == null) {
-            this.contactDate = new LocalDate(); // today
-        } else {
-            this.contactDate = contactDate;
-        }
+        this.createdDate = new LocalDate();
+        this.contactDate = new LocalDate();
+        this.noteText = "";
+    }
+
+    public Note(int noteId, Relationship relationship, LocalDate createdDate, LocalDate contactDate,
+                String noteText) {
+        this.noteId = noteId;
+        this.relationship = relationship;
+        this.createdDate = createdDate;
+        this.contactDate = contactDate;
         this.noteText = noteText;
     }
 
@@ -50,5 +58,9 @@ public class Note {
 
     public String getNoteText() {
         return noteText;
+    }
+
+    public void setNoteText(String noteText) {
+        this.noteText = noteText;
     }
 }
