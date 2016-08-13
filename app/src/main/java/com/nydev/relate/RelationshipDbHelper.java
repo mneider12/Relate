@@ -18,7 +18,7 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
     private final String LOG_TAG = "nydev.Relate";  // Tag to use in android monitor log statements
 
     // If you change the database schema, you must increment the database version
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME  = "Relationship.db";
 
     public static final String TEXT_TYPE = " TEXT"; // define text data types for SQL columns
@@ -66,7 +66,6 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
      */
     public void onUpgrade(SQLiteDatabase relationshipDb, int oldVersion, int newVersion) {
         // not needed until the database needs to be changed after release
-        relationshipDb.execSQL(SQL_CREATE_NOTE_TABLE);
     }
 
     @Override
