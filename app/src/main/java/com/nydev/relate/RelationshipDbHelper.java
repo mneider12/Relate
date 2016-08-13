@@ -39,7 +39,9 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
             NoteEntry.COLUMN_NAME_RELATIONSHIP_ID + INTEGER_TYPE + COMMA_SEPARATOR +
             NoteEntry.COLUMN_NAME_CREATED_DATE + DATE_TYPE + COMMA_SEPARATOR +
             NoteEntry.COLUMN_NAME_CONTACT_DATE + DATE_TYPE + COMMA_SEPARATOR +
-            NoteEntry.COLUMN_NAME_NOTE_TEXT + TEXT_TYPE + " )";
+            NoteEntry.COLUMN_NAME_NOTE_TEXT + TEXT_TYPE + COMMA_SEPARATOR +
+            "FOREIGN KEY(" + NoteEntry.COLUMN_NAME_RELATIONSHIP_ID + ") REFERENCES " +
+            RelationshipEntry.TABLE_NAME + "(" + RelationshipEntry._ID + " ))";
 
     /**
      * Create a new RelationshipDbHelper

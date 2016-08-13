@@ -5,8 +5,6 @@ import android.support.annotation.NonNull;
 
 import org.joda.time.MonthDay;
 
-import java.util.ArrayList;
-
 /**
  * Created by markneider on 7/2/16.
  * Hold information relevant to a single relationship record

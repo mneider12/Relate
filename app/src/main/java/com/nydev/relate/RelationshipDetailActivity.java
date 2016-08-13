@@ -29,7 +29,6 @@ public class RelationshipDetailActivity extends AppCompatActivity
     private RelationshipTableHelper relationshipTableHelper;
     private NoteTableHelper noteTableHelper;
     private Note note;
-    private RelationshipDetailActivity container; // use to differentiate 'this' in subclasses
 
     /**
      * Load relationship information on activity creation
@@ -41,7 +40,6 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         int relationshipId = intent.getIntExtra("com.nydev.relate.relationshipId", 0);
-        int noteId = intent.getIntExtra("com.nydev.relate.noteId", 0);
 
         relationshipTableHelper = new RelationshipTableHelper(this);
         if (relationshipTableHelper.isValidRelationshipId(relationshipId)) { // load in view mode if a valid existing relationship is passed in
@@ -72,7 +70,6 @@ public class RelationshipDetailActivity extends AppCompatActivity
         TextView noteView = (TextView) findViewById(R.id.note_edit_text);
         noteView.setText(note.getNoteText());
         // set watcher on note activity
-        container = this;
         setNoteEditTextWatcher(noteView);
     }
 
@@ -117,14 +114,13 @@ public class RelationshipDetailActivity extends AppCompatActivity
              */
             @Override
             public void afterTextChanged(Editable noteEditable) {
-                String noteText = noteEditable.toString();
                 note.setNoteText(noteEditable.toString());
             }
         });
     }
 
     /**
-     * Save the relationship being created
+     * Save the relationship
      * @param saveButton not used - view calling this method, expected from onClick
      */
     public void saveRelationship(View saveButton)

@@ -4,10 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import com.nydev.relate.NoteContract.NoteEntry;
-import com.nydev.relate.RelationshipContract.RelationshipEntry;
 
 import org.joda.time.LocalDate;
 
@@ -19,17 +17,7 @@ import java.util.ArrayList;
  */
 public class NoteTableHelper {
 
-    private RelationshipDbHelper relationshipDbHelper;
-
-    private static final String SQL_CREATE_ENTRIES =    // SQL statement to create relationship table and define columns
-            "CREATE TABLE " + NoteEntry.TABLE_NAME + " (" +
-            NoteEntry._ID + " INTEGER PRIMARY KEY," +
-            NoteEntry.COLUMN_NAME_RELATIONSHIP_ID + RelationshipDbHelper.INTEGER_TYPE + RelationshipDbHelper.COMMA_SEPARATOR +
-            NoteEntry.COLUMN_NAME_CREATED_DATE + RelationshipDbHelper.TEXT_TYPE + RelationshipDbHelper.COMMA_SEPARATOR +
-            NoteEntry.COLUMN_NAME_CONTACT_DATE + RelationshipDbHelper.TEXT_TYPE + RelationshipDbHelper.COMMA_SEPARATOR +
-            NoteEntry.COLUMN_NAME_NOTE_TEXT + RelationshipDbHelper.TEXT_TYPE +
-            "FOREIGN KEY(" + NoteEntry.COLUMN_NAME_RELATIONSHIP_ID + ") REFERENCES " +
-            RelationshipEntry.TABLE_NAME + "(" + RelationshipEntry._ID + " )";
+    private RelationshipDbHelper relationshipDbHelper; // Helper for accessing relationship database
 
     /**
      * Create a new NoteTableHelper
@@ -39,6 +27,11 @@ public class NoteTableHelper {
         relationshipDbHelper = new RelationshipDbHelper(context);
     }
 
+    /**
+     * Insert a new note into the note table
+     * @param note note to save
+     * @return true if the insert operation was successful, otherwise false
+     */
     public boolean insertNote(Note note) {
         SQLiteDatabase relationshipDatabase = relationshipDbHelper.getWritableDatabase();
         ContentValues noteValues = buildContentValues(note);
@@ -46,6 +39,12 @@ public class NoteTableHelper {
         return relationshipDatabase.insert(NoteEntry.TABLE_NAME, null, noteValues) != -1;
     }
 
+    /**
+     * Update an existing note in the database
+     * @param note note with information to save.
+     *             noteId must already exist in the _ID column of the note table.
+     * @return true if the update operation was successful, otherwise false
+     */
     public boolean updateNote(Note note) {
         SQLiteDatabase relationshipDatabase = relationshipDbHelper.getWritableDatabase();
         ContentValues noteValues = buildContentValues(note);
@@ -57,8 +56,8 @@ public class NoteTableHelper {
     /**
      * Build the data for either an insert or update into the note table.
      * Can be used as input to insert or update to a SQLiteDatabase
-     * @param note relationship to build data from
-     * @return ContentValues representing the data for a row in the relationship database
+     * @param note note to build data from
+     * @return ContentValues representing the data for a row in the note table
      */
     private ContentValues buildContentValues(Note note) {
         ContentValues noteValues = new ContentValues();
@@ -73,6 +72,11 @@ public class NoteTableHelper {
         return noteValues;
     }
 
+    /**
+     * Get all of the notes for a given relationship from the note table
+     * @param relationship relationship to retrieve notes for
+     * @return list of notes for given relationship
+     */
     public ArrayList<Note> getNotes(Relationship relationship) {
         SQLiteDatabase relationshipDatabase = relationshipDbHelper.getReadableDatabase();
 
@@ -97,16 +101,22 @@ public class NoteTableHelper {
             Note note = new Note(noteId, relationship, createdDate, contactDate, noteText);
             notes.add(note);
         }
+        noteCursor.close();
         return notes;
     }
 
+    /**
+     * Check whether noteId exists in the _ID column of the note table
+     * @param noteId id of note to check for
+     * @return true if noteId is a valid id in the note table, otherwise false
+     */
     public boolean isValidNoteId(int noteId) {
         SQLiteDatabase relationshipDatabase = relationshipDbHelper.getReadableDatabase();
         Cursor relationshipCursor = relationshipDatabase.rawQuery(
                 "SELECT _ID FROM " + NoteEntry.TABLE_NAME +
-                        " WHERE _ID=" + noteId, null);
+                        " WHERE " + NoteEntry._ID + "=" + noteId, null);
 
-        boolean isValidId = relationshipCursor.getCount() == 1;
+        boolean isValidId = relationshipCursor.getCount() == 1; // should never be more than 1 result
         relationshipCursor.close();
         return isValidId;
     }
