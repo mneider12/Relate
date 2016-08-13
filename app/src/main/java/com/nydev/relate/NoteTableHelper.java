@@ -46,6 +46,14 @@ public class NoteTableHelper {
         return relationshipDatabase.insert(NoteEntry.TABLE_NAME, null, noteValues) != -1;
     }
 
+    public boolean updateNote(Note note) {
+        SQLiteDatabase relationshipDatabase = relationshipDbHelper.getWritableDatabase();
+        ContentValues noteValues = buildContentValues(note);
+
+        return relationshipDatabase.update(NoteEntry.TABLE_NAME, noteValues,
+                NoteEntry._ID + "=" + note.getNoteId(), null) != 1;
+    }
+
     /**
      * Build the data for either an insert or update into the note table.
      * Can be used as input to insert or update to a SQLiteDatabase
@@ -95,7 +103,7 @@ public class NoteTableHelper {
     public boolean isValidNoteId(int noteId) {
         SQLiteDatabase relationshipDatabase = relationshipDbHelper.getReadableDatabase();
         Cursor relationshipCursor = relationshipDatabase.rawQuery(
-                "SELECT _ID FROM " + RelationshipEntry.TABLE_NAME +
+                "SELECT _ID FROM " + NoteEntry.TABLE_NAME +
                         " WHERE _ID=" + noteId, null);
 
         boolean isValidId = relationshipCursor.getCount() == 1;

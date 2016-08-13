@@ -27,6 +27,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
     private Relationship relationship;
     private RelationshipTableHelper relationshipTableHelper;
+    private NoteTableHelper noteTableHelper;
     private Note note;
     private RelationshipDetailActivity container; // use to differentiate 'this' in subclasses
 
@@ -54,7 +55,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
             getFragmentManager().beginTransaction().add(
                     R.id.demographics_container, demographicsViewFragment).commit();
 
-            NoteTableHelper noteTableHelper = new NoteTableHelper(this);
+            noteTableHelper = new NoteTableHelper(this);
             ArrayList<Note> notes = noteTableHelper.getNotes(relationship);
             if (notes.isEmpty()) {
                 note = new Note(this, relationship);
@@ -134,8 +135,11 @@ public class RelationshipDetailActivity extends AppCompatActivity
             relationshipTableHelper.insertRelationship(relationship);
         }
         if (!note.getNoteText().equals("")) {
-            NoteTableHelper noteTableHelper = new NoteTableHelper(this);
-            noteTableHelper.insertNote(note);
+            if (noteTableHelper.isValidNoteId(note.getNoteId())) {
+                noteTableHelper.updateNote(note);
+            } else {
+                noteTableHelper.insertNote(note);
+            }
         }
         finish();
     }
