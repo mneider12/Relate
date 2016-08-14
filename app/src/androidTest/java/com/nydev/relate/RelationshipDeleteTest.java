@@ -57,11 +57,11 @@ public class RelationshipDeleteTest {
         onData(allOf(instanceOf(Relationship.class), is(testRelationship))).perform(click());
         onView(withId(R.id.delete_relationship_button)).perform(click()); // click the delete button
 
-        RelationshipDbHelper relationshipDbHelper =
-                new RelationshipDbHelper(mDashboardRule.getActivity());
+        RelationshipTableHelper relationshipTableHelper =
+                new RelationshipTableHelper(mDashboardRule.getActivity());
         // verify that the relationship does not exist in the database (won't be valid)
         assertFalse(
-                relationshipDbHelper.isValidRelationshipId(testRelationship.getRelationshipId()));
+                relationshipTableHelper.isValidRelationshipId(testRelationship.getRelationshipId()));
         // check that the dashboard's ListView does not have an item for testRelationship
         onView(withId(R.id.thumbnail_container_layout))
                 .check(matches(not(withRelationship(is(testRelationship)))));
@@ -73,11 +73,11 @@ public class RelationshipDeleteTest {
      */
     @After
     public void restoreSavedRelationships() {
-        RelationshipDbHelper relationshipDbHelper =
-                new RelationshipDbHelper(mDashboardRule.getActivity());
+        RelationshipTableHelper relationshipTableHelper =
+                new RelationshipTableHelper(mDashboardRule.getActivity());
         // since relationships were deleted and do not exist in database, directly insert them back
         for (Relationship relationship : savedRelationships) {
-            relationshipDbHelper.insertRelationship(relationship);
+            relationshipTableHelper.insertRelationship(relationship);
         }
     }
 

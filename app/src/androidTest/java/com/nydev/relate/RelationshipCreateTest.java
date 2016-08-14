@@ -70,10 +70,10 @@ public class RelationshipCreateTest {
      */
     @After
     public void deleteCreatedRelationships() {
-        RelationshipDbHelper relationshipDbHelper =
-                new RelationshipDbHelper(mDashboardRule.getActivity());
+        RelationshipTableHelper relationshipTableHelper =
+                new RelationshipTableHelper(mDashboardRule.getActivity());
         for (Relationship relationship : createdRelationships) {
-            relationshipDbHelper.deleteRelationship(relationship.getRelationshipId());
+            relationshipTableHelper.deleteRelationship(relationship.getRelationshipId());
         }
         PreferencesTestHelper.setNextRelationshipId(
                 mDashboardRule.getActivity(), savedNextRelationshipId);

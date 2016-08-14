@@ -12,7 +12,7 @@ public class Note {
     private int noteId; // unique id for this note
     private Relationship relationship; //
     private LocalDate createdDate;
-    private LocalDate contactDate;
+    private LocalDate noteDate;
     private String noteText;
 
     /**
@@ -24,7 +24,7 @@ public class Note {
         noteId = PreferencesHelper.getNextNoteId(context); // reserve ID and increment ID counter
         this.relationship = relationship;
         this.createdDate = new LocalDate(); // created date is today
-        this.contactDate = new LocalDate(); // contact date defaults to today until changed
+        this.noteDate = new LocalDate(); // contact date defaults to today until changed
         this.noteText = ""; // start with no text
     }
 
@@ -33,15 +33,15 @@ public class Note {
      * @param noteId unique id for the note
      * @param relationship relationship related to this note
      * @param createdDate date the note was created
-     * @param contactDate date the note is about
+     * @param noteDate date the note is about
      * @param noteText note text
      */
-    public Note(int noteId, Relationship relationship, LocalDate createdDate, LocalDate contactDate,
+    public Note(int noteId, Relationship relationship, LocalDate createdDate, LocalDate noteDate,
                 String noteText) {
         this.noteId = noteId;
         this.relationship = relationship;
         this.createdDate = createdDate;
-        this.contactDate = contactDate;
+        this.noteDate = noteDate;
         this.noteText = noteText;
     }
 
@@ -73,8 +73,8 @@ public class Note {
      * Return the date this note refers to.
      * @return date this note refers to
      */
-    public LocalDate getContactDate() {
-        return contactDate;
+    public LocalDate getNoteDate() {
+        return noteDate;
     }
 
     /**
@@ -91,5 +91,9 @@ public class Note {
      */
     public void setNoteText(String noteText) {
         this.noteText = noteText;
+    }
+
+    public void setNoteDate(LocalDate noteDate) {
+        this.noteDate = noteDate;
     }
 }

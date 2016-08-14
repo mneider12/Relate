@@ -18,3 +18,6 @@ Enhance test suite for edge cases
 Create integrity checker
 
 Limit note size
+
+Add thumbnails to dashboard with either picture or an icon corresponding to relationship groups
+

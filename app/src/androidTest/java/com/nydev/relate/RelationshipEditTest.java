@@ -78,10 +78,10 @@ public class RelationshipEditTest {
      */
     @After
     public void restorePreEditRelationships() {
-        RelationshipDbHelper relationshipDbHelper =
-                new RelationshipDbHelper(mDashboardRule.getActivity());
+        RelationshipTableHelper relationshipTableHelper =
+                new RelationshipTableHelper(mDashboardRule.getActivity());
         for (Relationship relationship : savedRelationships) {
-            relationshipDbHelper.updateRelationship(relationship);
+            relationshipTableHelper.updateRelationship(relationship);
         }
     }
 }

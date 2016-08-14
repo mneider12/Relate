@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.joda.time.LocalDate;
 import org.joda.time.MonthDay;
 
 import java.util.ArrayList;
@@ -23,7 +24,8 @@ import java.util.ArrayList;
 public class RelationshipDetailActivity extends AppCompatActivity
     implements BirthdayPickerFragment.OnBirthdaySaveListener,
         DemographicsEditFragment.DemographicsSaveListener,
-        DemographicsViewFragment.OnEditDemographicsButtonListener {
+        DemographicsViewFragment.OnEditDemographicsButtonListener,
+        NoteFragment.NoteSaveListener {
 
     private Relationship relationship;
     private RelationshipTableHelper relationshipTableHelper;
@@ -47,12 +49,6 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
             relationship = relationshipTableHelper.getRelationship(relationshipId);
 
-            DemographicsViewFragment demographicsViewFragment =
-                    DemographicsViewFragment.newInstance(relationship);
-
-            getFragmentManager().beginTransaction().add(
-                    R.id.demographics_container, demographicsViewFragment).commit();
-
             noteTableHelper = new NoteTableHelper(this);
             ArrayList<Note> notes = noteTableHelper.getNotes(relationship);
             if (notes.isEmpty()) {
@@ -61,16 +57,25 @@ public class RelationshipDetailActivity extends AppCompatActivity
                 note = notes.get(0);
             }
 
+            DemographicsViewFragment demographicsViewFragment =
+                    DemographicsViewFragment.newInstance(relationship);
+            NoteFragment noteFragment = NoteFragment.newInstance(note);
+
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.add(R.id.note_container, noteFragment);
+            fragmentTransaction.add(R.id.demographics_container, demographicsViewFragment);
+            fragmentTransaction.commit();
+
         } else { // Create a new relationship in edit mode
             setContentView(R.layout.relationship_create);
             relationship = new Relationship(this); // reserves an ID for this Relationship
             note = new Note(this, relationship);
         }
-
+        /*
         TextView noteView = (TextView) findViewById(R.id.note_edit_text);
         noteView.setText(note.getNoteText());
         // set watcher on note activity
-        setNoteEditTextWatcher(noteView);
+        setNoteEditTextWatcher(noteView);*/
     }
 
     /**
@@ -204,5 +209,13 @@ public class RelationshipDetailActivity extends AppCompatActivity
         replaceViewWithEdit.replace(R.id.demographics_container, demographicsEditFragment);
         replaceViewWithEdit.addToBackStack(null);
         replaceViewWithEdit.commit();
+    }
+
+    public void saveNoteText(String noteText) {
+        note.setNoteText(noteText);
+    }
+
+    public void saveNoteDate(LocalDate noteDate) {
+        note.setNoteDate(noteDate);
     }
 }

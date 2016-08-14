@@ -66,7 +66,7 @@ public class NoteTableHelper {
         noteValues.put(NoteEntry._ID, note.getNoteId());
         noteValues.put(NoteEntry.COLUMN_NAME_RELATIONSHIP_ID, note.getRelationship().getRelationshipId());
         noteValues.put(NoteEntry.COLUMN_NAME_CREATED_DATE, note.getCreatedDate().toString());
-        noteValues.put(NoteEntry.COLUMN_NAME_CONTACT_DATE, note.getContactDate().toString());
+        noteValues.put(NoteEntry.COLUMN_NAME_CONTACT_DATE, note.getNoteDate().toString());
         noteValues.put(NoteEntry.COLUMN_NAME_NOTE_TEXT, note.getNoteText());
 
         return noteValues;

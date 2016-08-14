@@ -14,4 +14,6 @@
     <string name="save">Save</string>
     <string name="delete">Delete</string>
     <string name="edit_demographics">Edit demographics</string>
+    <string name="change_note_date">Change note date</string>
+
 </resources>
