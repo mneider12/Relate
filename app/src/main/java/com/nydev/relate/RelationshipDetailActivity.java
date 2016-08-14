@@ -25,7 +25,8 @@ public class RelationshipDetailActivity extends AppCompatActivity
     implements BirthdayPickerFragment.OnBirthdaySaveListener,
         DemographicsEditFragment.DemographicsSaveListener,
         DemographicsViewFragment.OnEditDemographicsButtonListener,
-        NoteFragment.NoteSaveListener {
+        NoteEditFragment.NoteSaveListener,
+        DatePickerFragment.DateSaveListener {
 
     private Relationship relationship;
     private RelationshipTableHelper relationshipTableHelper;
@@ -59,7 +60,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
             DemographicsViewFragment demographicsViewFragment =
                     DemographicsViewFragment.newInstance(relationship);
-            NoteFragment noteFragment = NoteFragment.newInstance(note);
+            NoteEditFragment noteFragment = NoteEditFragment.newInstance(note);
 
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.add(R.id.note_container, noteFragment);
@@ -215,7 +216,14 @@ public class RelationshipDetailActivity extends AppCompatActivity
         note.setNoteText(noteText);
     }
 
-    public void saveNoteDate(LocalDate noteDate) {
+    public void onDateSave(LocalDate noteDate) {
         note.setNoteDate(noteDate);
+        TextView noteDateTextView = (TextView) findViewById(R.id.note_date_button);
+        noteDateTextView.setText(noteDate.toString());
+    }
+
+    public void showDatePickerDialog(View noteDateSelectButton) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(), "noteDatePicker");
     }
 }
