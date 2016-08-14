@@ -223,7 +223,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
     }
 
     public void showDatePickerDialog(View noteDateSelectButton) {
-        DialogFragment newFragment = new DatePickerFragment();
+        DialogFragment newFragment = DatePickerFragment.newInstance(note.getNoteDate());
         newFragment.show(getFragmentManager(), "noteDatePicker");
     }
 }
