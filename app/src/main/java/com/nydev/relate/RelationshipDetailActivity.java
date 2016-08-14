@@ -1,6 +1,7 @@
 package com.nydev.relate;
 
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -28,10 +29,10 @@ public class RelationshipDetailActivity extends AppCompatActivity
         NoteEditFragment.NoteSaveListener,
         DatePickerFragment.DateSaveListener {
 
-    private Relationship relationship;
-    private RelationshipTableHelper relationshipTableHelper;
-    private NoteTableHelper noteTableHelper;
-    private Note note;
+    private Relationship relationship;  // relationship being considered
+    private RelationshipTableHelper relationshipTableHelper; // helper class for database operations on the relationship table
+    private NoteTableHelper noteTableHelper; // helper class for database operations on the note table
+    private Note note; // current note under consideration
 
     /**
      * Load relationship information on activity creation
@@ -50,17 +51,19 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
             relationship = relationshipTableHelper.getRelationship(relationshipId);
 
+            Fragment noteFragment;
             noteTableHelper = new NoteTableHelper(this);
             ArrayList<Note> notes = noteTableHelper.getNotes(relationship);
             if (notes.isEmpty()) {
                 note = new Note(this, relationship);
+                noteFragment = NoteEditFragment.newInstance(note); // open in edit mode for a new note
             } else {
                 note = notes.get(0);
+                noteFragment = NoteViewFragment.newInstance(note); // open in view mode for an existing note
             }
 
             DemographicsViewFragment demographicsViewFragment =
                     DemographicsViewFragment.newInstance(relationship);
-            NoteEditFragment noteFragment = NoteEditFragment.newInstance(note);
 
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.add(R.id.note_container, noteFragment);
