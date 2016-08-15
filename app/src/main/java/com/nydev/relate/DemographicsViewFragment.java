@@ -69,11 +69,12 @@ public class DemographicsViewFragment extends Fragment {
             nameView.setText(nameString);
         }
 
-        TextView birthdayView = (TextView) demographicsLayout.findViewById(R.id.birthday_text_view);
+        View birthdayLayout = demographicsLayout.findViewById(R.id.birthday_layout);
         String birthdayString = demographicsArgs.getString(BIRTHDAY_KEY, "");
         if (birthdayString.equals("")) {
-            birthdayView.setVisibility(View.GONE);
+            birthdayLayout.setVisibility(View.GONE);
         } else {
+            TextView birthdayView = (TextView) demographicsLayout.findViewById(R.id.birthday_text_view);
             birthdayView.setText(birthdayString);
         }
     }

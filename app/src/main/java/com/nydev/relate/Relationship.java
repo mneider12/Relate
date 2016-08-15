@@ -115,7 +115,7 @@ public class Relationship
         if (birthday == null) {
             return "";
         } else {
-            return birthday.toString();
+            return birthday.toString("MMM d");
         }
     }
 

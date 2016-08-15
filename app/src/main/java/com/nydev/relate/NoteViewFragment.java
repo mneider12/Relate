@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
  * Created by markneider on 8/14/16.
@@ -24,7 +25,7 @@ public class NoteViewFragment extends Fragment {
         // setup arguments
         Bundle noteArgs = new Bundle();
         noteArgs.putString(NOTE_TEXT_KEY, note.getNoteText());
-        noteArgs.putString(NOTE_DATE_KEY, note.getNoteDate().toString());
+        noteArgs.putString(NOTE_DATE_KEY, note.getNoteDate().toString("MMMM dd, yyyy"));
 
         noteFragment.setArguments(noteArgs);
 
