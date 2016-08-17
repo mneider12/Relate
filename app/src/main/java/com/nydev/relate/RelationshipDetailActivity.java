@@ -7,11 +7,12 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 import org.joda.time.LocalDate;
 import org.joda.time.MonthDay;
@@ -25,7 +26,6 @@ import java.util.ArrayList;
 public class RelationshipDetailActivity extends AppCompatActivity
     implements BirthdayPickerFragment.OnBirthdaySaveListener,
         DemographicsEditFragment.DemographicsSaveListener,
-        DemographicsViewFragment.OnEditDemographicsButtonListener,
         NoteEditFragment.NoteSaveListener,
         DatePickerFragment.DateSaveListener {
 
@@ -75,57 +75,9 @@ public class RelationshipDetailActivity extends AppCompatActivity
             relationship = new Relationship(this); // reserves an ID for this Relationship
             note = new Note(this, relationship);
         }
-        /*
-        TextView noteView = (TextView) findViewById(R.id.note_edit_text);
-        noteView.setText(note.getNoteText());
-        // set watcher on note activity
-        setNoteEditTextWatcher(noteView);*/
-    }
-
-    /**
-     * Set a TextWatcher on the name edit text view to save the name afterTextChanged
-     * @param noteEditTextView view to set watcher on
-     */
-    private void setNoteEditTextWatcher(final TextView noteEditTextView) {
-        noteEditTextView.addTextChangedListener(new TextWatcher() {
-            /**
-             * Not used
-             * {@inheritDoc}
-             *
-             * @param charSequence {@inheritDoc}
-             * @param i            {@inheritDoc}
-             * @param i1           {@inheritDoc}
-             * @param i2           {@inheritDoc}
-             */
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            /**
-             * Not used
-             * {@inheritDoc}
-             *
-             * @param charSequence {@inheritDoc}
-             * @param i            {@inheritDoc}
-             * @param i1           {@inheritDoc}
-             * @param i2           {@inheritDoc}
-             */
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            /**
-             * After text is changed in the name entry text field, save the new name to the relationship
-             *
-             * @param noteEditable text from name edit text view
-             */
-            @Override
-            public void afterTextChanged(Editable noteEditable) {
-                note.setNoteText(noteEditable.toString());
-            }
-        });
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        setTitle(relationship.getName().toString());
     }
 
     /**
@@ -204,7 +156,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
         finish();
     }
 
-    public void editDemographics(View editButton) {
+    public void editDemographics() {
         DemographicsEditFragment demographicsEditFragment =
                 DemographicsEditFragment.newInstance(relationship);
 
@@ -228,5 +180,23 @@ public class RelationshipDetailActivity extends AppCompatActivity
     public void showDatePickerDialog(View noteDateSelectButton) {
         DialogFragment newFragment = DatePickerFragment.newInstance(note.getNoteDate());
         newFragment.show(getFragmentManager(), "noteDatePicker");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_edit_demographics:
+                editDemographics();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.detail_activity_app_bar, menu);
+        return true;
     }
 }

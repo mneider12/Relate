@@ -105,6 +105,14 @@ public class Relationship
     }
 
     /**
+     * Get this relation's birthday
+     * @return this relation's birthday
+     */
+    public MonthDay getBirthday() {
+        return birthday;
+    }
+
+    /**
      * Retrieve the default display String for this relation's birthday
      * @return default display format for birthday. See MonthDay.toString() for format.
      *         If birthday is null, then return "";

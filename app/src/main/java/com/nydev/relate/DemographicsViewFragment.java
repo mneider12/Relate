@@ -13,12 +13,7 @@ import android.widget.TextView;
  */
 public class DemographicsViewFragment extends Fragment {
 
-    private static final String NAME_KEY = "name";
     private static final String BIRTHDAY_KEY = "birthday";
-
-    public interface OnEditDemographicsButtonListener {
-        void editDemographics(View editButton);
-    }
 
     /**
      * Create a fragment to edit demographics info for a relationship
@@ -30,7 +25,6 @@ public class DemographicsViewFragment extends Fragment {
 
         // setup arguments
         Bundle demographicArgs = new Bundle();
-        demographicArgs.putString(NAME_KEY, relationship.getName().toString());
         demographicArgs.putString(BIRTHDAY_KEY, relationship.getBirthdayString());
 
         demographicsViewFragment.setArguments(demographicArgs);
@@ -61,20 +55,11 @@ public class DemographicsViewFragment extends Fragment {
 
         Bundle demographicsArgs = getArguments();
 
-        TextView nameView = (TextView) demographicsLayout.findViewById(R.id.name_text_view);
-        String nameString = demographicsArgs.getString(NAME_KEY, "");
-        if (nameString.equals("")) {
-            nameView.setVisibility(View.GONE);
-        } else {
-            nameView.setText(nameString);
-        }
-
-        View birthdayLayout = demographicsLayout.findViewById(R.id.birthday_layout);
+        TextView birthdayView = (TextView) demographicsLayout.findViewById(R.id.birthday_text_view);
         String birthdayString = demographicsArgs.getString(BIRTHDAY_KEY, "");
         if (birthdayString.equals("")) {
-            birthdayLayout.setVisibility(View.GONE);
+            birthdayView.setVisibility(View.GONE);
         } else {
-            TextView birthdayView = (TextView) demographicsLayout.findViewById(R.id.birthday_text_view);
             birthdayView.setText(birthdayString);
         }
     }

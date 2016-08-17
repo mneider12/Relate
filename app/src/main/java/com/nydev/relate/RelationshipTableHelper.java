@@ -75,7 +75,11 @@ public class RelationshipTableHelper {
         relationshipValues.put(RelationshipEntry._ID, relationship.getRelationshipId());
         relationshipValues.put(RelationshipEntry.COLUMN_NAME_LAST_NAME, relationship.getLastName());
         relationshipValues.put(RelationshipEntry.COLUMN_NAME_FIRST_NAME, relationship.getFirstName());
-        relationshipValues.put(RelationshipEntry.COLUMN_NAME_BIRTHDAY, relationship.getBirthdayString());
+        MonthDay birthday = relationship.getBirthday();
+        if (birthday != null) {
+            relationshipValues.put(
+                    RelationshipEntry.COLUMN_NAME_BIRTHDAY, relationship.getBirthday().toString());
+        }
 
         return relationshipValues;
     }
@@ -104,7 +108,7 @@ public class RelationshipTableHelper {
             String rawBirthday = relationshipCursor.getString(relationshipCursor.getColumnIndex(
                     RelationshipEntry.COLUMN_NAME_BIRTHDAY));
             relationship = new Relationship(relationshipId, lastName, firstName);
-            if (!rawBirthday.equals("")) {
+            if (rawBirthday != null) {
                 MonthDay birthday = MonthDay.parse(rawBirthday);
                 relationship.setBirthday(birthday);
             }

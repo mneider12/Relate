@@ -1,54 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     tools:context=".RelationshipDetailActivity">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+    <TextView
+        android:id="@+id/birthday_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_cake_black_24dp"
+        android:hint="@string/enter_birthday_hint"
+        android:gravity="center_vertical"
+        android:drawablePadding="8dp"
+        android:textSize="16sp"/>
 
-            <TextView
-                android:id="@+id/name_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/enter_name_hint" />
-
-            <LinearLayout
-                android:id="@+id/birthday_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_cake_black_24dp"/>
-
-                <TextView
-                    android:id="@+id/birthday_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/enter_birthday_hint"/>
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/relationship_edit_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/enter_relationship_hint" />
-
-        </LinearLayout>
-
-        <ImageButton
-            android:id="@+id/edit_demographics_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_mode_edit_black_24dp"
-            android:layout_alignParentEnd="true"
-            android:onClick="editDemographics"
-            android:contentDescription="@string/edit_demographics"
-            />
-
-</RelativeLayout>
+</LinearLayout>
