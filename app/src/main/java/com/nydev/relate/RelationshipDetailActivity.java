@@ -78,6 +78,8 @@ public class RelationshipDetailActivity extends AppCompatActivity
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         setTitle(relationship.getName().toString());
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
