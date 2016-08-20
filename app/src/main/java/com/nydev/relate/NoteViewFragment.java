@@ -5,14 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormatter;
 
 /**
  * Created by markneider on 8/14/16.
+ * Fragment to control display of existing notes
  */
 public class NoteViewFragment extends Fragment {
 

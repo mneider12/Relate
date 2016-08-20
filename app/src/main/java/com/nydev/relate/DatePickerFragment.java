@@ -7,13 +7,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.DatePicker;
-import android.widget.TextView;
 
 import org.joda.time.LocalDate;
-import org.w3c.dom.Text;
 
 /**
  * Created by markneider on 8/14/16.
+ * Picker dialog for a full date (day, month and year)
  */
 public class DatePickerFragment extends DialogFragment
     implements DatePickerDialog.OnDateSetListener {

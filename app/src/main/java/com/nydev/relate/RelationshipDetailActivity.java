@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -70,16 +71,19 @@ public class RelationshipDetailActivity extends AppCompatActivity
             fragmentTransaction.add(R.id.demographics_container, demographicsViewFragment);
             fragmentTransaction.commit();
 
+            Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+            setSupportActionBar(myToolbar);
+            setTitle(relationship.getName().toString());
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+
         } else { // Create a new relationship in edit mode
             setContentView(R.layout.relationship_create);
             relationship = new Relationship(this); // reserves an ID for this Relationship
             note = new Note(this, relationship);
         }
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-        setTitle(relationship.getName().toString());
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
