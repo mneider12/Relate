@@ -17,8 +17,7 @@
         </activity>
 
         <activity android:name=".RelationshipDetailActivity"
-            android:parentActivityName=".RelationshipDashboardActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:parentActivityName=".RelationshipDashboardActivity">
         </activity>
 
     </application>

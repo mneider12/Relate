@@ -14,7 +14,8 @@
         android:background="?attr/colorPrimary"
         app:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        style="@style/AppToolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
