@@ -158,6 +158,13 @@ public class RelationshipDetailActivity extends AppCompatActivity
      * @param deleteButton Button that called this method from onClick
      */
     public void deleteRelationship(View deleteButton) {
+        deleteRelationship();
+    }
+
+    /**
+     * Delete current relationship from the relationship database and return to the dashboard
+     */
+    public void deleteRelationship() {
         relationshipTableHelper.deleteRelationship(relationship.getRelationshipId());
         finish();
     }
@@ -194,6 +201,8 @@ public class RelationshipDetailActivity extends AppCompatActivity
             case R.id.action_edit_demographics:
                 editDemographics();
                 return true;
+            case R.id.action_delete_relationship:
+                deleteRelationship();
             default:
                 return super.onOptionsItemSelected(item);
         }
