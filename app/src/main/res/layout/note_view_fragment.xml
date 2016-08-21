@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,35 +7,59 @@
     android:background="#FFF9C4">
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFF176">
+        android:layout_height="match_parent" >
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFF176">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_search_black_24dp"
+                />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_mode_edit_black_24dp"/>
+            
+            <TextView
+                android:id="@+id/note_date_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical|end"
+                android:textSize="12sp"
+                tools:text="April 20, 1990"
+                android:layout_margin="16dp"/>
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/note_date_text_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/note_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical|end"
-            android:textSize="12sp"
-            tools:text="April 20, 1990"
-            android:layout_margin="16dp"/>
+            android:typeface="monospace"
+            android:textSize="24sp"
+            android:padding="8dp"
+            tools:text="This is an example \nnote - and does not have any misspellings"/>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/note_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:typeface="monospace"
-        android:textSize="24sp"
-        android:padding="8dp"
-        tools:text="This is an example \nnote - and does not have any misspellings"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/create_note_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add_black_24dp"
+        android:onClick="createNote"/>
+    />
 
-</LinearLayout>
+</RelativeLayout>

@@ -4,8 +4,19 @@
 
     <item
         android:id="@+id/action_edit_demographics"
-        android:icon="@drawable/ic_mode_edit_black_24dp"
         android:title="@string/edit_demographics"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_select_note"
+        android:title="@string/select_note"
+        android:icon="@drawable/ic_search_black_24dp"
+        app:showAsAction="ifRoom"
+        />
+
+    <item
+        android:id="@+id/action_delete_relationship"
+        android:title="@string/delete_relationship"
         app:showAsAction="never" />
 
 </menu>

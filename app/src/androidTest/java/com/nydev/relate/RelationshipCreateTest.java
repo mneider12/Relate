@@ -60,7 +60,7 @@ public class RelationshipCreateTest {
         Relationship testRelationship =
                 RelationshipDbTestHelper.getLastRelationshipFromDatabase(mDashboardRule.getActivity());
         assertEquals(testName, testRelationship.getName().toString()); // verify name
-        assertEquals(testBirthday.toString(), testRelationship.getBirthdayString()); // verify birthday
+        assertEquals(testBirthday.toString("MMM d"), testRelationship.getBirthdayString()); // verify birthday
         createdRelationships.add(testRelationship); // save relationship to delete after test
     }
 

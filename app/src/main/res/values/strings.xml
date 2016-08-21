@@ -16,5 +16,7 @@
     <string name="edit_demographics">Edit demographics</string>
     <string name="change_note_date">Change note date</string>
     <string name="edit_note">Edit note</string>
+    <string name="delete_relationship">Delete relationship</string>
+    <string name="select_note">Select Note</string>
 
 </resources>

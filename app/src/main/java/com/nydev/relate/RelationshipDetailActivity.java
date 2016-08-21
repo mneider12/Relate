@@ -205,4 +205,12 @@ public class RelationshipDetailActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.detail_activity_app_bar, menu);
         return true;
     }
+
+    public void createNote(View createNoteButton) {
+        note = new Note(this, relationship);
+        Fragment noteFragment = NoteEditFragment.newInstance(note); // open in edit mode for a new note
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.note_container, noteFragment);
+        fragmentTransaction.commit();
+    }
 }
