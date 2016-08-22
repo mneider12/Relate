@@ -92,9 +92,14 @@ public class RelationshipDetailActivity extends AppCompatActivity
      */
     public void saveRelationship(View saveButton)
     {
+        saveRelationship();
+        finish();
+    }
+
+    public void saveRelationship() {
         if (relationshipTableHelper.isValidRelationshipId(relationship.getRelationshipId())) { // Relationship exists; update
             relationshipTableHelper.updateRelationship(relationship);
-        } else { // relationship is new; insert
+        } else { // Relationship is new; insert
             relationshipTableHelper.insertRelationship(relationship);
         }
         if (!note.getNoteText().equals("")) {
@@ -104,7 +109,6 @@ public class RelationshipDetailActivity extends AppCompatActivity
                 noteTableHelper.insertNote(note);
             }
         }
-        finish();
     }
 
     /**
@@ -151,14 +155,6 @@ public class RelationshipDetailActivity extends AppCompatActivity
         relationship.setBirthday(birthday);
         Button birthdayButton = (Button) findViewById(R.id.birthday_selection_button);
         birthdayButton.setText(birthday.toString());
-    }
-
-    /**
-     * Delete current relationship from the relationship database and return to the dashboard.
-     * @param deleteButton Button that called this method from onClick
-     */
-    public void deleteRelationship(View deleteButton) {
-        deleteRelationship();
     }
 
     /**
@@ -221,5 +217,29 @@ public class RelationshipDetailActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.note_container, noteFragment);
         fragmentTransaction.commit();
+    }
+
+    public void editNote(View editButton) {
+        Fragment noteFragment = NoteEditFragment.newInstance(note); // open existing note in edit mode
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.note_container, noteFragment);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        saveRelationship();
+    }
+
+    @Override
+    public void onBackPressed() {
+        saveRelationship();
+        super.onBackPressed();
     }
 }

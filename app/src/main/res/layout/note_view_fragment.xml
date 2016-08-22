@@ -29,7 +29,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_mode_edit_black_24dp"
                 style="?android:attr/borderlessButtonStyle"
-                android:minWidth="0dp"/>
+                android:minWidth="0dp"
+                android:onClick="editNote"/>
 
             <TextView
                 android:id="@+id/note_date_text_view"
