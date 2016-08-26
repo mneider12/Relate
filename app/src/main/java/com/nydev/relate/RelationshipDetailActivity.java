@@ -1,11 +1,12 @@
 package com.nydev.relate;
 
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -17,8 +18,6 @@ import android.support.v7.widget.Toolbar;
 
 import org.joda.time.LocalDate;
 import org.joda.time.MonthDay;
-
-import java.util.ArrayList;
 
 /**
  * Created by markneider on 8/6/16.
@@ -32,8 +31,8 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
     private Relationship relationship;  // relationship being considered
     private RelationshipTableHelper relationshipTableHelper; // helper class for database operations on the relationship table
-    private NoteTableHelper noteTableHelper; // helper class for database operations on the note table
     private Note note; // current note under consideration
+
 
     /**
      * Load relationship information on activity creation
@@ -52,22 +51,16 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
             relationship = relationshipTableHelper.getRelationship(relationshipId);
 
-            Fragment noteFragment;
-            noteTableHelper = new NoteTableHelper(this);
-            ArrayList<Note> notes = noteTableHelper.getNotes(relationship);
-            if (notes.isEmpty()) {
-                note = new Note(this, relationship);
-                noteFragment = NoteEditFragment.newInstance(note); // open in edit mode for a new note
-            } else {
-                note = notes.get(0);
-                noteFragment = NoteViewFragment.newInstance(note); // open in view mode for an existing note
-            }
+            NoteCollectionPagerAdapter noteAdapter = new NoteCollectionPagerAdapter(getSupportFragmentManager(),
+                    relationshipId, this);
+
+            ViewPager notePager = (ViewPager) findViewById(R.id.note_container);
+            notePager.setAdapter(noteAdapter);
 
             DemographicsViewFragment demographicsViewFragment =
                     DemographicsViewFragment.newInstance(relationship);
 
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.note_container, noteFragment);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.add(R.id.demographics_container, demographicsViewFragment);
             fragmentTransaction.commit();
 
@@ -82,7 +75,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
         } else { // Create a new relationship in edit mode
             setContentView(R.layout.relationship_create);
             relationship = new Relationship(this); // reserves an ID for this Relationship
-            note = new Note(this, relationship);
+            note = new Note(this, relationshipId);
         }
     }
 
@@ -102,6 +95,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
         } else { // Relationship is new; insert
             relationshipTableHelper.insertRelationship(relationship);
         }
+        NoteTableHelper noteTableHelper = new NoteTableHelper(this);
         if (!note.getNoteText().equals("")) {
             if (noteTableHelper.isValidNoteId(note.getNoteId())) {
                 noteTableHelper.updateNote(note);
@@ -128,7 +122,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
      */
     public void showBirthdayPickerDialog(View birthdayPickerButton) {
         DialogFragment birthdayPickerFragment = BirthdayPickerFragment.newInstance(null); // Initialize to January 1
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         birthdayPickerFragment.show(fragmentManager, "birthdayPicker");
     }
 
@@ -138,7 +132,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
      */
     public void saveBirthday(View saveButton) {
         BirthdayPickerFragment birthdayPickerFragment =
-                (BirthdayPickerFragment) getFragmentManager().findFragmentByTag("birthdayPicker");
+                (BirthdayPickerFragment) getSupportFragmentManager().findFragmentByTag("birthdayPicker");
         birthdayPickerFragment.saveBirthday();
     }
 
@@ -169,7 +163,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
         DemographicsEditFragment demographicsEditFragment =
                 DemographicsEditFragment.newInstance(relationship);
 
-        FragmentTransaction replaceViewWithEdit = getFragmentManager().beginTransaction();
+        FragmentTransaction replaceViewWithEdit = getSupportFragmentManager().beginTransaction();
 
         replaceViewWithEdit.replace(R.id.demographics_container, demographicsEditFragment);
         replaceViewWithEdit.addToBackStack(null);
@@ -177,7 +171,11 @@ public class RelationshipDetailActivity extends AppCompatActivity
     }
 
     public void saveNoteText(String noteText) {
-        note.setNoteText(noteText);
+        if (note == null) { //creating a new note
+            note = new Note(this, relationship.getRelationshipId());
+        } else { // save edits to an existing note
+            note.setNoteText(noteText);
+        }
     }
 
     public void onDateSave(LocalDate noteDate) {
@@ -188,7 +186,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
     public void showDatePickerDialog(View noteDateSelectButton) {
         DialogFragment newFragment = DatePickerFragment.newInstance(note.getNoteDate());
-        newFragment.show(getFragmentManager(), "noteDatePicker");
+        newFragment.show(getSupportFragmentManager(), "noteDatePicker");
     }
 
     @Override
@@ -212,16 +210,16 @@ public class RelationshipDetailActivity extends AppCompatActivity
     }
 
     public void createNote(View createNoteButton) {
-        note = new Note(this, relationship);
+        note = new Note(this, relationship.getRelationshipId());
         Fragment noteFragment = NoteEditFragment.newInstance(note); // open in edit mode for a new note
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.note_container, noteFragment);
         fragmentTransaction.commit();
     }
 
     public void editNote(View editButton) {
         Fragment noteFragment = NoteEditFragment.newInstance(note); // open existing note in edit mode
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.note_container, noteFragment);
         fragmentTransaction.commit();
     }

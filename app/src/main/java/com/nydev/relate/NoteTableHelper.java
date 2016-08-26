@@ -64,7 +64,7 @@ public class NoteTableHelper {
 
         // build key-value pairs based on the NoteContract
         noteValues.put(NoteEntry._ID, note.getNoteId());
-        noteValues.put(NoteEntry.COLUMN_NAME_RELATIONSHIP_ID, note.getRelationship().getRelationshipId());
+        noteValues.put(NoteEntry.COLUMN_NAME_RELATIONSHIP_ID, note.getRelationshipId());
         noteValues.put(NoteEntry.COLUMN_NAME_CREATED_DATE, note.getCreatedDate().toString());
         noteValues.put(NoteEntry.COLUMN_NAME_CONTACT_DATE, note.getNoteDate().toString());
         noteValues.put(NoteEntry.COLUMN_NAME_NOTE_TEXT, note.getNoteText());
@@ -74,16 +74,16 @@ public class NoteTableHelper {
 
     /**
      * Get all of the notes for a given relationship from the note table
-     * @param relationship relationship to retrieve notes for
+     * @param relationshipId id of relationship to retrieve notes for
      * @return list of notes for given relationship
      */
-    public ArrayList<Note> getNotes(Relationship relationship) {
+    public ArrayList<Note> getNotes(int relationshipId) {
         SQLiteDatabase relationshipDatabase = relationshipDbHelper.getReadableDatabase();
 
         // Select all data from relationship matching relationshipId. Should always return 0 or 1 rows, because _ID is the primary key.
         Cursor noteCursor = relationshipDatabase.rawQuery(
                 "SELECT * FROM " + NoteEntry.TABLE_NAME +
-                " WHERE " + NoteEntry.COLUMN_NAME_RELATIONSHIP_ID + "=" + relationship.getRelationshipId(),
+                " WHERE " + NoteEntry.COLUMN_NAME_RELATIONSHIP_ID + "=" + relationshipId,
                 null);
 
         ArrayList<Note> notes = new ArrayList<>();
@@ -98,7 +98,7 @@ public class NoteTableHelper {
             LocalDate contactDate = LocalDate.parse(contactDateRaw);
             String noteText = noteCursor.getString(noteCursor.getColumnIndex(
                     NoteEntry.COLUMN_NAME_NOTE_TEXT));
-            Note note = new Note(noteId, relationship, createdDate, contactDate, noteText);
+            Note note = new Note(noteId, relationshipId, createdDate, contactDate, noteText);
             notes.add(note);
         }
         noteCursor.close();
@@ -112,13 +112,51 @@ public class NoteTableHelper {
      */
     public boolean isValidNoteId(int noteId) {
         SQLiteDatabase relationshipDatabase = relationshipDbHelper.getReadableDatabase();
-        Cursor relationshipCursor = relationshipDatabase.rawQuery(
+        Cursor noteCursor = relationshipDatabase.rawQuery(
                 "SELECT _ID FROM " + NoteEntry.TABLE_NAME +
                         " WHERE " + NoteEntry._ID + "=" + noteId, null);
 
-        boolean isValidId = relationshipCursor.getCount() == 1; // should never be more than 1 result
-        relationshipCursor.close();
+        boolean isValidId = noteCursor.getCount() == 1; // should never be more than 1 result
+        noteCursor.close();
         return isValidId;
+    }
+
+    public int[] getNoteIds(int relationshipId) {
+        SQLiteDatabase relationshipDatabase = relationshipDbHelper.getReadableDatabase();
+        Cursor noteCursor = relationshipDatabase.rawQuery(
+                "SELECT _ID FROM " + NoteEntry.TABLE_NAME +
+                " WHERE " + NoteEntry.COLUMN_NAME_RELATIONSHIP_ID +"=" + relationshipId, null);
+        int noteCount = noteCursor.getCount();
+        int[] noteIds = new int[noteCount];
+        if (noteCursor.moveToFirst()) {
+            for (int notePosition = 0; notePosition < noteCount; notePosition++) {
+                noteIds[notePosition] = noteCursor.getInt(noteCursor.getColumnIndex(
+                        NoteEntry._ID));
+                noteCursor.moveToNext();
+            }
+        }
+        noteCursor.close();
+        return noteIds;
+    }
+
+    public Note getNote(int noteId) {
+        SQLiteDatabase relationshipDatabase = relationshipDbHelper.getReadableDatabase();
+        Cursor noteCursor = relationshipDatabase.rawQuery(
+                "SELECT * FROM " + NoteEntry.TABLE_NAME +
+                " WHERE " + NoteEntry._ID + "=" + noteId, null);
+        noteCursor.moveToFirst();
+        int relationshipId = noteCursor.getInt(noteCursor.getColumnIndex(
+                NoteEntry.COLUMN_NAME_RELATIONSHIP_ID));
+        String rawCreatedDate = noteCursor.getString(noteCursor.getColumnIndex(
+                NoteEntry.COLUMN_NAME_CREATED_DATE));
+        LocalDate createdDate = LocalDate.parse(rawCreatedDate);
+        String rawContactDate = noteCursor.getString(noteCursor.getColumnIndex(
+                NoteEntry.COLUMN_NAME_CONTACT_DATE));
+        LocalDate contactDate = LocalDate.parse(rawContactDate);
+        String noteText = noteCursor.getString(noteCursor.getColumnIndex(
+                NoteEntry.COLUMN_NAME_NOTE_TEXT));
+        noteCursor.close();
+        return new Note(noteId, relationshipId, createdDate, contactDate, noteText);
     }
 }
 

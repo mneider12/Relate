@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
 import com.nydev.relate.RelationshipContract.RelationshipEntry;
 
 import java.util.ArrayList;
@@ -19,11 +20,9 @@ import java.util.ArrayList;
  */
 public class RelationshipDashboardActivity extends AppCompatActivity {
 
-    @SuppressWarnings("unused") // currently only being used when necessary for debugging
-    private final String LOG_TAG = "nydev.Relate";  // Tag to use in android monitor log statements
-
     /**
      * Load relationships when the activity is created
+     *
      * @param savedInstanceState saved key value pairs if the system previously destroyed the activity automatically
      */
     @Override
@@ -46,8 +45,7 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
      * Load all Relationships from the relationship database when the application loads.
      * Create a ListView with selectable items to launch detail view of a Relationship.
      */
-    private void loadRelationshipThumbnails()
-    {
+    private void loadRelationshipThumbnails() {
         RelationshipTableHelper relationshipTableHelper = new RelationshipTableHelper(this); // Helper class to access Relationship database
         Cursor relationshipsCursor = relationshipTableHelper.getAllRelationships(); // load all relationships right away - may need more performance aware process later
         ArrayAdapter<Relationship> relationshipArrayAdapter = getRelationshipArrayAdapter(relationshipsCursor); // load relationships into an ArrayAdapter
@@ -67,12 +65,13 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
     /**
      * This method will load a relationship detail activity
      */
-    public void launchRelationshipDetailView(int relationshipId)
-    {
-        // build an intent identifying the relationship to load
+    public void launchRelationshipDetailView(int relationshipId) {
+        // define constants used to build intent extra identifier
         final String PACKAGE_NAME = "com.nydev.relate"; // identifier to use for sending intent extras from this application
         final String DOT_SEPARATOR = ".";
         final String RELATIONSHIP_ID_INTENT_EXTRA = "relationshipId";
+
+        // build an intent identifying the relationship to load
         Intent launchRelationshipDetail = new Intent(this, RelationshipDetailActivity.class);
         launchRelationshipDetail.putExtra(
                 PACKAGE_NAME + DOT_SEPARATOR + RELATIONSHIP_ID_INTENT_EXTRA, relationshipId);
@@ -81,17 +80,19 @@ public class RelationshipDashboardActivity extends AppCompatActivity {
 
     /**
      * Create a new relationship
+     *
      * @param view not used - the view that called createRelationship (expected from onClick)
      */
-    public void createRelationship(View view)
-    {
+    public void createRelationship(View view) {
         // launch detail activity to create new relationship
+        // not setting an extra for relationshipId tells the detail activity to open in create mode
         Intent launchRelationshipCreate = new Intent(this, RelationshipDetailActivity.class);
         startActivity(launchRelationshipCreate);
     }
 
     /**
      * Load Relationships into an ArrayAdapter. There will be one Relationship for each row in the Cursor
+     *
      * @param relationshipsCursor Cursor with one row for each Relationship
      * @return ArrayAdapter with one Relationship for each row in relationshipsCursor
      */

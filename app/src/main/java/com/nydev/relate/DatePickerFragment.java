@@ -2,10 +2,11 @@ package com.nydev.relate;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
 import org.joda.time.LocalDate;
@@ -22,10 +23,6 @@ public class DatePickerFragment extends DialogFragment
     private static final String DAY_KEY = "day";
 
     DateSaveListener mCallback;
-
-    public interface DateSaveListener {
-        void onDateSave(LocalDate date);
-    }
 
     public static DatePickerFragment newInstance(@Nullable LocalDate initialDate) {
         DatePickerFragment datePickerFragment = new DatePickerFragment();
@@ -45,6 +42,7 @@ public class DatePickerFragment extends DialogFragment
     }
 
     @Override
+    @NonNull
     public Dialog onCreateDialog(Bundle savedInstance) {
 
         Bundle dateArgs = getArguments();
@@ -65,6 +63,10 @@ public class DatePickerFragment extends DialogFragment
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         // DatePickerDialog uses 0 based month ids (0-11). Need to subtract 1 from joda month id.
         mCallback.onDateSave(new LocalDate(year, month + 1,day));
+    }
+
+    public interface DateSaveListener {
+        void onDateSave(LocalDate date);
     }
 
 }
