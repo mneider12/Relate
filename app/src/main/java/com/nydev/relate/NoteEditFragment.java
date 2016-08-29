@@ -19,45 +19,32 @@ import org.joda.time.LocalDate;
  */
 public class NoteEditFragment extends Fragment {
 
-    // calling activity must implement NoteSaveListener to save the note in this fragment
-    private NoteSaveListener mCallback;
+    private NoteTableHelper noteTableHelper;
 
     // key values for onCreate Bundle
+    private static final String NOTE_ID_KEY = "note_id";
+    private static final String RELATIONSHIP_ID_KEY = "relationship_id";
     private static final String NOTE_TEXT_KEY = "note_text";
+    private static final String NOTE_CREATED_DATE_KEY = "note_created_date";
     private static final String NOTE_DATE_KEY = "note_date";
 
-    /**
-     * Calling activity must implement NoteSaveListener so that note info entered into this fragement
-     * can be communicated back to the activity and saved
-     */
-    public interface NoteSaveListener {
-        /**
-         * Save the information in this note
-         * @param noteText text stored in this note
-         */
-        void saveNoteText(String noteText);
-    }
+    private Note note;
 
     /**
      * Get a new NoteEditFragment
      *
-     * @param note if note is null, then a blank edit fragment will be created to start a new note
-     *             if note is passed in, then the fragment will be built to edit the existing note
+     * @param note note to edit
      * @return new fragment to edit a note
      */
     public static NoteEditFragment newInstance(Note note) {
         NoteEditFragment noteFragment = new NoteEditFragment();
 
-        // setup arguments
         Bundle noteArgs = new Bundle();
-        if (note == null) { // creating a new note
-            noteArgs.putString(NOTE_TEXT_KEY, "");
-            noteArgs.putString(NOTE_DATE_KEY, new LocalDate().toString("MMM d yyyy"));
-        } else { // editing existing note
-            noteArgs.putString(NOTE_TEXT_KEY, note.getNoteText());
-            noteArgs.putString(NOTE_DATE_KEY, note.getNoteDate().toString());
-        }
-
+        noteArgs.putInt(NOTE_ID_KEY, note.getNoteId());
+        noteArgs.putInt(RELATIONSHIP_ID_KEY, note.getRelationshipId());
+        noteArgs.putString(NOTE_TEXT_KEY, note.getNoteText());
+        noteArgs.putString(NOTE_CREATED_DATE_KEY, note.getCreatedDate().toString());
+        noteArgs.putString(NOTE_DATE_KEY, note.getNoteDate().toString());
         noteFragment.setArguments(noteArgs);
 
         return noteFragment;
@@ -78,21 +65,40 @@ public class NoteEditFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        mCallback = (NoteSaveListener) context;
+        noteTableHelper = new NoteTableHelper(context);
     }
 
     private void loadNote(View noteLayout) {
 
         Bundle noteArgs = getArguments();
+        int noteId = noteArgs.getInt(NOTE_ID_KEY, -1);
 
-        String noteText = noteArgs.getString(NOTE_TEXT_KEY, "");
+        if (noteId == -1) {
+            createNote(noteArgs.getInt(RELATIONSHIP_ID_KEY));
+        } else {
+            loadNote(noteId, noteArgs);
+        }
+
+        String noteText = note.getNoteText();
         TextView noteTextView = (TextView) noteLayout.findViewById(R.id.note_edit_text);
         noteTextView.setText(noteText);
         setNoteEditTextWatcher(noteTextView);
 
-        String noteDateText = noteArgs.getString(NOTE_DATE_KEY, new LocalDate().toString()); // default to today
+        String noteDateText = note.getNoteDate().toString();
         TextView noteDateButton = (Button) noteLayout.findViewById(R.id.note_date_button);
         noteDateButton.setText(noteDateText);
+    }
+
+    private void createNote(int relationshipId) {
+        note = new Note(getContext(), relationshipId);
+    }
+
+    private void loadNote(int noteId, Bundle noteArgs) {
+        int relationshipId = noteArgs.getInt(RELATIONSHIP_ID_KEY);
+        LocalDate noteCreatedDate = new LocalDate(noteArgs.getString(NOTE_CREATED_DATE_KEY));
+        LocalDate noteContactDate = new LocalDate(noteArgs.getString(NOTE_DATE_KEY));
+        String noteText = noteArgs.getString(NOTE_TEXT_KEY);
+        note = new Note(noteId, relationshipId, noteCreatedDate, noteContactDate, noteText);
     }
 
     /**
@@ -136,8 +142,23 @@ public class NoteEditFragment extends Fragment {
              */
             @Override
             public void afterTextChanged(Editable noteEditable) {
-                mCallback.saveNoteText(noteEditable.toString());
+                note.setNoteText(noteEditable.toString());
             }
         });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        noteTableHelper.saveNote(note);
+    }
+
+    public void updateNoteDate(LocalDate noteDate) {
+        note.setNoteDate(noteDate);
+        View rootView = getView();
+        if (rootView != null) {
+            TextView noteDateTextView = (TextView) rootView.findViewById(R.id.note_date_button);
+            noteDateTextView.setText(noteDate.toString());
+        }
     }
 }

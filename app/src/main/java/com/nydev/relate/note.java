@@ -15,6 +15,14 @@ public class Note {
     private LocalDate noteDate;
     private String noteText;
 
+    public Note(int relationshipId) {
+        noteId = -1;
+        this.relationshipId = relationshipId;
+        this.createdDate = new LocalDate();
+        this. noteDate = new LocalDate();
+        this.noteText = "";
+    }
+
     /**
      * Create a new note
      * @param context calling context, used to access shared preferences

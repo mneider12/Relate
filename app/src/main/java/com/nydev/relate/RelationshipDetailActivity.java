@@ -26,12 +26,12 @@ import org.joda.time.MonthDay;
 public class RelationshipDetailActivity extends AppCompatActivity
     implements BirthdayPickerFragment.OnBirthdaySaveListener,
         DemographicsEditFragment.DemographicsSaveListener,
-        NoteEditFragment.NoteSaveListener,
         DatePickerFragment.DateSaveListener {
 
     private Relationship relationship;  // relationship being considered
     private RelationshipTableHelper relationshipTableHelper; // helper class for database operations on the relationship table
     private Note note; // current note under consideration
+    private NoteCollectionPagerAdapter noteAdapter;
 
 
     /**
@@ -51,7 +51,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
             relationship = relationshipTableHelper.getRelationship(relationshipId);
 
-            NoteCollectionPagerAdapter noteAdapter = new NoteCollectionPagerAdapter(getSupportFragmentManager(),
+            noteAdapter = new NoteCollectionPagerAdapter(getSupportFragmentManager(),
                     relationshipId, this);
 
             ViewPager notePager = (ViewPager) findViewById(R.id.note_container);
@@ -75,7 +75,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
         } else { // Create a new relationship in edit mode
             setContentView(R.layout.relationship_create);
             relationship = new Relationship(this); // reserves an ID for this Relationship
-            note = new Note(this, relationshipId);
+            saveRelationship();
         }
     }
 
@@ -94,14 +94,6 @@ public class RelationshipDetailActivity extends AppCompatActivity
             relationshipTableHelper.updateRelationship(relationship);
         } else { // Relationship is new; insert
             relationshipTableHelper.insertRelationship(relationship);
-        }
-        NoteTableHelper noteTableHelper = new NoteTableHelper(this);
-        if (!note.getNoteText().equals("")) {
-            if (noteTableHelper.isValidNoteId(note.getNoteId())) {
-                noteTableHelper.updateNote(note);
-            } else {
-                noteTableHelper.insertNote(note);
-            }
         }
     }
 
@@ -170,22 +162,9 @@ public class RelationshipDetailActivity extends AppCompatActivity
         replaceViewWithEdit.commit();
     }
 
-    public void saveNoteText(String noteText) {
-        if (note == null) { //creating a new note
-            note = new Note(this, relationship.getRelationshipId());
-        } else { // save edits to an existing note
-            note.setNoteText(noteText);
-        }
-    }
-
-    public void onDateSave(LocalDate noteDate) {
-        note.setNoteDate(noteDate);
-        TextView noteDateTextView = (TextView) findViewById(R.id.note_date_button);
-        noteDateTextView.setText(noteDate.toString());
-    }
-
     public void showDatePickerDialog(View noteDateSelectButton) {
-        DialogFragment newFragment = DatePickerFragment.newInstance(note.getNoteDate());
+        LocalDate noteDate = new LocalDate(((TextView) noteDateSelectButton).getText());
+        DialogFragment newFragment = DatePickerFragment.newInstance(noteDate);
         newFragment.show(getSupportFragmentManager(), "noteDatePicker");
     }
 
@@ -225,11 +204,6 @@ public class RelationshipDetailActivity extends AppCompatActivity
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
         saveRelationship();
@@ -239,5 +213,14 @@ public class RelationshipDetailActivity extends AppCompatActivity
     public void onBackPressed() {
         saveRelationship();
         super.onBackPressed();
+    }
+
+    @Override
+    public void onDateSave(LocalDate noteDate) {
+        ViewPager notePager = (ViewPager) findViewById(R.id.note_container);
+        int notePagerPosition = notePager.getCurrentItem();
+        NoteEditFragment noteEditFragment =
+                (NoteEditFragment) noteAdapter.getNoteFragment(notePagerPosition);
+        noteEditFragment.updateNoteDate(noteDate);
     }
 }

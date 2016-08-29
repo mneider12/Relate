@@ -121,22 +121,11 @@ public class NoteTableHelper {
         return isValidId;
     }
 
-    public int[] getNoteIds(int relationshipId) {
+    public Cursor getNoteIds(int relationshipId) {
         SQLiteDatabase relationshipDatabase = relationshipDbHelper.getReadableDatabase();
-        Cursor noteCursor = relationshipDatabase.rawQuery(
+        return relationshipDatabase.rawQuery(
                 "SELECT _ID FROM " + NoteEntry.TABLE_NAME +
                 " WHERE " + NoteEntry.COLUMN_NAME_RELATIONSHIP_ID +"=" + relationshipId, null);
-        int noteCount = noteCursor.getCount();
-        int[] noteIds = new int[noteCount];
-        if (noteCursor.moveToFirst()) {
-            for (int notePosition = 0; notePosition < noteCount; notePosition++) {
-                noteIds[notePosition] = noteCursor.getInt(noteCursor.getColumnIndex(
-                        NoteEntry._ID));
-                noteCursor.moveToNext();
-            }
-        }
-        noteCursor.close();
-        return noteIds;
     }
 
     public Note getNote(int noteId) {
@@ -157,6 +146,14 @@ public class NoteTableHelper {
                 NoteEntry.COLUMN_NAME_NOTE_TEXT));
         noteCursor.close();
         return new Note(noteId, relationshipId, createdDate, contactDate, noteText);
+    }
+
+    public boolean saveNote(Note note) {
+        if (isValidNoteId(note.getNoteId())) {
+            return updateNote(note);
+        } else {
+            return insertNote(note);
+        }
     }
 }
 
