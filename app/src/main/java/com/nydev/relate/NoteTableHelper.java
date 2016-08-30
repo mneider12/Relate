@@ -121,6 +121,12 @@ public class NoteTableHelper {
         return isValidId;
     }
 
+    /**
+     * Get a cursor over the list of note IDs for a given relationship
+     *
+     * @param relationshipId relationship ID that note IDs relate to
+     * @return Cursor over note IDs related to relationship ID
+     */
     public Cursor getNoteIds(int relationshipId) {
         SQLiteDatabase relationshipDatabase = relationshipDbHelper.getReadableDatabase();
         return relationshipDatabase.rawQuery(
@@ -128,12 +134,19 @@ public class NoteTableHelper {
                 " WHERE " + NoteEntry.COLUMN_NAME_RELATIONSHIP_ID +"=" + relationshipId, null);
     }
 
+    /**
+     * Load a note from the database
+     * Does not perform validation that noteId is valid. Do not call with an invalid noteId.
+     * @param noteId ID of the note to load
+     * @return saved note from the database
+     */
     public Note getNote(int noteId) {
         SQLiteDatabase relationshipDatabase = relationshipDbHelper.getReadableDatabase();
+        // Select everything in the row with noteId.
         Cursor noteCursor = relationshipDatabase.rawQuery(
                 "SELECT * FROM " + NoteEntry.TABLE_NAME +
                 " WHERE " + NoteEntry._ID + "=" + noteId, null);
-        noteCursor.moveToFirst();
+        noteCursor.moveToFirst(); // should only ever be one result
         int relationshipId = noteCursor.getInt(noteCursor.getColumnIndex(
                 NoteEntry.COLUMN_NAME_RELATIONSHIP_ID));
         String rawCreatedDate = noteCursor.getString(noteCursor.getColumnIndex(
@@ -148,6 +161,13 @@ public class NoteTableHelper {
         return new Note(noteId, relationshipId, createdDate, contactDate, noteText);
     }
 
+    /**
+     * Either insert or update note values in the database. If the note already exists in the
+     * database, it will be updated, if not, then a new note will be inserted.
+     *
+     * @param note note to save
+     * @return true if the save operation was successful, otherwise false.
+     */
     public boolean saveNote(Note note) {
         if (isValidNoteId(note.getNoteId())) {
             return updateNote(note);

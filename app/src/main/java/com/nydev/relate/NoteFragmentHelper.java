@@ -39,7 +39,7 @@ public class NoteFragmentHelper {
      * Create a note based on save arguments in a Bundle
      *
      * @param noteArgs Bundle of key value pairs with information to create a note.
-     * @return note based on information in noteArgsAdd adfsasd
+     * @return note based on information in noteArgs
      */
     public static Note loadNote(Bundle noteArgs) {
         int noteId = noteArgs.getInt(NOTE_ID_KEY);
