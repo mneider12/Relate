@@ -45,13 +45,6 @@ public class BirthdayPickerFragment extends DialogFragment {
          * @param birthday birthday selected by this dialog
          */
         void saveBirthday(MonthDay birthday);
-
-        /**
-         * Call saveBirthday method in BirthdayPickerFragment.
-         * Called directly by BirthdayPickerFragment UI.
-         * @param saveButton Button in Dialog that called this method from onClick
-         */
-        void saveBirthday(View saveButton);
     }
 
     /**
