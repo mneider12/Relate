@@ -2,7 +2,6 @@ package com.nydev.relate;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Debug;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -20,13 +19,12 @@ import com.nydev.relate.NoteContract.NoteEntry;
 public class NoteCollectionPagerAdapter extends FragmentStatePagerAdapter {
 
     // map positions in the fragment list to note IDs in the database
-    // for example, noteIdMap[2]=9 would mean that the second note in the swipable list is ID 9 in the database
+    // for example, noteIdMap[2]=9 would mean that the second note in the swipe-able list is ID 9 in the database
     private ArrayList<Integer> noteIdMap;
     private NoteTableHelper noteTableHelper; // helper for accessing note database
     private int relationshipId; // ID for the relationship under consideration
-    private Fragment currentFragment;
-    private int currentPosition;
-    private int editIndex;
+    private Fragment currentFragment; // save a reference to the currently displayed fragment
+    private int editIndex; // set this so that the next time the fragment with position == editIndex is loaded, it will be in edit mode.
 
 
     /**
@@ -67,8 +65,10 @@ public class NoteCollectionPagerAdapter extends FragmentStatePagerAdapter {
      * then a blank note edit fragment will be returned.
      *
      * @param position position in the note page swipe-able list (noteIdMap)
-     * @return fragment to view note at position in the swipe-able list if a note exists,
-     *         otherwise, a blank edit note fragment
+     * @return a fragment to display a note.
+     *         If there are no notes to display, a new note edit fragment is returned.
+     *         If the position == editIndex, then an existing note will be loaded in edit mode.
+     *         Otherwise, an existing note is loaded in view mode.
      */
     @Override
     public Fragment getItem(int position) {
@@ -79,46 +79,86 @@ public class NoteCollectionPagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
+    /**
+     * Create a note fragment to display in a ViewPager.
+     * position defines the order that the fragment will be displayed in.
+     *
+     * @param position position in the displayed list being retrieved.
+     *                 Lines up to the positions in noteIdMap
+     * @return an existing note in edit mode if position == editIndex,
+     *         otherwise an existing note in view mode
+     */
     private Fragment getNoteFragment(int position) {
         int noteId = noteIdMap.get(position);
         Note note = noteTableHelper.getNote(noteId);
-        if (position == editIndex) {
+        if (position == editIndex) { // indicates that this fragment should be the current note in edit mode.
             return NoteEditFragment.newInstance(note);
         } else {
             return NoteViewFragment.newInstance(note);
         }
     }
 
+    /**
+     * Return whether an object needs to change when the underlying data set changes
+     *
+     * @param object a note view or edit fragment to check for changes
+     * @return POSITION_NONE indicates there is a change and this fragment has been replaced
+     *         POSITION_UNCHANGED indicates there is no change and this fragment should remain in the swipe-view
+     */
     public int getItemPosition(Object object) {
-        if (currentFragment.equals(object) && editIndex != -1) {
+        if (currentFragment.equals(object) && editIndex != -1) { // Edit mode activated for current fragment
             return PagerAdapter.POSITION_NONE;
-        } else if (object instanceof NoteEditFragment) {
+        } else if (object instanceof NoteEditFragment) { // Change edit fragments back to view fragments when the data set changes
             return PagerAdapter.POSITION_NONE;
         }
-        return PagerAdapter.POSITION_UNCHANGED;
+        return PagerAdapter.POSITION_UNCHANGED; // Default to no change
     }
 
+    /**
+     * Return the number of fragments that can be swiped to with this adapter.
+     * When there are no saved notes in the adapter, 1 will be returned so the ViewPager will load a new note in edit mode.
+     *
+     * @return the number of stored notes if there are any, otherwise 1.
+     */
     @Override
     public int getCount() {
         return Math.max(noteIdMap.size(), 1); // if there are no notes yet, still initialize pager. We will use getItem to display a blank note edit fragment
     }
 
+    /**
+     * Return the currently displayed fragment
+     *
+     * @return currently displayed fragment
+     */
     public Fragment getCurrentFragment() {
         return currentFragment;
     }
 
+    /**
+     * Change the currently displayed view fragment into an edit fragment
+     *
+     * @param position current position being displayed in the UI
+     */
     public void edit(int position) {
-        editIndex = position;
-        notifyDataSetChanged();
+        editIndex = position; // this indicates that the view fragment should be reloaded as an edit fragment in getItem
+        notifyDataSetChanged(); // kick off reloading fragments so the edit fragment will be displayed.
     }
 
+    /**
+     * Called when a new fragment is presented to the UI. Keep track of the current fragment and
+     * notifyDataSetChanged when an edit fragment loses focus.
+     *
+     * @param container {@inheritDoc}
+     * @param position {@inheritDoc}
+     * @param object {@inheritDoc}
+     */
+    @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
-        super.setPrimaryItem(container, position, object);
-        currentPosition = position;
-        currentFragment = (Fragment) object;
-        if (editIndex != -1 && position != editIndex) {
-            editIndex = -1;
-            notifyDataSetChanged();
+        super.setPrimaryItem(container, position, object); // maintain existing behavior
+        currentFragment = (Fragment) object; // update the saved current fragment
+        if (editIndex != -1 && position != editIndex) { // edit mode was turned on, but we have left the edit fragment. Turn off editing mode
+            editIndex = -1; // no position will match this index
+            notifyDataSetChanged(); // reload edit fragment as view fragment
         }
     }
 }
