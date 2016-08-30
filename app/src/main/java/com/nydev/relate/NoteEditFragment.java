@@ -21,13 +21,6 @@ public class NoteEditFragment extends Fragment {
 
     private NoteTableHelper noteTableHelper;
 
-    // key values for onCreate Bundle
-    private static final String NOTE_ID_KEY = "note_id";
-    private static final String RELATIONSHIP_ID_KEY = "relationship_id";
-    private static final String NOTE_TEXT_KEY = "note_text";
-    private static final String NOTE_CREATED_DATE_KEY = "note_created_date";
-    private static final String NOTE_DATE_KEY = "note_date";
-
     private Note note;
 
     /**
@@ -39,12 +32,7 @@ public class NoteEditFragment extends Fragment {
     public static NoteEditFragment newInstance(Note note) {
         NoteEditFragment noteFragment = new NoteEditFragment();
 
-        Bundle noteArgs = new Bundle();
-        noteArgs.putInt(NOTE_ID_KEY, note.getNoteId());
-        noteArgs.putInt(RELATIONSHIP_ID_KEY, note.getRelationshipId());
-        noteArgs.putString(NOTE_TEXT_KEY, note.getNoteText());
-        noteArgs.putString(NOTE_CREATED_DATE_KEY, note.getCreatedDate().toString());
-        noteArgs.putString(NOTE_DATE_KEY, note.getNoteDate().toString());
+        Bundle noteArgs = NoteFragmentHelper.saveNoteBundle(note);
         noteFragment.setArguments(noteArgs);
 
         return noteFragment;
@@ -71,12 +59,10 @@ public class NoteEditFragment extends Fragment {
     private void loadNote(View noteLayout) {
 
         Bundle noteArgs = getArguments();
-        int noteId = noteArgs.getInt(NOTE_ID_KEY, -1);
+        note = NoteFragmentHelper.loadNote(noteArgs);
 
-        if (noteId == -1) {
-            createNote(noteArgs.getInt(RELATIONSHIP_ID_KEY));
-        } else {
-            loadNote(noteId, noteArgs);
+        if (note.getNoteId() == -1) {
+            note = new Note(getContext(), note.getRelationshipId());
         }
 
         String noteText = note.getNoteText();
@@ -87,18 +73,6 @@ public class NoteEditFragment extends Fragment {
         String noteDateText = note.getNoteDate().toString();
         TextView noteDateButton = (Button) noteLayout.findViewById(R.id.note_date_button);
         noteDateButton.setText(noteDateText);
-    }
-
-    private void createNote(int relationshipId) {
-        note = new Note(getContext(), relationshipId);
-    }
-
-    private void loadNote(int noteId, Bundle noteArgs) {
-        int relationshipId = noteArgs.getInt(RELATIONSHIP_ID_KEY);
-        LocalDate noteCreatedDate = new LocalDate(noteArgs.getString(NOTE_CREATED_DATE_KEY));
-        LocalDate noteContactDate = new LocalDate(noteArgs.getString(NOTE_DATE_KEY));
-        String noteText = noteArgs.getString(NOTE_TEXT_KEY);
-        note = new Note(noteId, relationshipId, noteCreatedDate, noteContactDate, noteText);
     }
 
     /**

@@ -13,16 +13,18 @@ import android.widget.TextView;
  */
 public class NoteViewFragment extends Fragment {
 
-    private static final String NOTE_TEXT_KEY = "note_text";
+    private static final String NOTE_ID_KEY = "note_id";
+    private static final String RELATIONSHIP_ID_KEY = "relationship_id";
+    private static final String NOTE_CREATED_DATE_KEY = "note_created_date";
     private static final String NOTE_DATE_KEY = "note_date";
+    private static final String NOTE_TEXT_KEY = "note_text";
+    private Note note;
 
     public static NoteViewFragment newInstance(Note note) {
         NoteViewFragment noteFragment = new NoteViewFragment();
 
         // setup arguments
-        Bundle noteArgs = new Bundle();
-        noteArgs.putString(NOTE_TEXT_KEY, note.getNoteText());
-        noteArgs.putString(NOTE_DATE_KEY, note.getNoteDate().toString("MMMM dd, yyyy"));
+        Bundle noteArgs = NoteFragmentHelper.saveNoteBundle(note);
 
         noteFragment.setArguments(noteArgs);
 
@@ -42,13 +44,19 @@ public class NoteViewFragment extends Fragment {
 
     public void loadNote(View noteLayout) {
         Bundle noteArgs = getArguments();
+        note = NoteFragmentHelper.loadNote(noteArgs);
 
-        String noteText = noteArgs.getString(NOTE_TEXT_KEY, "");
         TextView noteTextView = (TextView) noteLayout.findViewById(R.id.note_text_view);
-        noteTextView.setText(noteText);
+        noteTextView.setText(note.getNoteText());
 
-        String noteDateText = noteArgs.getString(NOTE_DATE_KEY); // default to today
         TextView noteDateButton = (TextView) noteLayout.findViewById(R.id.note_date_text_view);
-        noteDateButton.setText(noteDateText);
+        noteDateButton.setText(note.getNoteDate().toString("MMMM d yyyy"));
     }
+
+    public Note getNote() {
+        return note;
+    }
+
 }
+
+

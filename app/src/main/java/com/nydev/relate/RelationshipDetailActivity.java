@@ -30,7 +30,6 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
     private Relationship relationship;  // relationship being considered
     private RelationshipTableHelper relationshipTableHelper; // helper class for database operations on the relationship table
-    private Note note; // current note under consideration
     private NoteCollectionPagerAdapter noteAdapter;
 
 
@@ -189,7 +188,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
     }
 
     public void createNote(View createNoteButton) {
-        note = new Note(this, relationship.getRelationshipId());
+        Note note = new Note(relationship.getRelationshipId());
         Fragment noteFragment = NoteEditFragment.newInstance(note); // open in edit mode for a new note
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.note_container, noteFragment);
@@ -197,10 +196,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
     }
 
     public void editNote(View editButton) {
-        Fragment noteFragment = NoteEditFragment.newInstance(note); // open existing note in edit mode
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.note_container, noteFragment);
-        fragmentTransaction.commit();
+        noteAdapter.edit(((ViewPager) findViewById(R.id.note_container)).getCurrentItem());
     }
 
     @Override
@@ -217,10 +213,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
     @Override
     public void onDateSave(LocalDate noteDate) {
-        ViewPager notePager = (ViewPager) findViewById(R.id.note_container);
-        int notePagerPosition = notePager.getCurrentItem();
-        NoteEditFragment noteEditFragment =
-                (NoteEditFragment) noteAdapter.getNoteFragment(notePagerPosition);
+        NoteEditFragment noteEditFragment = (NoteEditFragment) noteAdapter.getCurrentFragment();
         noteEditFragment.updateNoteDate(noteDate);
     }
 }
