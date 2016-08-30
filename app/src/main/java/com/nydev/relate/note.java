@@ -15,11 +15,18 @@ public class Note {
     private LocalDate noteDate;
     private String noteText;
 
+    /**
+     * Create a new shell note. This holds a reference to the related relationship,
+     * but does not have a reserved noteId. noteId will equal -1.
+     *
+     * @param relationshipId id of related relationship to this note
+     */
     public Note(int relationshipId) {
-        noteId = -1;
+        noteId = -1; // -1 indicates that the note does not have a reserved Id.
+        // The information in this note will need to be used to construct a permanent note if it is to be saved.
         this.relationshipId = relationshipId;
-        this.createdDate = new LocalDate();
-        this. noteDate = new LocalDate();
+        this.createdDate = new LocalDate(); // today
+        this. noteDate = new LocalDate(); // default to today
         this.noteText = "";
     }
 
@@ -101,6 +108,11 @@ public class Note {
         this.noteText = noteText;
     }
 
+    /**
+     * Set the date of reference for this note
+     *
+     * @param noteDate date this note refers to
+     */
     public void setNoteDate(LocalDate noteDate) {
         this.noteDate = noteDate;
     }

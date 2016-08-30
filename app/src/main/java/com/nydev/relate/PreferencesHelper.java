@@ -55,7 +55,7 @@ public class PreferencesHelper
 
     /**
      * Increment the next available relationship ID in SharedPreferences.
-     * If NEXT_RELATIONSHIP_ID is not an existing key in relationshipPreferences,
+     * If NEXT_RELATIONSHIP_ID_KEY is not an existing key in relationshipPreferences,
      * then it will be initialized to INITIAL_ID and then incremented.
      * @param relationshipPreferences relationship SharedPreferences.
      */
@@ -64,6 +64,13 @@ public class PreferencesHelper
         incrementId(relationshipPreferences, NEXT_RELATIONSHIP_ID_KEY, INITIAL_ID);
     }
 
+    /**
+     * Increment the next available note ID in SharedPreferences.
+     * If NEXT_NOTE_ID_KEY is not an existing key in relationshipPreferences,
+     * then it will be initialized to INITIAL_ID and then increments.
+     *
+     * @param relationshipPreferences relationship SharedPreferences
+     */
     private static void incrementNextNoteId(SharedPreferences relationshipPreferences) {
         incrementId(relationshipPreferences, NEXT_NOTE_ID_KEY, INITIAL_ID);
     }

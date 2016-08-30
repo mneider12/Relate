@@ -135,6 +135,12 @@ public class Relationship
         this.name = name;
     }
 
+    /**
+     * Compare whether to Relationship objects have the same relationshipId.
+     *
+     * @param otherRelationship relationship to compare to
+     * @return true if otherRelationship is a Relationship with the same relationshipId. Otherwise false.
+     */
     @Override
     public boolean equals(Object otherRelationship){
         if (otherRelationship != null && otherRelationship instanceof Relationship) {
@@ -144,6 +150,11 @@ public class Relationship
         }
     }
 
+    /**
+     * Return hash code for this relationship. Hash Code is equal to the relationshipId.
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         return relationshipId;
