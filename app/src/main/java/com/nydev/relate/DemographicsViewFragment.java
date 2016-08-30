@@ -25,6 +25,7 @@ public class DemographicsViewFragment extends Fragment {
 
         // setup arguments
         Bundle demographicArgs = new Bundle();
+
         demographicArgs.putString(BIRTHDAY_KEY, relationship.getBirthdayString());
 
         demographicsViewFragment.setArguments(demographicArgs);

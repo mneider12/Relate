@@ -43,6 +43,7 @@ public class DemographicsEditFragment extends Fragment {
 
         // setup arguments
         Bundle demographicArgs = new Bundle();
+
         demographicArgs.putString(NAME_KEY, relationship.getName().toString());
         demographicArgs.putString(BIRTHDAY_KEY, relationship.getBirthdayString());
 
