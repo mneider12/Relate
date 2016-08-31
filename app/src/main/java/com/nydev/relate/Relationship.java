@@ -153,7 +153,7 @@ public class Relationship
     /**
      * Return hash code for this relationship. Hash Code is equal to the relationshipId.
      *
-     * @return
+     * @return hash code for this relationship.
      */
     @Override
     public int hashCode() {

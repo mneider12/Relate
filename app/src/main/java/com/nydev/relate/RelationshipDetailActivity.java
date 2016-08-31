@@ -30,7 +30,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
     private Relationship relationship;  // relationship being considered
     private RelationshipTableHelper relationshipTableHelper; // helper class for database operations on the relationship table
-    private NoteCollectionPagerAdapter noteAdapter;
+    private NoteCollectionPagerAdapter noteAdapter; // adapter to display note for this relationship
 
 
     /**
@@ -42,39 +42,49 @@ public class RelationshipDetailActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        int relationshipId = intent.getIntExtra("com.nydev.relate.relationshipId", 0);
+        int relationshipId = intent.getIntExtra("com.nydev.relate.relationshipId", -1); // -1 indicates an invalid relationshipId
 
         relationshipTableHelper = new RelationshipTableHelper(this);
         if (relationshipTableHelper.isValidRelationshipId(relationshipId)) { // load in view mode if a valid existing relationship is passed in
+            // set layout for viewing an existing relationship
             setContentView(R.layout.relationship_detail_view);
-
+            //load an existing relationship
             relationship = relationshipTableHelper.getRelationship(relationshipId);
-
+            // setup noteAdapter as the backbone for a swipe-able page view of notes.
             noteAdapter = new NoteCollectionPagerAdapter(getSupportFragmentManager(),
                     relationshipId, this);
-
-            ViewPager notePager = (ViewPager) findViewById(R.id.note_container);
+            ViewPager notePager = (ViewPager) findViewById(R.id.note_container); // Widget that swipes along a list provider by an adapter
             notePager.setAdapter(noteAdapter);
-
+            // Demographics fragment in view mode initially when loading an existing relationship
             DemographicsViewFragment demographicsViewFragment =
                     DemographicsViewFragment.newInstance(relationship);
-
+            // Commit demographics fragment
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.add(R.id.demographics_container, demographicsViewFragment);
             fragmentTransaction.commit();
 
-            Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-            setSupportActionBar(myToolbar);
-            setTitle(relationship.getName().toString());
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.setDisplayHomeAsUpEnabled(true);
+            // Setup Toolbar title
+            String name = relationship.getName().toString();
+            if (name.equals("")) {
+                setTitle("<unnamed>");
+            } else {
+                setTitle(relationship.getName().toString());
             }
 
         } else { // Create a new relationship in edit mode
             setContentView(R.layout.relationship_create);
             relationship = new Relationship(this); // reserves an ID for this Relationship
             saveRelationship();
+
+            // Setup Toolbar title
+            setTitle("NEW");
+        }
+        // create Toolbar
+        Toolbar relationshipToolbar = (Toolbar) findViewById(R.id.relationship_toolbar);
+        setSupportActionBar(relationshipToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 

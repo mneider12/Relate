@@ -69,9 +69,4 @@ public class RelationshipDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase relationshipDb, int oldVersion, int newVersion) {
         // not needed until the database needs to be changed after release
     }
-
-    @Override
-    public void onDowngrade(SQLiteDatabase relationshipDb, int oldVersion, int newVersion) {
-
-    }
 }
