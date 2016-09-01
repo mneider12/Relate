@@ -160,6 +160,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
      */
     public void deleteRelationship() {
         relationshipTableHelper.deleteRelationship(relationship.getRelationshipId());
+        relationship = null;
         finish();
     }
 
@@ -215,7 +216,9 @@ public class RelationshipDetailActivity extends AppCompatActivity
     @Override
     public void onStop() {
         super.onStop();
-        saveRelationship();
+        if (relationship != null) { // relationship was deleted or cancelled
+            saveRelationship();
+        }
     }
 
     @Override

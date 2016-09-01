@@ -28,6 +28,14 @@ public class NoteTableHelper {
     }
 
     /**
+     * Create a new NoteTableHelper from an existing RelationshipDbHelper
+     * @param relationshipDbHelper helper for accessing relationship database
+     */
+    public NoteTableHelper(RelationshipDbHelper relationshipDbHelper) {
+        this.relationshipDbHelper = relationshipDbHelper;
+    }
+
+    /**
      * Insert a new note into the note table
      * @param note note to save
      * @return true if the insert operation was successful, otherwise false
@@ -37,6 +45,12 @@ public class NoteTableHelper {
         ContentValues noteValues = buildContentValues(note);
 
         return relationshipDatabase.insert(NoteEntry.TABLE_NAME, null, noteValues) != -1;
+    }
+
+    public boolean deleteNote(int noteId) {
+        SQLiteDatabase relationshipDatabase = relationshipDbHelper.getWritableDatabase();
+        return relationshipDatabase.delete(NoteEntry.TABLE_NAME,
+                NoteEntry._ID + "=" + noteId, null) == 1;
     }
 
     /**
@@ -174,6 +188,19 @@ public class NoteTableHelper {
         } else {
             return insertNote(note);
         }
+    }
+
+    /**
+     * Delete all notes for a given relationship
+     *
+     * @param relationshipId ID of relationship to delete notes for
+     * @return true if all notes were deleted (including if none are found), otherwise false
+     */
+    public boolean deleteAllNotes(int relationshipId) {
+        SQLiteDatabase relationshipDatabase = relationshipDbHelper.getWritableDatabase();
+        relationshipDatabase.delete(NoteEntry.TABLE_NAME,
+                NoteEntry.COLUMN_NAME_RELATIONSHIP_ID + "=" + relationshipId, null);
+        return true;
     }
 }
 

@@ -151,6 +151,7 @@ public class NoteEditFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        // don't save an empty note. May be slightly unexpected if note previously had text and is blanked out
         if (!note.getNoteText().equals("")) {
             noteTableHelper.saveNote(note);
         }

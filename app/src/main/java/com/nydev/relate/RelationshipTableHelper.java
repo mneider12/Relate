@@ -59,7 +59,7 @@ public class RelationshipTableHelper {
         ContentValues relationshipValues = buildContentValues(relationship); // build data for update
 
         return relationshipDatabase.update(RelationshipEntry.TABLE_NAME, relationshipValues,
-                RelationshipEntry._ID + "=" + relationship.getRelationshipId(), null) != -1;
+                RelationshipEntry._ID + "=" + relationship.getRelationshipId(), null) == 1;
     }
 
     /**
@@ -140,7 +140,11 @@ public class RelationshipTableHelper {
     public boolean deleteRelationship(int relationshipId) {
         SQLiteDatabase relationshipDatabase = relationshipDbHelper.getWritableDatabase();
 
+        // first delete related notes
+        NoteTableHelper noteTableHelper = new NoteTableHelper(relationshipDbHelper);
+        noteTableHelper.deleteAllNotes(relationshipId);
+
         return relationshipDatabase.delete(RelationshipEntry.TABLE_NAME,
-                RelationshipEntry._ID + "=" + relationshipId, null) != -1;
+                RelationshipEntry._ID + "=" + relationshipId, null) == 1;
     }
 }
