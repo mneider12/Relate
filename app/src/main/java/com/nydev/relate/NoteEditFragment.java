@@ -151,7 +151,9 @@ public class NoteEditFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        noteTableHelper.saveNote(note);
+        if (!note.getNoteText().equals("")) {
+            noteTableHelper.saveNote(note);
+        }
     }
 
     /**
