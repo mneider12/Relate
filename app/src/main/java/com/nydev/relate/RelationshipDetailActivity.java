@@ -46,15 +46,11 @@ public class RelationshipDetailActivity extends AppCompatActivity
 
         relationshipTableHelper = new RelationshipTableHelper(this);
         if (relationshipTableHelper.isValidRelationshipId(relationshipId)) { // load in view mode if a valid existing relationship is passed in
-            onCreateExistingRelationship(relationshipId);
+            loadExistingRelationship(relationshipId);
         } else { // Create a new relationship in edit mode
-            setContentView(R.layout.relationship_create);
-            relationship = new Relationship(this); // reserves an ID for this Relationship
-            saveRelationship();
-
-            // Setup Toolbar title
-            setTitle("NEW");
+            createNewRelationship();
         }
+
         // create Toolbar
         Toolbar relationshipToolbar = (Toolbar) findViewById(R.id.relationship_toolbar);
         setSupportActionBar(relationshipToolbar);
@@ -64,31 +60,45 @@ public class RelationshipDetailActivity extends AppCompatActivity
         }
     }
 
-    private void onCreateExistingRelationship(int relationshipId) {
+    /**
+     * Create view for a new relationship
+     */
+    private void createNewRelationship() {
+        setContentView(R.layout.relationship_create);
+        relationship = new Relationship(this); // reserves an ID for this Relationship
+        saveRelationship();
+
+        setTitle("NEW");
+    }
+
+    /**
+     * Create view for an opening an existing relationship
+     *
+     * @param relationshipId ID of relationship to load
+     */
+    private void loadExistingRelationship(int relationshipId) {
         // set layout for viewing an existing relationship
         setContentView(R.layout.relationship_detail_view);
+
         //load an existing relationship
         relationship = relationshipTableHelper.getRelationship(relationshipId);
+
         // setup noteAdapter as the backbone for a swipe-able page view of notes.
         noteAdapter = new NoteCollectionPagerAdapter(getSupportFragmentManager(),
                 relationshipId, this);
         ViewPager notePager = (ViewPager) findViewById(R.id.note_container); // Widget that swipes along a list provider by an adapter
         notePager.setAdapter(noteAdapter);
+
         // Demographics fragment in view mode initially when loading an existing relationship
         DemographicsViewFragment demographicsViewFragment =
                 DemographicsViewFragment.newInstance(relationship);
+
         // Commit demographics fragment
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.demographics_container, demographicsViewFragment);
         fragmentTransaction.commit();
 
-        // Setup Toolbar title
-        String name = relationship.getName().toString();
-        if (name.equals("")) {
-            setTitle("<unnamed>");
-        } else {
-            setTitle(relationship.getName().toString());
-        }
+        setTitle(relationship.getName().toString());
     }
 
     /**
@@ -101,6 +111,11 @@ public class RelationshipDetailActivity extends AppCompatActivity
         finish();
     }
 
+    /**
+     * Save the relationship in this activity to the database.
+     * If the relationship already exists, it will be updated.
+     * Otherwise it will be added to the database
+     */
     public void saveRelationship() {
         if (relationshipTableHelper.isValidRelationshipId(relationship.getRelationshipId())) { // Relationship exists; update
             relationshipTableHelper.updateRelationship(relationship);
@@ -140,12 +155,18 @@ public class RelationshipDetailActivity extends AppCompatActivity
         birthdayPickerFragment.saveBirthday();
     }
 
+    /**
+     * Save the name for this relationship to the relationship in local memory
+     *
+     * @param name name to save
+     */
     public void saveName(Name name) {
         relationship.setName(name);
     }
 
     /**
-     * Save the relation's birthday.
+     * Save the relation's birthday to local memory.
+     * Update the birthday selection button display to reflect the new birthday
      * Called by BirthdayPickerFragment.
      * @param birthday birthday selected by this dialog
      */
@@ -160,10 +181,13 @@ public class RelationshipDetailActivity extends AppCompatActivity
      */
     public void deleteRelationship() {
         relationshipTableHelper.deleteRelationship(relationship.getRelationshipId());
-        relationship = null;
+        relationship = null; // set relationship to null so we don't try to save it in onStop
         finish();
     }
 
+    /**
+     * Change the demographics display from view mode to edit mode.
+     */
     public void editDemographics() {
         DemographicsEditFragment demographicsEditFragment =
                 DemographicsEditFragment.newInstance(relationship);
@@ -171,16 +195,30 @@ public class RelationshipDetailActivity extends AppCompatActivity
         FragmentTransaction replaceViewWithEdit = getSupportFragmentManager().beginTransaction();
 
         replaceViewWithEdit.replace(R.id.demographics_container, demographicsEditFragment);
-        replaceViewWithEdit.addToBackStack(null);
+
         replaceViewWithEdit.commit();
     }
 
+    /**
+     * Show date picker for the note fragment to set the note date.
+     * The date will be set to the current note date displayed on the note button
+     *
+     * @param noteDateSelectButton button that launches the picker.
+     *                             Used to get the date to initialize the picker.
+     */
     public void showDatePickerDialog(View noteDateSelectButton) {
+        // get the current date from the button display
         LocalDate noteDate = new LocalDate(((TextView) noteDateSelectButton).getText());
         DialogFragment newFragment = DatePickerFragment.newInstance(noteDate);
         newFragment.show(getSupportFragmentManager(), "noteDatePicker");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param item {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -189,11 +227,18 @@ public class RelationshipDetailActivity extends AppCompatActivity
                 return true;
             case R.id.action_delete_relationship:
                 deleteRelationship();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param menu {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -201,18 +246,34 @@ public class RelationshipDetailActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Create a new note
+     *
+     * @param createNoteButton button used to launch this method. Not used here.
+     */
     public void createNote(View createNoteButton) {
+        // create a shell note,
+        // allowing NoteEditFragment to handle the rest of creating and handling note operations
         Note note = new Note(relationship.getRelationshipId());
+
         Fragment noteFragment = NoteEditFragment.newInstance(note); // open in edit mode for a new note
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.note_container, noteFragment);
         fragmentTransaction.commit();
     }
 
+    /**
+     * Edit the note loaded in a view fragment within this activity. Called from button within fragment.
+     *
+     * @param editButton button calling this method. Not used here.
+     */
     public void editNote(View editButton) {
         noteAdapter.edit(((ViewPager) findViewById(R.id.note_container)).getCurrentItem());
     }
 
+    /**
+     * Save relationship information when this activity is stopped, so user changes aren't lost.
+     */
     @Override
     public void onStop() {
         super.onStop();
@@ -221,12 +282,11 @@ public class RelationshipDetailActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        saveRelationship();
-        super.onBackPressed();
-    }
-
+    /**
+     * Pass along an updated date to the NoteEditFragment loaded within this activity.
+     *
+     * @param noteDate date to pass along
+     */
     @Override
     public void onDateSave(LocalDate noteDate) {
         NoteEditFragment noteEditFragment = (NoteEditFragment) noteAdapter.getCurrentFragment();
