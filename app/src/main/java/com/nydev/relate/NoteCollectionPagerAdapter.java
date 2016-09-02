@@ -1,6 +1,7 @@
 package com.nydev.relate;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -90,7 +91,12 @@ public class NoteCollectionPagerAdapter extends FragmentStatePagerAdapter {
      */
     private Fragment getNoteFragment(int position) {
         int noteId = noteIdMap.get(position);
-        Note note = noteTableHelper.getNote(noteId);
+        Note note;
+        if (noteTableHelper.isValidNoteId(noteId)) {
+            note = noteTableHelper.getNote(noteId);
+        } else {
+            note = new Note(noteId, relationshipId);
+        }
         if (position == editIndex) { // indicates that this fragment should be the current note in edit mode.
             return NoteEditFragment.newInstance(note);
         } else {
@@ -160,5 +166,18 @@ public class NoteCollectionPagerAdapter extends FragmentStatePagerAdapter {
             editIndex = -1; // no position will match this index
             notifyDataSetChanged(); // reload edit fragment as view fragment
         }
+    }
+
+    /**
+     * Insert a new note at the given position, and set it to open in edit mode
+     *
+     * @param context calling context - used to reserve a new note id
+     * @param position position to insert - usually the ViewPager current position
+     */
+    public void createNote(Context context, int position) {
+        int noteId = PreferencesHelper.getNextNoteId(context);
+        noteIdMap.add(position, noteId);
+        editIndex = position;
+        notifyDataSetChanged();
     }
 }

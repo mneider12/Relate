@@ -1,5 +1,6 @@
 package com.nydev.relate;
 
+import android.content.SharedPreferences;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -252,14 +253,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
      * @param createNoteButton button used to launch this method. Not used here.
      */
     public void createNote(View createNoteButton) {
-        // create a shell note,
-        // allowing NoteEditFragment to handle the rest of creating and handling note operations
-        Note note = new Note(relationship.getRelationshipId());
-
-        Fragment noteFragment = NoteEditFragment.newInstance(note); // open in edit mode for a new note
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.note_container, noteFragment);
-        fragmentTransaction.commit();
+        noteAdapter.createNote(this, getNotePosition());
     }
 
     /**
@@ -268,7 +262,7 @@ public class RelationshipDetailActivity extends AppCompatActivity
      * @param editButton button calling this method. Not used here.
      */
     public void editNote(View editButton) {
-        noteAdapter.edit(((ViewPager) findViewById(R.id.note_container)).getCurrentItem());
+        noteAdapter.edit(getNotePosition());
     }
 
     /**
@@ -291,5 +285,14 @@ public class RelationshipDetailActivity extends AppCompatActivity
     public void onDateSave(LocalDate noteDate) {
         NoteEditFragment noteEditFragment = (NoteEditFragment) noteAdapter.getCurrentFragment();
         noteEditFragment.updateNoteDate(noteDate);
+    }
+
+    /**
+     * Get the current position of the note ViewPager
+     *
+     * @return current position of the note ViewPager
+     */
+    private int getNotePosition() {
+        return ((ViewPager) findViewById(R.id.note_container)).getCurrentItem();
     }
 }

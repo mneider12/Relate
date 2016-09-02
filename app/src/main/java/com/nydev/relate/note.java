@@ -44,6 +44,17 @@ public class Note {
     }
 
     /**
+     * Create a note with a reserved note Id associated with a particular relationship,
+     * but with no other saved information
+     *
+     * @param noteId reserved note ID
+     * @param relationshipId related relationship ID
+     */
+    public Note(int noteId, int relationshipId) {
+        this(noteId, relationshipId, new LocalDate(), new LocalDate(), "");
+    }
+
+    /**
      * Create a Note object for an existing note
      * @param noteId unique id for the note
      * @param relationshipId id of relationship related to this note
