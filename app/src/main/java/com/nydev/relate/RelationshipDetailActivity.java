@@ -1,8 +1,6 @@
 package com.nydev.relate;
 
-import android.content.SharedPreferences;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
@@ -296,6 +294,11 @@ public class RelationshipDetailActivity extends AppCompatActivity
         return ((ViewPager) findViewById(R.id.note_container)).getCurrentItem();
     }
 
+    /**
+     * Delete the note currently being displayed. Called from button with note fragment.
+     *
+     * @param deleteButton button used to call this method. Not used here.
+     */
     public void deleteNote(View deleteButton) {
         noteAdapter.deleteNote(getNotePosition());
     }
