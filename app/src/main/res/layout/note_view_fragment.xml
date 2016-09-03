@@ -32,6 +32,14 @@
                 android:minWidth="0dp"
                 android:onClick="editNote"/>
 
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_delete_black_24dp"
+                style="?android:attr/borderlessButtonStyle"
+                android:minWidth="0dp"
+                android:onClick="deleteNote"/>
+
             <TextView
                 android:id="@+id/note_date_text_view"
                 android:layout_width="0dp"

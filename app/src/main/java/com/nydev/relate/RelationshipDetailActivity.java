@@ -295,4 +295,10 @@ public class RelationshipDetailActivity extends AppCompatActivity
     private int getNotePosition() {
         return ((ViewPager) findViewById(R.id.note_container)).getCurrentItem();
     }
+
+    public void deleteNote(View deleteButton) {
+        View fragmentView = noteAdapter.getCurrentFragment().getView();
+        ((ViewPager) findViewById(R.id.note_container)).removeView(fragmentView);
+        noteAdapter.deleteNote(getNotePosition());
+    }
 }

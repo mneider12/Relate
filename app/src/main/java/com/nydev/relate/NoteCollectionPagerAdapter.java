@@ -26,7 +26,7 @@ public class NoteCollectionPagerAdapter extends FragmentStatePagerAdapter {
     private int relationshipId; // ID for the relationship under consideration
     private Fragment currentFragment; // save a reference to the currently displayed fragment
     private int editIndex; // set this so that the next time the fragment with position == editIndex is loaded, it will be in edit mode.
-
+    private boolean needToRefresh;
 
     /**
      * Create a pager adapter to provider a list of note fragments
@@ -42,6 +42,7 @@ public class NoteCollectionPagerAdapter extends FragmentStatePagerAdapter {
         noteTableHelper = new NoteTableHelper(context); // use this helper to load notes
         createNoteIdMap();
         editIndex = -1;
+        needToRefresh = false;
     }
 
     /**
@@ -108,12 +109,14 @@ public class NoteCollectionPagerAdapter extends FragmentStatePagerAdapter {
      * Return whether an object needs to change when the underlying data set changes
      *
      * @param object a note view or edit fragment to check for changes
-     * @return POSITION_NONE indicates there is a change and this fragment has been replaced
+     * @return POSITION_NONE indicates there is a change and this fragment has been replaced or removed
      *         POSITION_UNCHANGED indicates there is no change and this fragment should remain in the swipe-view
      */
     public int getItemPosition(Object object) {
-        if (currentFragment.equals(object) && editIndex != -1) { // Edit mode activated for current fragment
+        if (needToRefresh) { // removed a view, need to refresh all
             return PagerAdapter.POSITION_NONE;
+        } else if (currentFragment.equals(object) && editIndex != -1) { //edit pressed for current view fragment. Reload as edit fragment
+                return PagerAdapter.POSITION_NONE;
         } else if (object instanceof NoteEditFragment) { // Change edit fragments back to view fragments when the data set changes
             return PagerAdapter.POSITION_NONE;
         }
@@ -179,5 +182,14 @@ public class NoteCollectionPagerAdapter extends FragmentStatePagerAdapter {
         noteIdMap.add(position, noteId);
         editIndex = position;
         notifyDataSetChanged();
+    }
+
+    public void deleteNote(int position) {
+        int noteId = noteIdMap.get(position);
+        noteTableHelper.deleteNote(noteId);
+        noteIdMap.remove(position);
+        needToRefresh = true;
+        notifyDataSetChanged();
+        needToRefresh = false;
     }
 }
