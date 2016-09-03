@@ -1,7 +1,6 @@
 package com.nydev.relate;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -184,12 +183,18 @@ public class NoteCollectionPagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
+    /**
+     * Delete note at position.
+     * Removes the note from the database and notifies the ViewPager that the dataset needs to be reread.
+     *
+     * @param position position in noteIdMap to delete
+     */
     public void deleteNote(int position) {
         int noteId = noteIdMap.get(position);
         noteTableHelper.deleteNote(noteId);
         noteIdMap.remove(position);
-        needToRefresh = true;
+        needToRefresh = true; // every view may shift due to delete. Refresh all.
         notifyDataSetChanged();
-        needToRefresh = false;
+        needToRefresh = false; // reset so that we don't always refresh all.
     }
 }

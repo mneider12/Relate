@@ -297,8 +297,6 @@ public class RelationshipDetailActivity extends AppCompatActivity
     }
 
     public void deleteNote(View deleteButton) {
-        View fragmentView = noteAdapter.getCurrentFragment().getView();
-        ((ViewPager) findViewById(R.id.note_container)).removeView(fragmentView);
         noteAdapter.deleteNote(getNotePosition());
     }
 }
