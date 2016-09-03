@@ -67,6 +67,13 @@ public class RelationshipDetailActivity extends AppCompatActivity
         relationship = new Relationship(this); // reserves an ID for this Relationship
         saveRelationship();
 
+        Note note = new Note(this, relationship.getRelationshipId());
+        NoteEditFragment noteEditFragment = NoteEditFragment.newInstance(note);
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.note_container, noteEditFragment);
+        fragmentTransaction.commit();
+
         setTitle("NEW");
     }
 
